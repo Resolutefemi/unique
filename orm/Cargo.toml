@@ -21,6 +21,8 @@ thiserror = { workspace = true }
 parking_lot = { workspace = true }
 once_cell = { workspace = true }
 async-trait = "0.1"
+argon2 = "0.5"
+rand = "0.8"
 
 # Database drivers — feature-gated so the default build stays light.
 sqlx = { version = "0.8", default-features = false, features = ["runtime-tokio", "tls-rustls"], optional = true }
