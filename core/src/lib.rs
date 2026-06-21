@@ -5,7 +5,8 @@
 //! the `kungfu` crate (`kungfu/src/lib.rs`), which re-exports from here and
 //! adds the `#[get]` / `#[post]` proc macros.
 
-#![forbid(unsafe_code)]
+// Deny `unsafe` everywhere except the explicitly-allowed `ffi` module.
+#![deny(unsafe_code)]
 
 pub mod error;
 pub mod headers;
@@ -18,6 +19,9 @@ pub mod router;
 pub mod server;
 pub mod version;
 pub mod websocket;
+
+#[cfg(feature = "ffi")]
+pub mod ffi;
 
 pub mod middleware_builtin {
     pub use crate::middleware::builtin::cors::{cors, cors_with, CorsConfig};
