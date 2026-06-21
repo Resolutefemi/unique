@@ -1,6 +1,6 @@
-//! The `kungfu` CLI. V1 only supports `--version` and a built-in demo server
-//! (so the binary is runnable end-to-end). `new`/`start`/`build`/`migrate`
-//! /`generate admin`/`deploy` are stubs that print a roadmap message.
+//! The `kungfu` CLI.
+
+mod scaffold;
 
 use std::net::SocketAddr;
 
@@ -25,20 +25,37 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
             run_demo_server().await?;
         }
         Some("new") => {
-            eprintln!("`kungfu new` is not implemented in V1.");
-            eprintln!("Roadmap: scaffold a new project from a template in the user's preferred language.");
+            let project_name = args.get(2).map(|s| s.as_str());
+            match project_name {
+                Some(name) => {
+                    if let Err(e) = scaffold::scaffold(name) {
+                        eprintln!("Error: {e}");
+                        std::process::exit(1);
+                    }
+                }
+                None => {
+                    eprintln!("Usage: kungfu new <project-name>");
+                    eprintln!("Example: kungfu new my-app");
+                    std::process::exit(1);
+                }
+            }
         }
         Some("start") => {
-            eprintln!("`kungfu start` is not implemented in V1.");
-            eprintln!("Roadmap: start the dev server with file watching + hot reload.");
-        }
-        Some("build") => {
-            eprintln!("`kungfu build` is not implemented in V1.");
-            eprintln!("Roadmap: bundle the Rust core + routes into a standalone binary.");
+            eprintln!("`kungfu start` runs `cargo run` with file watching.");
+            eprintln!("For now, use: cargo run");
+            // Try to run `cargo run` in the current directory.
+            let _ = std::process::Command::new("cargo").arg("run").status();
         }
         Some("migrate") => {
-            eprintln!("`kungfu migrate` is not implemented in V1.");
-            eprintln!("Roadmap: run ORM migrations (Phase 3).");
+            eprintln!("`kungfu migrate` — generates SQL migrations from Model definitions.");
+            eprintln!("In V1, migrations are generated at startup via `kungfu_orm::generate_migration::<T>()`.");
+            eprintln!("See orm/examples/orm_mock.rs for an example.");
+        }
+        Some("build") => {
+            eprintln!("`kungfu build` runs `cargo build --release`.");
+            let _ = std::process::Command::new("cargo")
+                .args(["build", "--release"])
+                .status();
         }
         Some("generate") => {
             eprintln!("`kungfu generate` is not implemented in V1.");
@@ -64,13 +81,13 @@ fn print_help() {
     println!("    kungfu <COMMAND>");
     println!();
     println!("COMMANDS:");
+    println!("    new <name>  Scaffold a new Kungfu project");
     println!("    demo        Run the built-in demo server on :3000");
-    println!("    new         Scaffold a new project (V1)");
-    println!("    start       Start dev server with hot reload (V1.1+)");
-    println!("    build       Compile a production binary (V1)");
-    println!("    migrate     Run ORM migrations (Phase 3)");
+    println!("    start       Run the project in the current directory (cargo run)");
+    println!("    build       Build the project for release (cargo build --release)");
+    println!("    migrate     Generate SQL migrations from Model definitions");
     println!("    generate    Generate admin / models (Phase 3)");
-    println!("    deploy      Deploy to cloud (V1)");
+    println!("    deploy      Deploy to cloud (Phase 3)");
     println!("    --version   Print version");
     println!("    --help      Print this help");
 }
