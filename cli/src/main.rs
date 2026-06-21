@@ -65,12 +65,12 @@ fn print_help() {
     println!();
     println!("COMMANDS:");
     println!("    demo        Run the built-in demo server on :3000");
-    println!("    new         Scaffold a new project (V2)");
-    println!("    start       Start dev server with hot reload (V1.1)");
-    println!("    build       Compile a production binary (V2)");
+    println!("    new         Scaffold a new project (V1)");
+    println!("    start       Start dev server with hot reload (V1.1+)");
+    println!("    build       Compile a production binary (V1)");
     println!("    migrate     Run ORM migrations (Phase 3)");
     println!("    generate    Generate admin / models (Phase 3)");
-    println!("    deploy      Deploy to cloud (V2)");
+    println!("    deploy      Deploy to cloud (V1)");
     println!("    --version   Print version");
     println!("    --help      Print this help");
 }
