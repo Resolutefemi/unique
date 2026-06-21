@@ -5,6 +5,8 @@
 //! common case is a handful of headers per request — a linear scan is faster
 //! than hashing for N < ~16.
 
+pub mod multipart;
+
 use std::collections::HashMap;
 
 use bytes::Bytes;
@@ -156,6 +158,9 @@ impl Request {
         self.query.get(key).map(|s| s.as_str())
     }
 }
+
+/// Re-export multipart parsing types at the request module level.
+pub use multipart::{Multipart, Part};
 
 fn percent_decode(s: &str) -> String {
     let bytes = s.as_bytes();
