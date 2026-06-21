@@ -8,6 +8,7 @@
 #![forbid(unsafe_code)]
 
 pub mod error;
+pub mod headers;
 pub mod middleware;
 pub mod openapi;
 pub mod request;
@@ -26,6 +27,7 @@ pub mod middleware_builtin {
 }
 
 pub use error::{KungfuError, Result, StatusCode};
+pub use headers::Headers;
 pub use middleware::{build_chain, Middleware, Next, NextFuture};
 pub use request::{parse_query, Method, Request};
 pub use response::Response;
