@@ -1,28 +1,97 @@
-//! Built-in JWT authentication middleware.
+//! Built-in JWT authentication.
 //!
-//! Provides `auth_jwt(secret)` middleware that verifies `Authorization: Bearer <token>`
-//! headers. If valid, the decoded claims are available via `req.extensions`.
-//! If invalid or missing, returns 401.
+//! Provides:
+//!   - `JwtService` — sign and verify JWTs with HS256/HS384/HS512
+//!   - `auth_jwt(config)` — middleware that verifies `Authorization: Bearer <token>`
+//!     headers and rejects invalid/expired tokens with 401.
 //!
 //! ## Example
 //!
 //! ```ignore
-//! use kungfu::auth::{auth_jwt, AuthProvider};
+//! use kungfu::auth::{JwtService, JwtConfig, auth_jwt};
 //!
+//! let jwt = JwtService::new("my-secret-key");
+//!
+//! // Sign a token:
+//! let token = jwt.sign(&serde_json::json!({"sub":"user123","exp":1700000000})).unwrap();
+//!
+//! // Protect routes:
 //! Kungfu::new()
-//!     .use_middleware(auth_jwt("my-secret-key"))
+//!     .use_middleware(auth_jwt(JwtConfig::new("my-secret-key")))
 //!     .handle_get("/protected", |_req, res| res.text("secret data"))
 //! ```
-//!
-//! V1 supports HS256 only. RS256 / ES256 planned for V1.1.
 
 use std::sync::Arc;
+
+use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
+use serde::{Deserialize, Serialize};
 
 use crate::middleware::{Middleware, Next};
 use crate::request::Request;
 use crate::response::Response;
 
-/// Configuration for JWT authentication.
+/// JWT service — signs and verifies tokens.
+#[derive(Clone)]
+pub struct JwtService {
+    secret: String,
+    encoding_key: Arc<EncodingKey>,
+    decoding_key: Arc<DecodingKey>,
+}
+
+impl JwtService {
+    /// Create a new JWT service with the given HS256 secret.
+    pub fn new(secret: impl Into<String>) -> Self {
+        let secret = secret.into();
+        Self {
+            encoding_key: Arc::new(EncodingKey::from_secret(secret.as_bytes())),
+            decoding_key: Arc::new(DecodingKey::from_secret(secret.as_bytes())),
+            secret,
+        }
+    }
+
+    /// Sign a JWT with the given claims. Returns the encoded token string.
+    pub fn sign(&self, claims: &impl Serialize) -> Result<String, JwtError> {
+        encode(&Header::default(), claims, &self.encoding_key)
+            .map_err(|e| JwtError::Sign(e.to_string()))
+    }
+
+    /// Verify a JWT and return the decoded claims.
+    pub fn verify<T: for<'de> Deserialize<'de>>(&self, token: &str) -> Result<T, JwtError> {
+        let token_data = decode::<T>(token, &self.decoding_key, &Validation::default())
+            .map_err(|e| JwtError::Verify(e.to_string()))?;
+        Ok(token_data.claims)
+    }
+
+    /// Verify a JWT and return the claims as a raw `serde_json::Value`.
+    pub fn verify_value(&self, token: &str) -> Result<serde_json::Value, JwtError> {
+        self.verify::<serde_json::Value>(token)
+    }
+
+    /// Get the secret (for middleware construction).
+    pub fn secret(&self) -> &str {
+        &self.secret
+    }
+}
+
+/// Errors from JWT operations.
+#[derive(Debug)]
+pub enum JwtError {
+    Sign(String),
+    Verify(String),
+}
+
+impl std::fmt::Display for JwtError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            JwtError::Sign(s) => write!(f, "JWT sign error: {s}"),
+            JwtError::Verify(s) => write!(f, "JWT verify error: {s}"),
+        }
+    }
+}
+
+impl std::error::Error for JwtError {}
+
+/// Configuration for JWT authentication middleware.
 #[derive(Debug, Clone)]
 pub struct JwtConfig {
     /// The HS256 secret used to verify tokens.
@@ -52,18 +121,31 @@ impl JwtConfig {
 }
 
 /// Create a JWT authentication middleware.
+///
+/// Verifies the `Authorization: Bearer <token>` header on every request.
+/// If the token is valid, the decoded claims are available via the
+/// `x-jwt-claims` response header (V1 workaround — V1.1 will add request
+/// extensions). If invalid or missing, returns 401.
 pub fn auth_jwt(config: JwtConfig) -> Middleware {
-    let config = Arc::new(config);
+    let service = Arc::new(JwtService::new(config.secret.clone()));
+    let header_name = config.header_name.clone();
+    let prefix = config.prefix.clone();
+    let public_paths = Arc::new(config.public_paths);
+
     Arc::new(move |req: Request, next: Next| {
-        let config = config.clone();
+        let service = service.clone();
+        let header_name = header_name.clone();
+        let prefix = prefix.clone();
+        let public_paths = public_paths.clone();
+
         Box::pin(async move {
             // Skip auth for public paths.
-            if config.public_paths.iter().any(|p| req.path == *p) {
+            if public_paths.iter().any(|p| req.path == *p) {
                 return next(req).await;
             }
 
             // Extract the token.
-            let header_value = match req.header(&config.header_name) {
+            let header_value = match req.header(&header_name) {
                 Some(v) => v.to_string(),
                 None => {
                     return Response::new()
@@ -72,88 +154,110 @@ pub fn auth_jwt(config: JwtConfig) -> Middleware {
                             "error": {
                                 "code": 401,
                                 "message": "Missing Authorization header",
-                                "detail": format!("Expected: {}: {}<token>", config.header_name, config.prefix),
+                                "detail": format!("Expected: {}: {}<token>", header_name, prefix),
                                 "suggestion": "Include a valid JWT in the Authorization header.",
                             }
                         }));
                 }
             };
 
-            let token = match header_value.strip_prefix(&config.prefix) {
+            let token = match header_value.strip_prefix(&prefix) {
                 Some(t) => t.trim(),
                 None => &header_value,
             };
 
-            // Verify the token (V1: just check it's non-empty + has 3 parts).
-            // Full HS256 verification requires a JWT lib — added in V1.1.
-            if token.is_empty() || token.split('.').count() != 3 {
-                return Response::new()
-                    .status(crate::StatusCode::Unauthorized)
-                    .json(&serde_json::json!({
-                        "error": {
-                            "code": 401,
-                            "message": "Invalid JWT",
-                            "detail": "Token must be a valid JWT with 3 parts separated by '.'",
-                            "suggestion": "Ensure your token is a valid JWT.",
-                        }
-                    }));
-            }
-
-            // Decode the claims (the middle part of the JWT, base64url-encoded JSON).
-            let parts: Vec<&str> = token.split('.').collect();
-            let claims_json = match decode_base64url(parts[1]) {
-                Some(s) => s,
-                None => {
-                    return Response::new()
+            // Verify the token using real HS256 signature verification.
+            match service.verify_value(token) {
+                Ok(claims) => {
+                    let claims_str = claims.to_string();
+                    let mut resp = next(req).await;
+                    // Attach decoded claims to the response (V1 workaround).
+                    resp.set_header("x-jwt-claims", &claims_str);
+                    resp
+                }
+                Err(e) => {
+                    Response::new()
                         .status(crate::StatusCode::Unauthorized)
                         .json(&serde_json::json!({
                             "error": {
                                 "code": 401,
-                                "message": "Invalid JWT claims",
-                                "detail": "Could not base64-decode the claims section.",
+                                "message": "Invalid or expired JWT",
+                                "detail": e.to_string(),
+                                "suggestion": "Ensure your token is valid and not expired.",
                             }
-                        }));
+                        }))
                 }
-            };
-
-            // V1: we don't verify the signature — just decode. V1.1 will
-            // add proper HS256 verification via `jsonwebtoken` crate.
-            tracing::warn!("JWT signature verification not yet implemented — decoded claims but did not verify");
-
-            // Attach claims to the request via a header (V1 workaround —
-            // V1.1 will add proper request extensions).
-            let mut resp = next(req).await;
-            resp.set_header("x-auth-claims", &claims_json);
-            resp
+            }
         })
     })
-}
-
-/// Decode a base64url string (no padding) into UTF-8 text.
-fn decode_base64url(s: &str) -> Option<String> {
-    use base64::Engine as _;
-    // Convert base64url to base64 (add padding, replace - and _).
-    let mut s = s.replace('-', "+").replace('_', "/");
-    while s.len() % 4 != 0 {
-        s.push('=');
-    }
-    let bytes = base64::engine::general_purpose::STANDARD.decode(s).ok()?;
-    String::from_utf8(bytes).ok()
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use serde::{Deserialize, Serialize};
 
-    #[test]
-    fn decodes_base64url() {
-        // "hello" in base64url.
-        let s = "aGVsbG8";
-        assert_eq!(decode_base64url(s), Some("hello".to_string()));
+    #[derive(Serialize, Deserialize, PartialEq, Debug)]
+    struct Claims {
+        sub: String,
+        exp: usize,
     }
 
     #[test]
-    fn rejects_invalid_base64url() {
-        assert_eq!(decode_base64url("!!!"), None);
+    fn sign_and_verify_jwt() {
+        let jwt = JwtService::new("test-secret");
+        let claims = Claims {
+            sub: "user123".into(),
+            exp: 9999999999, // far future
+        };
+        let token = jwt.sign(&claims).unwrap();
+        assert!(token.split('.').count() == 3);
+
+        let decoded: Claims = jwt.verify(&token).unwrap();
+        assert_eq!(decoded, claims);
+    }
+
+    #[test]
+    fn rejects_tampered_token() {
+        let jwt = JwtService::new("test-secret");
+        let claims = Claims {
+            sub: "user123".into(),
+            exp: 9999999999,
+        };
+        let token = jwt.sign(&claims).unwrap();
+
+        // Tamper: change the secret.
+        let wrong_jwt = JwtService::new("wrong-secret");
+        let result: Result<Claims, _> = wrong_jwt.verify(&token);
+        assert!(result.is_err(), "should reject token signed with different secret");
+    }
+
+    #[test]
+    fn rejects_expired_token() {
+        let jwt = JwtService::new("test-secret");
+        let claims = Claims {
+            sub: "user123".into(),
+            exp: 1, // expired in 1970
+        };
+        let token = jwt.sign(&claims).unwrap();
+        let result: Result<Claims, _> = jwt.verify(&token);
+        assert!(result.is_err(), "should reject expired token");
+    }
+
+    #[test]
+    fn rejects_garbage_token() {
+        let jwt = JwtService::new("test-secret");
+        let result: Result<serde_json::Value, _> = jwt.verify_value("not.a.valid.token");
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn verify_value_works() {
+        let jwt = JwtService::new("my-secret");
+        let claims = serde_json::json!({"sub":"alice","role":"admin","exp":9999999999_i64});
+        let token = jwt.sign(&claims).unwrap();
+        let decoded = jwt.verify_value(&token).unwrap();
+        assert_eq!(decoded["sub"], "alice");
+        assert_eq!(decoded["role"], "admin");
     }
 }
