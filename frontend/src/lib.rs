@@ -56,8 +56,10 @@ pub mod types;
 pub mod parser;
 pub mod ssr_executor;
 pub mod dev_mode;
+pub mod file_routing;
 
 pub use dev_mode::{DevMode, DevModeConfig};
+pub use file_routing::register_pages;
 pub use livereload::LiveReloadServer;
 pub use parser::{KungfuFile, parse_kungfu_file};
 pub use ssr::{render_page, SsrContext};
