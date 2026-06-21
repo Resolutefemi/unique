@@ -54,8 +54,10 @@ pub mod ssr;
 pub mod livereload;
 pub mod types;
 pub mod parser;
+pub mod ssr_executor;
 
 pub use livereload::LiveReloadServer;
 pub use parser::{KungfuFile, parse_kungfu_file};
 pub use ssr::{render_page, SsrContext};
+pub use ssr_executor::{render_kungfu_file, SsrError};
 pub use types::{generate_typescript, RouteTypeSpec};
