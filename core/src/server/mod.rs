@@ -228,6 +228,41 @@ async fn handle_connection(
             }
         };
 
+        // WebSocket upgrade detection.
+        let is_ws_upgrade = req
+            .header("upgrade")
+            .map(|v| v.eq_ignore_ascii_case("websocket"))
+            .unwrap_or(false)
+            && req
+                .header("connection")
+                .map(|v| v.to_ascii_lowercase().contains("upgrade"))
+                .unwrap_or(false);
+
+        if is_ws_upgrade {
+            let router = router_slot.read().clone();
+            if let Some(ws_handler) = router.ws_handlers.get(&req.path).cloned() {
+                // Send the 101 Switching Protocols response.
+                let accept_key = crate::websocket::compute_accept_key(
+                    req.header("sec-websocket-key").unwrap_or(""),
+                );
+                let response = format!(
+                    "HTTP/1.1 101 Switching Protocols\r\n\
+                     Upgrade: websocket\r\n\
+                     Connection: Upgrade\r\n\
+                     Sec-WebSocket-Accept: {accept_key}\r\n\r\n"
+                );
+                if stream.write_all(response.as_bytes()).await.is_err() {
+                    return Ok(());
+                }
+                let _ = stream.flush().await;
+
+                // Hand off the TCP stream to the WebSocket handler.
+                let ws = crate::websocket::WebSocket::new(stream);
+                ws_handler(ws).await;
+                return Ok(()); // WebSocket connection closed — done.
+            }
+        }
+
         let req_keep_alive = match req.header("connection") {
             Some(v) if v.eq_ignore_ascii_case("close") => false,
             Some(v) if v.eq_ignore_ascii_case("keep-alive") => true,

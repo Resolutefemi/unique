@@ -17,6 +17,7 @@ pub mod response;
 pub mod router;
 pub mod server;
 pub mod version;
+pub mod websocket;
 
 pub mod middleware_builtin {
     pub use crate::middleware::builtin::cors::{cors, cors_with, CorsConfig};
@@ -38,6 +39,7 @@ pub use response::Response;
 pub use router::{Handler, RouteMeta, RouteResolution, Router};
 pub use server::Server;
 pub use version::VERSION;
+pub use websocket::{compute_accept_key, WebSocket, WebSocketHandler, WebSocketMessage};
 
 /// Convenience: the default secure-by-default middleware stack.
 ///

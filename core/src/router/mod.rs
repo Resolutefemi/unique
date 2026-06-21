@@ -154,6 +154,10 @@ pub struct Router {
     middleware: Vec<crate::middleware::Middleware>,
     /// Static fallback handler for 404s (e.g. serve files from public/).
     fallback: Option<Handler>,
+    /// WebSocket handlers keyed by path. When a request comes in with the
+    /// `Upgrade: websocket` header, we look up the path here and run the
+    /// WS handler instead of the normal route handler.
+    pub ws_handlers: std::collections::HashMap<String, crate::websocket::WebSocketHandler>,
 }
 
 impl Router {
@@ -162,6 +166,7 @@ impl Router {
             root: Node::new(),
             middleware: Vec::new(),
             fallback: None,
+            ws_handlers: std::collections::HashMap::new(),
         }
     }
 
@@ -292,6 +297,22 @@ impl Router {
 impl Default for Router {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+impl Router {
+    /// Register a WebSocket handler at the given path.
+    pub fn ws<F, Fut>(&mut self, path: &str, handler: F)
+    where
+        F: Fn(crate::websocket::WebSocket) -> Fut + Send + Sync + 'static,
+        Fut: std::future::Future<Output = ()> + Send + 'static,
+    {
+        let handler = std::sync::Arc::new(handler);
+        let ws_handler: crate::websocket::WebSocketHandler = std::sync::Arc::new(move |ws| {
+            let h = handler.clone();
+            Box::pin(async move { h(ws).await })
+        });
+        self.ws_handlers.insert(path.to_string(), ws_handler);
     }
 }
 
