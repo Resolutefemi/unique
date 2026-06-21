@@ -24,12 +24,14 @@
 pub mod prelude;
 pub mod builder;
 pub mod macros;
+pub mod simple;
 
 // Re-export `__macro_support` at the crate root so `#[macro_export]` macros
 // can find it via `$crate::__macro_support`.
 pub use macros::__macro_support;
 
 pub use builder::{Kungfu, KungfuBuilder};
+pub use simple::ResponseBuilder;
 pub use kungfu_core::{
     default_middleware_stack,
     error::{KungfuError, Result, StatusCode},
