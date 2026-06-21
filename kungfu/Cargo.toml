@@ -1,0 +1,26 @@
+[package]
+name = "kungfu"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Idiomatic Rust API for the Kungfu.js polyglot web framework"
+
+[lib]
+name = "kungfu"
+path = "src/lib.rs"
+
+[dependencies]
+kungfu-core = { path = "../core" }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true }
+
+[[example]]
+name = "hello"
+path = "examples/hello.rs"
