@@ -1,0 +1,20 @@
+[package]
+name = "kungfu-cli"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "The `kungfu` command-line tool"
+
+[[bin]]
+name = "kungfu"
+path = "src/main.rs"
+
+[dependencies]
+kungfu-core = { path = "../core" }
+kungfu = { path = "../kungfu" }
+tokio = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+serde_json = { workspace = true }
+bytes = { workspace = true }
