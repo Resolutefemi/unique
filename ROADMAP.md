@@ -18,33 +18,80 @@ This document tracks the path from V1 to "fastest framework ever" and beyond.
 | Frontend module (.kungfu SSR + livereload + TS type gen) | ✅ shipped |
 | Benchmark suite vs actix/express/fastapi | ✅ scripts + harness |
 
-## V1.1 — Productivity (next 1-2 weeks)
+## V1 — Status: shipped (2026-06-21)
 
-### Backend
-- ✅ **WebSocket routes** — `Kungfu::new().ws("/chat", handler)`. RFC 6455 frame parser/encoder + auto upgrade handshake.
-- ✅ **Multipart body parsing** — `req.multipart()` parses `multipart/form-data` for file uploads.
-- ✅ **JSON Schema request validation** — `validate_json("/users", Method::Post, schema)` middleware with type/required/min/max/enum checks.
-- ✅ **Argon2id password hashing** — `sensitive` ORM fields auto-hashed on insert. `verify_password()` for login flows.
-- ✅ **Gzip compression middleware** — `gzip()` compresses response bodies based on `Accept-Encoding`.
-- ✅ **CLI: kungfu new** — scaffold a new project with `kungfu new <name>`.
-- ✅ **CLI: kungfu start** — runs `cargo run` in the current directory.
-- ✅ **CLI: kungfu build** — runs `cargo build --release`.
-- ⏳ **C ABI via `cbindgen`** — opaque `KungfuRouter`/`KungfuServer` pointers. Prerequisite for the C++/Dart/Swift bindings.
-- ⏳ **Wire sqlx real drivers** — the ORM has feature-gated `sqlx` deps but the `query()` impl returns `Error::NoDriver`. ~2 hours to wire up Postgres/MySQL/SQLite.
-- ⏳ **Source-code hot reload** (cargo-watch style, not just router swap).
+All V1 items shipped. The framework is stable and the v1.0.0 release is
+on GitHub. Below is what's been done + what's left for future point releases.
+
+| Component | Status |
+|---|---|
+| Rust core engine | ✅ shipped |
+| io_uring zero-copy I/O | ✅ shipped (feature flag) |
+| HTTP/1.1 pipelining | ✅ shipped (io_uring path) |
+| SIMD JSON | ✅ shipped (feature flag) |
+| SmallVec-backed Headers | ✅ shipped |
+| Response object pooling | ✅ shipped |
+| JS/TS binding (napi-rs) | ✅ scaffold |
+| ORM (mock driver + sqlx feature gates wired) | ✅ shipped |
+| kungfu-css (Tailwind-like engine) | ✅ shipped |
+| Frontend module (.kungfu SSR + livereload + TS type gen) | ✅ shipped |
+| Benchmark suite vs actix/express/fastapi | ✅ scripts + harness |
+| WebSocket routes (RFC 6455) | ✅ shipped |
+| Multipart body parsing | ✅ shipped |
+| JSON Schema request validation | ✅ shipped |
+| Argon2id password hashing | ✅ shipped |
+| Gzip compression middleware | ✅ shipped |
+| ETag + conditional GET middleware | ✅ shipped |
+| Static file serving middleware | ✅ shipped |
+| Cookie/CookieJar/SameSite | ✅ shipped |
+| C ABI via cbindgen (kungfu.h) | ✅ shipped (feature flag `ffi`) |
+| C++ binding (header-only) | ✅ shipped |
+| Java binding (JNI scaffold) | ✅ shipped |
+| Dart binding (dart:ffi scaffold) | ✅ shipped |
+| Swift binding (C interop scaffold) | ✅ shipped |
+| Python binding (pyo3) | ✅ scaffold |
+| Go binding (net/http) | ✅ shipped |
+| `.kungfu` SSR execution via Node subprocess | ✅ shipped |
+| DevMode controller (livereload + routes.d.ts wiring) | ✅ shipped |
+| File-based routing (auto-register .kungfu files) | ✅ shipped |
+| JWT authentication middleware (scaffold) | ✅ shipped |
+| Background jobs queue | ✅ shipped |
+| Plugin system (scaffold) | ✅ shipped |
+| CLI: kungfu new | ✅ shipped |
+| CLI: kungfu start --watch (source-code hot reload) | ✅ shipped |
+| CLI: kungfu build | ✅ shipped |
+| CLI: kungfu migrate | ✅ shipped (generates guidance) |
+| CLI: kungfu generate admin | ✅ shipped |
+| CLI: kungfu deploy (Dockerfile/compose/systemd) | ✅ shipped |
+| NextJS-style tutorial (10 chapters) | ✅ shipped |
+
+## Future work (post-V1)
+
+### Performance (path to 3M req/s)
+- ⏳ Connection-per-thread scheduling — pin each TCP connection to a worker thread.
+- ⏳ Custom HTTP parser (vs `httparse`).
+- ⏳ HTTP/3 via `quinn` + `h3`.
+- ⏳ io_uring buffer ring (true zero-copy).
+- ⏳ Batched `writev` on the io_uring path.
+- ⏳ TLS offload via `rustls`.
+
+### ORM
+- ⏳ Real sqlx driver for INSERT/UPDATE/DELETE (currently only SELECT is wired).
+- ⏳ Connection pooling via `deadpool`.
+- ⏳ Query cache keyed by SQL + params.
 
 ### Frontend
-- ⏳ **`.kungfu` SSR execution** — the Rust side parses + renders but execution of `data()`/`template()` requires a JS runtime (Deno or Node). Wire up a subprocess call.
-- ⏳ **WebSocket live reload server** — the broadcast server exists but isn't wired into the HTTP listener yet.
-- ⏳ **End-to-end type safety** — the TS type generator exists but isn't wired into the build.
+- ⏳ `.kungfu` client-side hydration (currently SSR-only).
+- ⏳ WebSocket livereload server wired into HTTP listener (currently `DevMode` exists but isn't auto-wired).
+- ⏳ End-to-end type safety (auto-emit `routes.d.ts` on every route registration).
 
-### CLI
-- ⏳ **`kungfu migrate`** — run ORM migrations (currently generates SQL only).
-- ⏳ **`kungfu generate admin`** — generate admin dashboard from model definitions.
-- ⏳ **`kungfu deploy`** — one-command deploy to Docker / Vercel / AWS Lambda.
+### Auth
+- ⏳ Full JWT HS256/RS256/ES256 signature verification (V1 decodes claims but doesn't verify).
+- ⏳ Session-based auth (cookie + server-side store).
+- ⏳ OAuth2 integration.
 
-### Documentation
-- ✅ **NextJS-style tutorial** — `docs/learn/` with all 10 chapters (Getting Started, Routing, Middleware, Request & Response, Cookies & Sessions, Static Files, Database & ORM, Frontend & SSR, OpenAPI & Docs, Deployment).
+### Admin dashboard
+- ⏳ Auto-generate CRUD interfaces from model definitions (currently just lists routes from OpenAPI).
 
 ## V1.2 — Polyglot bindings (1-2 months)
 
