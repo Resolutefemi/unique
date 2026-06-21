@@ -1,6 +1,6 @@
 {
   "name": "kungfu",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "One API surface, infinite languages. A polyglot web framework with a Rust core.",
   "main": "index.js",
   "types": "index.d.ts",

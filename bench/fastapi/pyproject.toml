@@ -1,6 +1,6 @@
 [project]
 name = "kungfu-bench-fastapi"
-version = "0.1.0"
+version = "1.0.0"
 description = "FastAPI equivalent of the kungfu bench, for apples-to-apples comparison"
 requires-python = ">=3.10"
 dependencies = [
