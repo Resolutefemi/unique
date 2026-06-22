@@ -15,6 +15,7 @@ pub mod auth;
 pub mod auth_ext;
 pub mod tls;
 pub mod auto;
+pub mod perf;
 pub mod middleware;
 pub mod openapi;
 pub mod request;
@@ -25,6 +26,9 @@ pub mod version;
 pub mod websocket;
 pub mod jobs;
 pub mod plugin;
+
+#[cfg(test)]
+mod fuzz;
 
 #[cfg(feature = "ffi")]
 pub mod ffi;
