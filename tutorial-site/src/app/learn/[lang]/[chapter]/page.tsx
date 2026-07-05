@@ -1,5 +1,5 @@
-import { Navbar } from '../../components/Navbar';
-import { chapters, languages } from '../../data/languages';
+import { Navbar } from '@/components/Navbar';
+import { chapters, languages } from '@/data/languages';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
@@ -87,49 +87,41 @@ function getTutorialContent(lang: string, chapter: string): string {
   const langName = langData.name;
 
   if (chapter === '01-getting-started') {
-    return `
-<h1>Getting Started with Kungfu.js in ${langName}</h1>
-<p>Welcome to the Kungfu.js tutorial for ${langName}! This guide will take you from beginner to pro.</p>
-
-<h2>What is Kungfu.js?</h2>
-<p>Kungfu.js is a polyglot web framework with a Rust core. It lets you write your backend in any language while keeping the frontend in JavaScript/TypeScript. The HTTP server, router, and middleware all run in Rust for maximum performance.</p>
-
-<h2>Why use Kungfu.js?</h2>
-<ul>
-  <li><strong>Fast:</strong> 86k+ requests per second on CI runners</li>
-  <li><strong>Secure:</strong> HSTS, CSP, CORS, rate limiting, JWT auth. All on by default</li>
-  <li><strong>Simple:</strong> No macros needed, just closures</li>
-  <li><strong>Polyglot:</strong> Write backend in ${langName}, Rust, Python, Go, and more</li>
-</ul>
-
-<h2>Prerequisites</h2>
-${getPrerequisites(lang)}
-
-<h2>Installation</h2>
-${getInstallSteps(lang)}
-
-<h2>Your First App</h2>
-${getHelloWorld(lang)}
-
-<h2>Run It</h2>
-${getRunCommand(lang)}
-
-<h2>What Just Happened?</h2>
-${getExplanation(lang)}
-
-<h2>Next Steps</h2>
-<p>In the next chapter, you will learn about routing, path parameters, and query strings.</p>
-`;
+    return [
+      `<h1>Getting Started with Kungfu.js in ${langName}</h1>`,
+      `<p>Welcome to the Kungfu.js tutorial for ${langName}! This guide will take you from beginner to pro.</p>`,
+      `<h2>What is Kungfu.js?</h2>`,
+      `<p>Kungfu.js is a polyglot web framework with a Rust core. It lets you write your backend in any language while keeping the frontend in JavaScript/TypeScript. The HTTP server, router, and middleware all run in Rust for maximum performance.</p>`,
+      `<h2>Why use Kungfu.js?</h2>`,
+      `<ul>`,
+      `<li><strong>Fast:</strong> 86k+ requests per second on CI runners</li>`,
+      `<li><strong>Secure:</strong> HSTS, CSP, CORS, rate limiting, JWT auth. All on by default</li>`,
+      `<li><strong>Simple:</strong> No macros needed, just closures</li>`,
+      `<li><strong>Polyglot:</strong> Write backend in ${langName}, Rust, Python, Go, and more</li>`,
+      `</ul>`,
+      `<h2>Prerequisites</h2>`,
+      getPrerequisites(lang),
+      `<h2>Installation</h2>`,
+      getInstallSteps(lang),
+      `<h2>Your First App</h2>`,
+      getHelloWorld(lang),
+      `<h2>Run It</h2>`,
+      getRunCommand(lang),
+      `<h2>What Just Happened?</h2>`,
+      getExplanation(lang),
+      `<h2>Next Steps</h2>`,
+      `<p>In the next chapter, you will learn about routing, path parameters, and query strings.</p>`,
+    ].join('\n');
   }
 
   const chapterData = chapters.find(c => c.slug === chapter)!;
-  return `
-<h1>${chapterData.title} in ${langName}</h1>
-<p>${chapterData.description}</p>
-<p>This chapter covers ${chapterData.title.toLowerCase()} for ${langName} developers.</p>
-<h2>Overview</h2>
-<p>See the full text tutorial in the <code>docs/learn/</code> directory of the Kungfu.js repository for detailed examples.</p>
-`;
+  return [
+    `<h1>${chapterData.title} in ${langName}</h1>`,
+    `<p>${chapterData.description}</p>`,
+    `<p>This chapter covers ${chapterData.title.toLowerCase()} for ${langName} developers.</p>`,
+    `<h2>Overview</h2>`,
+    `<p>See the full text tutorial in the <code>docs/learn/</code> directory of the Kungfu.js repository for detailed examples.</p>`,
+  ].join('\n');
 }
 
 function getPrerequisites(lang: string): string {
@@ -151,31 +143,31 @@ function getPrerequisites(lang: string): string {
 function getInstallSteps(lang: string): string {
   switch (lang) {
     case 'rust':
-      return '<pre><code>git clone https://github.com/Resolutefemi/kungfu.git\\ncd kungfu\\ncargo build --workspace --release</code></pre>';
+      return '<pre><code>git clone https://github.com/Resolutefemi/kungfu.git\ncd kungfu\ncargo build --workspace --release</code></pre>';
     case 'javascript':
     case 'typescript':
-      return '<pre><code>git clone https://github.com/Resolutefemi/kungfu.git\\ncd kungfu/bindings/js\\nnpm install\\nnpm run build</code></pre>';
+      return '<pre><code>git clone https://github.com/Resolutefemi/kungfu.git\ncd kungfu/bindings/js\nnpm install\nnpm run build</code></pre>';
     case 'python':
-      return '<pre><code>git clone https://github.com/Resolutefemi/kungfu.git\\ncd kungfu/bindings/python\\npip install maturin\\nmaturin develop --release</code></pre>';
+      return '<pre><code>git clone https://github.com/Resolutefemi/kungfu.git\ncd kungfu/bindings/python\npip install maturin\nmaturin develop --release</code></pre>';
     case 'go':
       return '<pre><code>go get github.com/Resolutefemi/kungfu/bindings/go</code></pre>';
     default:
-      return '<pre><code>git clone https://github.com/Resolutefemi/kungfu.git\\ncd kungfu\\ncargo build -p kungfu-core --release --features ffi</code></pre>';
+      return '<pre><code>git clone https://github.com/Resolutefemi/kungfu.git\ncd kungfu\ncargo build -p kungfu-core --release --features ffi</code></pre>';
   }
 }
 
 function getHelloWorld(lang: string): string {
   switch (lang) {
     case 'rust':
-      return '<pre><code>use kungfu::prelude::*;\\n\\nfn main() {\\n    let rt = tokio::runtime::Runtime::new().unwrap();\\n    rt.block_on(\\n        Kungfu::new()\\n            .handle_get("/hello", |_req, res| res.text("world"))\\n            .run("0.0.0.0:3000"),\\n    ).unwrap();\\n}</code></pre>';
+      return '<pre><code>use kungfu::prelude::*;\n\nfn main() {\n    let rt = tokio::runtime::Runtime::new().unwrap();\n    rt.block_on(\n        Kungfu::new()\n            .handle_get("/hello", |_req, res| res.text("world"))\n            .run("0.0.0.0:3000"),\n    ).unwrap();\n}</code></pre>';
     case 'javascript':
-      return '<pre><code>const { Kungfu } = require(\'kungfu\');\\nconst app = new Kungfu();\\n\\napp.get(\'/hello\', (req) => {\\n    return { status: 200, body: JSON.stringify({ message: \'world\' }) };\\n});\\n\\napp.listen(3000);</code></pre>';
+      return '<pre><code>const { Kungfu } = require(\'kungfu\');\nconst app = new Kungfu();\n\napp.get(\'/hello\', (req) => {\n    return { status: 200, body: JSON.stringify({ message: \'world\' }) };\n});\n\napp.listen(3000);</code></pre>';
     case 'typescript':
-      return '<pre><code>import { Kungfu } from \'kungfu\';\\nconst app = new Kungfu();\\n\\napp.get(\'/hello\', (req) => {\\n    return { status: 200, body: JSON.stringify({ message: \'world\' }) };\\n});\\n\\napp.listen(3000);</code></pre>';
+      return '<pre><code>import { Kungfu } from \'kungfu\';\nconst app = new Kungfu();\n\napp.get(\'/hello\', (req) => {\n    return { status: 200, body: JSON.stringify({ message: \'world\' }) };\n});\n\napp.listen(3000);</code></pre>';
     case 'python':
-      return '<pre><code>from kungfu import KungfuApp\\nimport json\\n\\napp = KungfuApp()\\n\\napp.get(\'/hello\', lambda req: app.respond(\\n    json.loads(req)[\'request_id\'], 200,\\n    json.dumps({\'message\': \'world\'})\\n))\\n\\napp.listen(3000)</code></pre>';
+      return '<pre><code>from kungfu import KungfuApp\nimport json\n\napp = KungfuApp()\n\napp.get(\'/hello\', lambda req: app.respond(\n    json.loads(req)[\'request_id\'], 200,\n    json.dumps({\'message\': \'world\'})\n))\n\napp.listen(3000)</code></pre>';
     case 'go':
-      return '<pre><code>package main\\n\\nimport "github.com/Resolutefemi/kungfu/bindings/go/kungfu"\\n\\nfunc main() {\\n    app := kungfu.New()\\n    app.Get("/hello", func(w kungfu.ResponseWriter, r *kungfu.Request) {\\n        w.Text(200, "world")\\n    })\\n    app.Run(":3000")\\n}</code></pre>';
+      return '<pre><code>package main\n\nimport "github.com/Resolutefemi/kungfu/bindings/go/kungfu"\n\nfunc main() {\n    app := kungfu.New()\n    app.Get("/hello", func(w kungfu.ResponseWriter, r *kungfu.Request) {\n        w.Text(200, "world")\n    })\n    app.Run(":3000")\n}</code></pre>';
     default:
       return '<pre><code>// See bindings/' + lang + '/ for examples</code></pre>';
   }
@@ -184,19 +176,25 @@ function getHelloWorld(lang: string): string {
 function getRunCommand(lang: string): string {
   switch (lang) {
     case 'rust':
-      return '<pre><code>cargo run --example hello\\n\\n# Then visit:\\n# http://localhost:3000/hello</code></pre>';
+      return '<pre><code>cargo run --example hello\n\n# Then visit:\n# http://localhost:3000/hello</code></pre>';
     case 'javascript':
     case 'typescript':
-      return '<pre><code>node examples/hello.js\\n\\n# Then visit:\\n# http://localhost:3000/hello</code></pre>';
+      return '<pre><code>node examples/hello.js\n\n# Then visit:\n# http://localhost:3000/hello</code></pre>';
     case 'python':
-      return '<pre><code>python examples/hello_handlers.py\\n\\n# Then visit:\\n# http://localhost:3000/hello</code></pre>';
+      return '<pre><code>python examples/hello_handlers.py\n\n# Then visit:\n# http://localhost:3000/hello</code></pre>';
     case 'go':
-      return '<pre><code>go run examples/hello/main.go\\n\\n# Then visit:\\n# http://localhost:3000/hello</code></pre>';
+      return '<pre><code>go run examples/hello/main.go\n\n# Then visit:\n# http://localhost:3000/hello</code></pre>';
     default:
       return '<pre><code># See the bindings directory for run instructions</code></pre>';
   }
 }
 
 function getExplanation(lang: string): string {
-  return '<p>You just created a Kungfu.js server that listens on port 3000 and responds to GET /hello with "world". The Rust core handles the HTTP parsing, routing, and response writing. Your ' + lang + ' code only runs for the business logic.</p><p>The server comes with built-in security headers (HSTS, CSP, X-Frame-Options), CORS, and rate limiting. You can verify this by checking the response headers:</p><pre><code>curl -i http://localhost:3000/hello</code></pre><p>You will see headers like <code>strict-transport-security</code>, <code>content-security-policy</code>, and more.</p><p>Auto-generated API docs are available at <a href="http://localhost:3000/docs">http://localhost:3000/docs</a>.</p>';
+  return [
+    '<p>You just created a Kungfu.js server that listens on port 3000 and responds to GET /hello with "world". The Rust core handles the HTTP parsing, routing, and response writing. Your ' + lang + ' code only runs for the business logic.</p>',
+    '<p>The server comes with built-in security headers (HSTS, CSP, X-Frame-Options), CORS, and rate limiting. You can verify this by checking the response headers:</p>',
+    '<pre><code>curl -i http://localhost:3000/hello</code></pre>',
+    '<p>You will see headers like <code>strict-transport-security</code>, <code>content-security-policy</code>, and more.</p>',
+    '<p>Auto-generated API docs are available at <a href="http://localhost:3000/docs">http://localhost:3000/docs</a>.</p>',
+  ].join('\n');
 }

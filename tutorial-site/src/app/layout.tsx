@@ -1,4 +1,4 @@
-import './src/styles/globals.css';
+import '../styles/globals.css';
 
 export const metadata = {
   title: 'Kungfu.js - Learn the Polyglot Web Framework',
