@@ -1,0 +1,79 @@
+{
+  "name": "kungfu",
+  "displayName": "Kungfu.js",
+  "description": "Support for .jsk and .tsk Kungfu.js files. Syntax highlighting, snippets, and the Kungfu.js logo.",
+  "version": "1.0.0",
+  "publisher": "Resolutefemi",
+  "icon": "images/logo.png",
+  "engines": { "vscode": "^1.80.0" },
+  "categories": ["Programming Languages", "Snippets"],
+  "keywords": ["kungfu", "jsk", "tsk", "web", "framework", "rust"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Resolutefemi/kungfu"
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "kungfu-js",
+        "aliases": ["Kungfu JS", "jsk"],
+        "extensions": [".jsk"],
+        "icon": {
+          "light": "images/logo-light.svg",
+          "dark": "images/logo-dark.svg"
+        },
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "kungfu-ts",
+        "aliases": ["Kungfu TS", "tsk"],
+        "extensions": [".tsk"],
+        "icon": {
+          "light": "images/logo-light.svg",
+          "dark": "images/logo-dark.svg"
+        },
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "kungfu-page",
+        "aliases": ["Kungfu Page", "kungfu"],
+        "extensions": [".kungfu"],
+        "icon": {
+          "light": "images/logo-light.svg",
+          "dark": "images/logo-dark.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "kungfu-js",
+        "scopeName": "source.kungfu-js",
+        "path": "./syntaxes/kungfu-js.tmLanguage.json"
+      },
+      {
+        "language": "kungfu-ts",
+        "scopeName": "source.kungfu-ts",
+        "path": "./syntaxes/kungfu-ts.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "kungfu-js",
+        "path": "./snippets/kungfu.json"
+      },
+      {
+        "language": "kungfu-ts",
+        "path": "./snippets/kungfu.json"
+      }
+    ],
+    "icons": {
+      "kungfu-logo": {
+        "description": "Kungfu.js logo",
+        "default": {
+          "fontPath": "images/logo.svg",
+          "fontCharacter": "🥋"
+        }
+      }
+    }
+  }
+}

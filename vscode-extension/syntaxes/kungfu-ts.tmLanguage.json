@@ -1,0 +1,51 @@
+{
+  "scopeName": "source.kungfu-ts",
+  "patterns": [{ "include": "#expression" }],
+  "repository": {
+    "expression": {
+      "patterns": [
+        { "include": "#keywords" },
+        { "include": "#types" },
+        { "include": "#strings" },
+        { "include": "#comments" },
+        { "include": "#numbers" },
+        { "include": "#functions" },
+        { "include": "#decorators" }
+      ]
+    },
+    "keywords": {
+      "match": "\\b(const|let|var|function|return|if|else|for|while|async|await|import|export|from|class|extends|implements|interface|type|enum|new|this|super|try|catch|finally|throw|typeof|instanceof|in|of|delete|void|yield|default|break|continue|switch|case|do|with|public|private|protected|readonly|static|abstract|as|is|keyof|infer|namespace|declare|module)\\b",
+      "name": "keyword.control.kungfu-ts"
+    },
+    "types": {
+      "match": "\\b(string|number|boolean|any|unknown|never|void|null|undefined|object|symbol|bigint)\\b",
+      "name": "support.type.kungfu-ts"
+    },
+    "decorators": {
+      "match": "@[a-zA-Z_][\\w]*",
+      "name": "meta.decorator.kungfu-ts"
+    },
+    "strings": {
+      "name": "string.quoted.kungfu-ts",
+      "patterns": [
+        { "match": "'[^']*'", "name": "string.quoted.single.kungfu-ts" },
+        { "match": "\"[^\"]*\"", "name": "string.quoted.double.kungfu-ts" },
+        { "match": "`[^`]*`", "name": "string.quoted.template.kungfu-ts" }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        { "match": "//.*$", "name": "comment.line.double-slash.kungfu-ts" },
+        { "match": "/\\*[\\s\\S]*?\\*/", "name": "comment.block.kungfu-ts" }
+      ]
+    },
+    "numbers": {
+      "match": "\\b\\d+(\\.\\d+)?\\b",
+      "name": "constant.numeric.kungfu-ts"
+    },
+    "functions": {
+      "match": "\\b([a-zA-Z_$][\\w$]*)\\s*(?=\\()",
+      "name": "entity.name.function.kungfu-ts"
+    }
+  }
+}
