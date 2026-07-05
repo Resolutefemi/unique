@@ -1,5 +1,6 @@
 import { Navbar } from '@/components/Navbar';
 import { chapters, languages } from '@/data/languages';
+import { getChapterContent } from '@/data/content';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
@@ -32,7 +33,7 @@ export default async function TutorialPage({
   const prev = chapterIndex > 0 ? chapters[chapterIndex - 1] : null;
   const next = chapterIndex < chapters.length - 1 ? chapters[chapterIndex + 1] : null;
 
-  const content = getTutorialContent(params.lang, params.chapter);
+  const content = getChapterContent(params.lang, params.chapter);
 
   return (
     <>
