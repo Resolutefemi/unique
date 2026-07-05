@@ -16,6 +16,7 @@ pub mod auth_ext;
 pub mod tls;
 pub mod auto;
 pub mod perf;
+pub mod http_parser;
 pub mod middleware;
 pub mod openapi;
 pub mod request;
