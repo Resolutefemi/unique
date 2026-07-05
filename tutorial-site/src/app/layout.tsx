@@ -1,4 +1,4 @@
-import './src/styles/globals.css';
+import '@/styles/globals.css';
 import { PrismLoader } from '../components/PrismLoader';
 
 export const metadata = {

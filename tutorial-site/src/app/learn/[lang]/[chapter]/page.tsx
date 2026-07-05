@@ -40,7 +40,11 @@ export default async function TutorialPage({
       <Navbar />
       <div className="tutorial-layout">
         <aside className="sidebar">
-          <h3>{lang.icon} {lang.name}</h3>
+          <h3>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={lang.iconUrl} alt={lang.name} width={20} height={20} style={{ verticalAlign: 'middle', marginRight: 6 }} />
+            {lang.name}
+          </h3>
           {chapters.map((c, i) => (
             <Link
               key={c.slug}
@@ -53,7 +57,9 @@ export default async function TutorialPage({
           <h3>Other Languages</h3>
           {languages.filter(l => l.id !== params.lang).map(l => (
             <Link key={l.id} href={`/learn/${l.id}/01-getting-started`}>
-              {l.icon} {l.name}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={l.iconUrl} alt={l.name} width={16} height={16} style={{ verticalAlign: 'middle', marginRight: 4 }} />
+              {l.name}
             </Link>
           ))}
         </aside>

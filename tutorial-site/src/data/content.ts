@@ -440,7 +440,7 @@ function getMiddlewareCode(lang: string): string {
   if (lang === 'rust') {
     return `use std::sync::Arc;\n\nlet add_request_id = Arc::new(|req, next| {\n    Box::pin(async move {\n        let id = req.header("x-request-id")\n            .map(|s| s.to_string())\n            .unwrap_or_else(|| "unknown".to_string());\n        let mut resp = next(req).await;\n        resp.set_header("x-request-id", id);\n        resp\n    })\n});\n\n// Auth middleware (short-circuits if no API key)\nlet require_auth = Arc::new(|req, next| {\n    Box::pin(async move {\n        if req.header("x-api-key").is_none() {\n            return Response::new().status(StatusCode::Unauthorized)\n                .text("Missing API key");\n        }\n        next(req).await\n    })\n});\n\nKungfu::new()\n    .use_middleware(add_request_id)  // runs first\n    .use_middleware(require_auth)    // runs second\n    .handle_get("/data", |_req, res| res.text("secret data"))`;
   }
-  return `// Custom middleware example\napp.use((req, next) => {\n    console.log(`['${req.method} ${req.path}']`);\n    const response = next(req);\n    response.headers['x-request-id'] = generateId();\n    return response;\n});\n\n// Auth middleware (short-circuit)\napp.use((req, next) => {\n    if (req.path !== '/login' && !req.headers['authorization']) {\n        return { status: 401, body: '{"error":"Unauthorized"}' };\n    }\n    return next(req);\n});`;
+  return `// Custom middleware example\napp.use((req, next) => {\n    console.log(\`['\${req.method} \${req.path}']\`);\n    const response = next(req);\n    response.headers['x-request-id'] = generateId();\n    return response;\n});\n\n// Auth middleware (short-circuit)\napp.use((req, next) => {\n    if (req.path !== '/login' && !req.headers['authorization']) {\n        return { status: 401, body: '{"error":"Unauthorized"}' };\n    }\n    return next(req);\n});`;
 }
 
 function getDatabaseCode(lang: string, slug: string): string {
@@ -508,7 +508,7 @@ function getCssCode(lang: string): string {
 }
 
 function getFrontendCode(lang: string): string {
-  return `// .kng file format (src/pages/index.kng)\nexport async function data(req) {\n    return { user: { name: 'Bruce', role: 'master' } };\n}\n\nexport function template({ user }) {\n    return `<div class="flex p-4 text-xl">\n        Hello, ` + user.name + `! You are a ` + user.role + `.\n    </div>`;\n}\n---\n<footer>Copyright 2026</footer>`;
+  return `// .kng file format (src/pages/index.kng)\nexport async function data(req) {\n    return { user: { name: 'Bruce', role: 'master' } };\n}\n\nexport function template({ user }) {\n    return \`<div class="flex p-4 text-xl">\n        Hello, \` + user.name + \`! You are a \` + user.role + \`.\n    </div>\`;\n}\n---\n<footer>Copyright 2026</footer>`;
 }
 
 function getRequestResponseCode(lang: string, slug: string): string {

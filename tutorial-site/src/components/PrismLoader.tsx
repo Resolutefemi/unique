@@ -2,6 +2,14 @@
 
 import { useEffect } from 'react';
 
+declare global {
+  interface Window {
+    Prism?: {
+      highlightAll: (element?: HTMLElement | Document) => void;
+    };
+  }
+}
+
 export function PrismLoader() {
   useEffect(() => {
     // Load Prism.js dynamically
