@@ -13,7 +13,7 @@ export default function HomePage() {
           Write your backend in any language. Frontend in JS/TS only.
           Fast, secure, simple.
         </p>
-        <h2 style={{ fontSize: '1.5rem', marginTop: '2rem' }}>Choose your language</h2>
+        <h2 style={{ fontSize: '1.4rem', marginTop: '1.5rem' }}>Choose your language</h2>
         <div className="lang-grid">
           {languages.map((lang) => (
             <Link
@@ -21,7 +21,8 @@ export default function HomePage() {
               href={`/learn/${lang.id}/01-getting-started`}
               className="lang-card"
             >
-              <span className="lang-icon">{lang.icon}</span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={lang.iconUrl} alt={lang.name} className="lang-icon" width={40} height={40} />
               <span className="lang-name">{lang.name}</span>
               <span className="lang-desc">{lang.description}</span>
             </Link>

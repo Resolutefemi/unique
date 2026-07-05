@@ -1,10 +1,10 @@
-// Language data for the tutorial site.
-// Kungfu.js is available in ALL these languages.
+// Language data with real SVG icons from CDN (devicon.dev)
+// Each language uses its official icon from the devicon CDN.
 
 export interface Language {
   id: string;
   name: string;
-  icon: string;
+  iconUrl: string;
   description: string;
   fileExtension: string;
   packageName: string;
@@ -15,7 +15,7 @@ export const languages: Language[] = [
   {
     id: 'rust',
     name: 'Rust',
-    icon: '🦀',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg',
     description: 'Native performance, full API access',
     fileExtension: '.rs',
     packageName: 'kungfu',
@@ -24,7 +24,7 @@ export const languages: Language[] = [
   {
     id: 'javascript',
     name: 'JavaScript',
-    icon: '🟨',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
     description: 'Node.js binding via napi-rs',
     fileExtension: '.jsk',
     packageName: '@kungfu/core',
@@ -33,7 +33,7 @@ export const languages: Language[] = [
   {
     id: 'typescript',
     name: 'TypeScript',
-    icon: '🔷',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
     description: 'Type-safe JS with .tsk files',
     fileExtension: '.tsk',
     packageName: '@kungfu/core',
@@ -42,7 +42,7 @@ export const languages: Language[] = [
   {
     id: 'python',
     name: 'Python',
-    icon: '🐍',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
     description: 'pyo3 binding, decorator API',
     fileExtension: '.py',
     packageName: 'kungfu',
@@ -51,7 +51,7 @@ export const languages: Language[] = [
   {
     id: 'go',
     name: 'Go',
-    icon: '🐹',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg',
     description: 'Standalone net/http implementation',
     fileExtension: '.go',
     packageName: 'github.com/Resolutefemi/kungfu/bindings/go',
@@ -60,25 +60,25 @@ export const languages: Language[] = [
   {
     id: 'java',
     name: 'Java',
-    icon: '☕',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
     description: 'C ABI via JNI',
     fileExtension: '.java',
-    packageName: 'com.kng:kungfu',
+    packageName: 'com.kungfu:kungfu',
     registry: 'Maven Central',
   },
   {
     id: 'kotlin',
     name: 'Kotlin',
-    icon: '🟪',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-original.svg',
     description: 'JVM binding, same as Java',
     fileExtension: '.kt',
-    packageName: 'com.kng:kungfu',
+    packageName: 'com.kungfu:kungfu',
     registry: 'Maven Central',
   },
   {
     id: 'dart',
     name: 'Dart',
-    icon: '🎯',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dart/dart-original.svg',
     description: 'dart:ffi via C ABI',
     fileExtension: '.dart',
     packageName: 'kungfu',
@@ -87,7 +87,7 @@ export const languages: Language[] = [
   {
     id: 'swift',
     name: 'Swift',
-    icon: '🐦',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg',
     description: 'C interop via module map',
     fileExtension: '.swift',
     packageName: 'Kungfu',
@@ -96,7 +96,7 @@ export const languages: Language[] = [
   {
     id: 'cpp',
     name: 'C++',
-    icon: '➕',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',
     description: 'Header-only wrapper around C ABI',
     fileExtension: '.cpp',
     packageName: 'kungfu.hpp',
@@ -105,7 +105,7 @@ export const languages: Language[] = [
   {
     id: 'php',
     name: 'PHP',
-    icon: '🐘',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg',
     description: 'FFI extension to C library',
     fileExtension: '.php',
     packageName: 'kungfu/kungfu',
@@ -114,7 +114,7 @@ export const languages: Language[] = [
   {
     id: 'ruby',
     name: 'Ruby',
-    icon: '💎',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ruby/ruby-original.svg',
     description: 'FFI gem to C library',
     fileExtension: '.rb',
     packageName: 'kungfu',
@@ -123,7 +123,7 @@ export const languages: Language[] = [
   {
     id: 'csharp',
     name: 'C#',
-    icon: '🔵',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg',
     description: 'P/Invoke to C library',
     fileExtension: '.cs',
     packageName: 'Kungfu.Core',
@@ -132,7 +132,7 @@ export const languages: Language[] = [
   {
     id: 'c',
     name: 'C',
-    icon: '🔤',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg',
     description: 'Direct C ABI, no wrapper needed',
     fileExtension: '.c',
     packageName: 'kungfu.h',
@@ -141,7 +141,7 @@ export const languages: Language[] = [
   {
     id: 'elixir',
     name: 'Elixir',
-    icon: '💧',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/elixir/elixir-original.svg',
     description: 'NIF binding to C library',
     fileExtension: '.ex',
     packageName: 'kungfu',
@@ -150,8 +150,8 @@ export const languages: Language[] = [
   {
     id: 'lua',
     name: 'Lua',
-    icon: '🌙',
-    description: 'Lua FFI to C library',
+    iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/lua/lua-original.svg',
+    description: 'LuaJIT FFI to C library',
     fileExtension: '.lua',
     packageName: 'kungfu',
     registry: 'LuaRocks',
