@@ -29,6 +29,9 @@ pub mod websocket;
 pub mod jobs;
 pub mod plugin;
 
+#[cfg(feature = "http3")]
+pub mod http3;
+
 #[cfg(test)]
 mod fuzz;
 
