@@ -1,0 +1,48 @@
+[package]
+name = "kungfu"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Idiomatic Rust API for the Kungfu.js polyglot web framework"
+repository = "https://github.com/Resolutefemi/kungfu"
+homepage = "https://github.com/Resolutefemi/kungfu"
+keywords = ["web", "framework", "http", "server", "polyglot"]
+categories = ["web-programming", "network-programming"]
+
+[lib]
+name = "kungfu"
+path = "src/lib.rs"
+
+[dependencies]
+kungfu-core = { path = "../core" }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+bytes = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true }
+serde = { workspace = true }
+
+[[example]]
+name = "hello"
+path = "examples/hello.rs"
+
+[[example]]
+name = "simple"
+path = "examples/simple.rs"
+
+[[example]]
+name = "middleware"
+path = "examples/middleware.rs"
+
+[[example]]
+name = "params"
+path = "examples/params.rs"
+
+[[example]]
+name = "errors"
+path = "examples/errors.rs"
