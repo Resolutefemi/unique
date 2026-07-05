@@ -10,14 +10,22 @@ env:
   CARGO_TERM_COLOR: always
   RUST_BACKTRACE: 1
 
+# The repo has the workspace at kungfu/ subdirectory (not repo root).
+# All cargo commands must run from kungfu/.
+
 jobs:
   test:
     name: Test (default features)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: kungfu
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: kungfu
       - name: Install system dependencies
         run: sudo apt-get update -qq && sudo apt-get install -y -qq python3-dev
       - name: Build
@@ -26,18 +34,23 @@ jobs:
         run: cargo test --workspace --lib --verbose
       - name: Clippy
         run: cargo clippy --workspace --all-targets -- -D warnings
-        continue-on-error: true  # V1: clippy warnings are advisory
+        continue-on-error: true
       - name: Format check
         run: cargo fmt --all -- --check
-        continue-on-error: true  # V1: fmt is advisory
+        continue-on-error: true
 
   test-features:
     name: Test (io_uring + simd features)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: kungfu
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: kungfu
       - name: Build with all features
         run: cargo build -p kungfu-core --features "io_uring simd" --verbose
       - name: Test with all features
@@ -46,10 +59,15 @@ jobs:
   bench:
     name: Build benchmark binary
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: kungfu
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: kungfu
       - name: Build bench binary
         run: cargo build -p kungfu-cli --bin kungfu_bench --release
       - name: Build demo binary with max perf
@@ -58,10 +76,15 @@ jobs:
   js-binding:
     name: JS binding builds
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: kungfu
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: kungfu
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -69,14 +92,19 @@ jobs:
         run: cd bindings/js && npm install
       - name: Build native binding
         run: cd bindings/js && npm run build:debug
-        continue-on-error: true  # napi-rs build is finicky in CI; treat as advisory
+        continue-on-error: true
 
   doc:
     name: Build documentation
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: kungfu
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: kungfu
       - name: Build docs
         run: cargo doc --workspace --no-deps
