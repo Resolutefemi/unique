@@ -1606,7 +1606,9 @@ dependencies = [
  "bytes",
  "kungfu-core",
  "kungfu-css",
+ "parking_lot",
  "pyo3",
+ "serde",
  "serde_json",
  "tokio",
 ]
