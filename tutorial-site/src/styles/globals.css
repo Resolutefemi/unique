@@ -81,13 +81,16 @@ pre code {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   background: var(--nav-bg);
   backdrop-filter: blur(10px);
   z-index: 1000;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .navbar-brand {
@@ -95,7 +98,7 @@ pre code {
   align-items: center;
   gap: 0.5rem;
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: var(--text);
   text-decoration: none;
   flex-shrink: 0;
@@ -107,12 +110,14 @@ pre code {
   display: flex;
   align-items: center;
   gap: 1.25rem;
+  flex-shrink: 0;
 }
 
 .navbar-link {
   color: var(--text-secondary);
   font-size: 0.9rem;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .navbar-link:hover { color: var(--accent); text-decoration: none; }
@@ -121,55 +126,87 @@ pre code {
   background: var(--bg-secondary);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 0.4rem 0.75rem;
+  padding: 0.35rem 0.6rem;
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--text);
   transition: all 0.2s;
+  flex-shrink: 0;
 }
 
 .theme-toggle:hover { border-color: var(--accent); }
 
 .hamburger {
   display: none;
-  background: none;
-  border: none;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   color: var(--text);
-  padding: 0.25rem;
+  padding: 0.35rem 0.6rem;
+  flex-shrink: 0;
 }
 
+/* Mobile: show hamburger + theme toggle, hide links in dropdown */
 @media (max-width: 768px) {
-  .hamburger { display: block; }
-
-  .navbar-right {
-    position: fixed;
-    top: 57px;
-    right: 0;
-    width: 200px;
-    flex-direction: column;
-    gap: 0;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 0 0 0 12px;
-    padding: 0.5rem;
-    transform: translateX(100%);
-    transition: transform 0.25s ease;
-    z-index: 999;
+  .navbar {
+    padding: 0.6rem 0.75rem;
   }
 
-  .navbar-right.open { transform: translateX(0); }
+  .navbar-brand {
+    font-size: 1rem;
+  }
 
+  .hamburger {
+    display: block;
+  }
+
+  /* Links hidden by default, shown as dropdown */
   .navbar-link {
+    display: none;
+  }
+
+  .navbar-right.open .navbar-link {
+    display: block;
     width: 100%;
     padding: 0.6rem 0.75rem;
     border-radius: 6px;
   }
 
-  .navbar-link:hover { background: var(--bg-secondary); }
+  .navbar-right.open .navbar-link:hover {
+    background: var(--bg-secondary);
+  }
 
-  .theme-toggle { width: 100%; text-align: center; margin-top: 0.5rem; }
+  .navbar-right {
+    position: relative;
+  }
+
+  .navbar-right.open {
+    position: absolute;
+    top: 100%;
+    right: 0.75rem;
+    flex-direction: column;
+    gap: 0;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 0 0 10px 10px;
+    padding: 0.5rem;
+    min-width: 160px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+  }
+
+  /* Theme toggle ALWAYS visible, even when menu is closed */
+  .navbar-right .theme-toggle {
+    display: block;
+  }
+
+  .navbar-right.open .theme-toggle {
+    width: 100%;
+    text-align: center;
+    margin-top: 0.25rem;
+  }
 }
 
 /* Hero */
