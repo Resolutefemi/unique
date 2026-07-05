@@ -1,0 +1,171 @@
+//! The `kungfu` CLI.
+
+mod scaffold;
+
+use std::net::SocketAddr;
+
+#[tokio::main]
+async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
+    tracing_subscriber::fmt()
+        .with_env_filter(
+            tracing_subscriber::EnvFilter::try_from_default_env()
+                .unwrap_or_else(|_| "info".into()),
+        )
+        .init();
+
+    let args: Vec<String> = std::env::args().collect();
+    match args.get(1).map(|s| s.as_str()) {
+        Some("--version") | Some("-v") => {
+            println!("kungfu {}", kungfu_core::VERSION);
+        }
+        Some("--help") | Some("-h") | None => {
+            print_help();
+        }
+        Some("demo") => {
+            run_demo_server().await?;
+        }
+        Some("new") => {
+            let project_name = args.get(2).map(|s| s.as_str());
+            match project_name {
+                Some(name) => {
+                    if let Err(e) = scaffold::scaffold(name) {
+                        eprintln!("Error: {e}");
+                        std::process::exit(1);
+                    }
+                }
+                None => {
+                    eprintln!("Usage: kungfu new <project-name>");
+                    eprintln!("Example: kungfu new my-app");
+                    std::process::exit(1);
+                }
+            }
+        }
+        Some("start") => {
+            eprintln!("`kungfu start` runs `cargo run` with file watching.");
+            eprintln!("For now, use: cargo run");
+            // Try to run `cargo run` in the current directory.
+            let _ = std::process::Command::new("cargo").arg("run").status();
+        }
+        Some("migrate") => {
+            eprintln!("`kungfu migrate` — generates SQL migrations from Model definitions.");
+            eprintln!("In V1, migrations are generated at startup via `kungfu_orm::generate_migration::<T>()`.");
+            eprintln!("See orm/examples/orm_mock.rs for an example.");
+        }
+        Some("build") => {
+            eprintln!("`kungfu build` runs `cargo build --release`.");
+            let _ = std::process::Command::new("cargo")
+                .args(["build", "--release"])
+                .status();
+        }
+        Some("generate") => {
+            eprintln!("`kungfu generate` is not implemented in V1.");
+            eprintln!("Roadmap: generate admin dashboards, ORM models, etc.");
+        }
+        Some("deploy") => {
+            eprintln!("`kungfu deploy` is not implemented in V1.");
+            eprintln!("Roadmap: one-command deploy to Docker / Vercel / AWS Lambda.");
+        }
+        Some(other) => {
+            eprintln!("Unknown command: {other}");
+            print_help();
+            std::process::exit(1);
+        }
+    }
+    Ok(())
+}
+
+fn print_help() {
+    println!("kungfu {} — the polyglot web framework", kungfu_core::VERSION);
+    println!();
+    println!("USAGE:");
+    println!("    kungfu <COMMAND>");
+    println!();
+    println!("COMMANDS:");
+    println!("    new <name>  Scaffold a new Kungfu project");
+    println!("    demo        Run the built-in demo server on :3000");
+    println!("    start       Run the project in the current directory (cargo run)");
+    println!("    build       Build the project for release (cargo build --release)");
+    println!("    migrate     Generate SQL migrations from Model definitions");
+    println!("    generate    Generate admin / models (Phase 3)");
+    println!("    deploy      Deploy to cloud (Phase 3)");
+    println!("    --version   Print version");
+    println!("    --help      Print this help");
+}
+
+/// Run a tiny demo server so `cargo run -p kungfu-cli -- demo` works out of the box.
+async fn run_demo_server() -> std::result::Result<(), Box<dyn std::error::Error>> {
+    use std::sync::Arc;
+    use bytes::Bytes;
+
+    let addr: SocketAddr = "0.0.0.0:3000".parse()?;
+
+    let mut router = kungfu_core::router::Router::new();
+
+    // Hello world route — uses the cached-response hot path.
+    // The JSON body is serialised ONCE at startup; every request reuses the
+    // same `Bytes` (clone is an atomic Arc increment, ~5ns).
+    let hello_body: Bytes = Bytes::from(
+        serde_json::to_vec(&serde_json::json!({
+            "message": "world",
+            "framework": "kungfu",
+            "version": kungfu_core::VERSION,
+        }))
+        .unwrap(),
+    );
+    let hello_for_handler = hello_body.clone();
+    router.add_with_meta(
+        kungfu_core::router::RouteMeta {
+            path: "/hello".into(),
+            method: kungfu_core::Method::Get,
+            summary: Some("Say hello".into()),
+            tags: vec!["demo".into()],
+            ..Default::default()
+        },
+        Arc::new(move |_req| {
+            let body = hello_for_handler.clone();
+            Box::pin(async move {
+                kungfu_core::Response::new().json_bytes(body)
+            })
+        }),
+    )?;
+
+    // Echo route — uses path param + body.
+    router.add_with_meta(
+        kungfu_core::router::RouteMeta {
+            path: "/echo/:name".into(),
+            method: kungfu_core::Method::Post,
+            summary: Some("Echo a name + posted JSON body".into()),
+            tags: vec!["demo".into()],
+            ..Default::default()
+        },
+        Arc::new(|req: kungfu_core::Request| {
+            Box::pin(async move {
+                let name = req.param("name").unwrap_or("anonymous").to_string();
+                let body: serde_json::Value = req.json_value().unwrap_or(serde_json::json!({}));
+                kungfu_core::Response::new().json(&serde_json::json!({
+                    "hello": name,
+                    "you_sent": body,
+                }))
+            })
+        }),
+    )?;
+
+    // Install default middleware + auto docs.
+    for mw in kungfu_core::default_middleware_stack().into_iter().rev() {
+        router.prepend_middleware(mw);
+    }
+    kungfu_core::openapi::register_docs_routes(&mut router, "Kungfu Demo", kungfu_core::VERSION)?;
+
+    // Multi-acceptor: one per CPU core. With the `io_uring` feature enabled,
+    // this dispatches to the io_uring path on Linux 5.1+.
+    let n_cpus = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(4);
+    let server = kungfu_core::Server::new(router, addr).with_acceptor_threads(n_cpus);
+    println!("🥋 Kungfu demo server listening on http://{addr} ({n_cpus} acceptor threads)");
+    #[cfg(feature = "io_uring")]
+    println!("   (built with io_uring zero-copy I/O)");
+    println!("   Try:  curl http://localhost:3000/hello");
+    println!("   Try:  curl -X POST http://localhost:3000/echo/bruce -d '{{\"kick\":\"roundhouse\"}}' -H 'Content-Type: application/json'");
+    println!("   Docs: http://localhost:3000/docs");
+    server.serve().await?;
+    Ok(())
+}

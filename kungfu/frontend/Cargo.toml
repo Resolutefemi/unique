@@ -1,0 +1,23 @@
+[package]
+name = "kungfu-frontend"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Frontend module for the Kungfu.js framework — SSR, .kungfu files, live reload, type generation"
+
+[lib]
+name = "kungfu_frontend"
+path = "src/lib.rs"
+
+[dependencies]
+kungfu-core = { path = "../core" }
+kungfu-css = { path = "../css" }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+thiserror = { workspace = true }
+once_cell = { workspace = true }
+regex = { workspace = true }
+walkdir = "2"
