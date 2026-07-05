@@ -7,7 +7,7 @@
 //
 //	package main
 //
-//	import "github.com/kungfu-js/kungfu/bindings/go/kungfu"
+//	import "github.com/Resolutefemi/kungfu/bindings/go/kungfu"
 //
 //	func main() {
 //	    app := kungfu.New()

@@ -8,7 +8,7 @@ package main
 import (
 	"encoding/json"
 
-	"github.com/kungfu-js/kungfu/bindings/go/kungfu"
+	"github.com/Resolutefemi/kungfu/bindings/go/kungfu"
 )
 
 func main() {

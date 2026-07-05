@@ -5,6 +5,10 @@ edition.workspace = true
 authors.workspace = true
 license.workspace = true
 description = "Core engine for the Kungfu.js polyglot web framework"
+repository = "https://github.com/Resolutefemi/kungfu"
+homepage = "https://github.com/Resolutefemi/kungfu"
+keywords = ["web", "framework", "http", "server", "polyglot"]
+categories = ["web-programming", "network-programming"]
 
 [lib]
 name = "kungfu_core"
@@ -40,13 +44,18 @@ simd-json = { version = "0.13", optional = true }
 # 2-3x throughput improvement on Linux. See PERF.md.
 tokio-uring = { version = "0.5", optional = true }
 
+# Optional: HTTP/3 via quinn + h3.
+# Enable with `--features http3`. Requires UDP.
+# NOTE: h3 crate API is unstable — feature flag exists but the actual
+# implementation will be added when h3 stabilises. For now, http3 is a no-op.
+quinn = { version = "0.11", optional = true }
+
 [features]
 default = []
-# Enable SIMD JSON parsing on x86_64. ~2-4x faster JSON encode/decode.
 simd = ["dep:simd-json"]
-# Enable io_uring zero-copy I/O on Linux 5.1+. ~2-3x throughput improvement.
-# Only available on Linux; on other platforms this is a no-op.
 io_uring = ["dep:tokio-uring"]
+ffi = []
+http3 = ["dep:quinn"]
 
 [dev-dependencies]
 tokio = { workspace = true }

@@ -56,13 +56,23 @@ pub fn render_page(file: &KungfuFile, ctx: &SsrContext, rendered_template: &str,
     html.push_str(&serde_json::to_string(data_json).unwrap_or_else(|_| "{}".into()));
     html.push_str(";</script>\n");
 
+    // Inject the hydration script (inline — no extra HTTP request).
+    html.push_str("  <script>");
+    html.push_str(HYDRATION_SCRIPT);
+    html.push_str("</script>\n");
+
     if ctx.inject_livereload {
+        html.push_str("  <script>window.__KUNGFU_LIVERELOAD__ = true;</script>\n");
         html.push_str("  <script src=\"/__kungfu_livereload.js\"></script>\n");
     }
 
     html.push_str("</body>\n</html>\n");
     html
 }
+
+/// The client-side hydration + livereload script.
+/// Embedded directly into the HTML to avoid an extra HTTP request.
+const HYDRATION_SCRIPT: &str = include_str!("hydration.js");
 
 #[cfg(test)]
 mod tests {
@@ -96,6 +106,6 @@ mod tests {
             ..Default::default()
         };
         let html = render_page(&file, &ctx, "", &serde_json::json!({}));
-        assert!(!html.contains("livereload"));
+        assert!(!html.contains("__kungfu_livereload.js"));
     }
 }

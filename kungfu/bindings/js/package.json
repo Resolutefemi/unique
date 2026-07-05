@@ -1,5 +1,5 @@
 {
-  "name": "kungfu",
+  "name": "@kungfu/core",
   "version": "1.0.0",
   "description": "One API surface, infinite languages. A polyglot web framework with a Rust core.",
   "main": "index.js",
@@ -21,13 +21,11 @@
     "build": "napi build --platform --release",
     "build:debug": "napi build --platform",
     "prepublishOnly": "napi prepublish -t npm",
-    "test": "jest"
+    "test": "node -e \"const k=require('./kungfu.linux-x64-gnu.node'); console.log('Version:', k.version())\""
   },
   "devDependencies": {
     "@napi-rs/cli": "^2.18.0",
-    "@types/node": "^22.0.0",
-    "jest": "^29.7.0",
-    "typescript": "^5.6.0"
+    "@types/node": "^22.0.0"
   },
   "engines": {
     "node": ">= 18"
@@ -40,7 +38,7 @@
   "license": "MIT OR Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kungfu-js/kungfu.git",
+    "url": "https://github.com/Resolutefemi/kungfu.git",
     "directory": "bindings/js"
   },
   "keywords": [
@@ -50,6 +48,7 @@
     "napi",
     "polyglot",
     "http",
-    "server"
+    "server",
+    "fast"
   ]
 }
