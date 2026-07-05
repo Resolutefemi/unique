@@ -5,14 +5,14 @@
 ```kotlin
 // build.gradle.kts
 dependencies {
-    implementation("com.kungfu:kungfu:1.0.0")
+    implementation("com.kng:kungfu:1.0.0")
 }
 ```
 
 ## Quickstart
 
 ```kotlin
-import com.kungfu.Kungfu
+import com.kng.Kungfu
 
 fun main() {
     val app = Kungfu()
@@ -31,5 +31,5 @@ fun main() {
 - libkungfu_core.so / .dll / .dylib
 
 ## Package
-- **Maven Central:** `com.kungfu:kungfu`
+- **Maven Central:** `com.kng:kungfu`
 - **Extension:** `.kt`

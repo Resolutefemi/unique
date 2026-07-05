@@ -10,7 +10,7 @@
 //!
 //! In V1 we don't actually recompile the binary — that requires a separate
 //! build step. The hot-reload here is for the *config* and *route* layer:
-//! routes can be re-registered from a dynamically loaded .kungfu-routes file
+//! routes can be re-registered from a dynamically loaded .kng-routes file
 //! without recompiling. Full source-code hot reload (cargo watch style) is
 //! a Phase 2 feature.
 

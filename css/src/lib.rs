@@ -51,7 +51,7 @@ pub fn compile_classes(input: &str) -> String {
     emit_css(&tokens)
 }
 
-/// Top-level convenience: scan a directory recursively for `.html`, `.kungfu`,
+/// Top-level convenience: scan a directory recursively for `.html`, `.kng`,
 /// `.tsx`, `.jsx` files, extract used classes, and emit a CSS bundle.
 pub fn compile_directory<P: AsRef<Path>>(root: P) -> std::io::Result<String> {
     let classes = scan_directory(root)?;

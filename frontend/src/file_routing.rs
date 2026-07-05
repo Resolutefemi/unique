@@ -1,11 +1,11 @@
-//! File-based routing — auto-register `.kungfu` files as routes.
+//! File-based routing — auto-register `.kng` files as routes.
 //!
-//! Walks `src/pages/` and converts each `.kungfu` file into a route:
+//! Walks `src/pages/` and converts each `.kng` file into a route:
 //!
-//! - `src/pages/index.kungfu` → `/`
-//! - `src/pages/about.kungfu` → `/about`
-//! - `src/pages/users/[id].kungfu` → `/users/:id`
-//! - `src/pages/assets/[...path].kungfu` → `/assets/*path`
+//! - `src/pages/index.kng` → `/`
+//! - `src/pages/about.kng` → `/about`
+//! - `src/pages/users/[id].kng` → `/users/:id`
+//! - `src/pages/assets/[...path].kng` → `/assets/*path`
 //!
 //! ## Example
 //!
@@ -23,7 +23,7 @@ use kungfu_core::{Method, RouteMeta};
 
 use crate::parser::parse_kungfu_file;
 
-/// Walk `pages_dir`, parse each `.kungfu` file, and register a route for
+/// Walk `pages_dir`, parse each `.kng` file, and register a route for
 /// each in `router`. The handler is a placeholder that returns a "not yet
 /// rendered" message — actual SSR execution requires the `ssr_executor`
 /// module wired in.
@@ -64,7 +64,7 @@ pub fn register_pages(router: &mut Router, pages_dir: &Path) -> std::io::Result<
             }
         };
 
-        // Register a GET route that actually renders the .kungfu file
+        // Register a GET route that actually renders the .kng file
         // via the SSR executor (Node.js subprocess).
         let route_path = kungfu_file.route_path.clone();
         let file_path = path.to_path_buf();
@@ -119,7 +119,7 @@ pub fn register_pages(router: &mut Router, pages_dir: &Path) -> std::io::Result<
                             "<!-- Kungfu SSR: render failed for {} -->\n\
                              <h1>SSR Error</h1>\n\
                              <p>Could not render this page: {e}</p>\n\
-                             <p>Make sure Node.js is installed and the .kungfu file is valid.</p>\n\
+                             <p>Make sure Node.js is installed and the .kng file is valid.</p>\n\
                              <p>File: {}</p>",
                             file_path.display(),
                             file_path.display()
@@ -157,16 +157,16 @@ mod tests {
         let _ = fs::remove_dir_all(&tmp);
         fs::create_dir_all(&tmp).unwrap();
 
-        // index.kungfu → /
+        // index.kng → /
         fs::write(
-            tmp.join("index.kungfu"),
+            tmp.join("index.kng"),
             "export function data() { return {}; }\nexport function template() { return ''; }",
         ).unwrap();
 
-        // users/[id].kungfu → /users/:id
+        // users/[id].kng → /users/:id
         fs::create_dir_all(tmp.join("users")).unwrap();
         fs::write(
-            tmp.join("users").join("[id].kungfu"),
+            tmp.join("users").join("[id].kng"),
             "export function data() { return {}; }\nexport function template() { return ''; }",
         ).unwrap();
 

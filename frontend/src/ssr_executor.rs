@@ -1,6 +1,6 @@
-//! `.kungfu` SSR execution via a Node.js subprocess.
+//! `.kng` SSR execution via a Node.js subprocess.
 //!
-//! The `.kungfu` file format exports `data()` and `template()` TypeScript
+//! The `.kng` file format exports `data()` and `template()` TypeScript
 //! functions. To execute them, we spawn a Node.js subprocess that loads
 //! the file via a tiny loader script, calls `data(req)` then
 //! `template(data)`, and prints the rendered HTML to stdout.
@@ -8,7 +8,7 @@
 //! ## Requirements
 //!
 //! - Node.js 18+ must be installed and on PATH.
-//! - The `.kungfu` file's TypeScript is transpiled on the fly using
+//! - The `.kng` file's TypeScript is transpiled on the fly using
 //!   `tsx` (or `ts-node`). For production, pre-compile the files with
 //!   `tsc` and use the resulting `.js` files.
 //!
@@ -17,7 +17,7 @@
 //! ```ignore
 //! use kungfu_frontend::ssr_executor::render_kungfu_file;
 //!
-//! let html = render_kungfu_file("src/pages/index.kungfu", r#"{"url":"/"}"#).await?;
+//! let html = render_kungfu_file("src/pages/index.kng", r#"{"url":"/"}"#).await?;
 //! ```
 
 use std::path::Path;
@@ -29,10 +29,10 @@ use tokio::process::Command;
 use crate::ssr::SsrContext;
 
 /// The JavaScript loader script that runs inside the Node subprocess.
-/// It loads the `.kungfu` file, calls `data()` then `template(data)`, and
+/// It loads the `.kng` file, calls `data()` then `template(data)`, and
 /// prints the rendered HTML to stdout.
 const LOADER_SCRIPT: &str = r#"
-// Kungfu .kungfu loader. Receives the path + request JSON on argv.
+// Kungfu .kng loader. Receives the path + request JSON on argv.
 // Prints the rendered HTML to stdout.
 const path = require('path');
 const fs = require('fs');
@@ -41,7 +41,7 @@ async function main() {
     const [, , file, reqJson] = process.argv;
     if (!file) { console.error('missing file path'); process.exit(1); }
 
-    // Read the .kungfu file.
+    // Read the .kng file.
     const content = fs.readFileSync(file, 'utf8');
 
     // Split into code + optional static HTML.
@@ -75,7 +75,7 @@ async function main() {
 main().catch(e => { console.error(e); process.exit(1); });
 "#;
 
-/// Render a `.kungfu` file by spawning a Node.js subprocess.
+/// Render a `.kng` file by spawning a Node.js subprocess.
 ///
 /// Returns the rendered HTML string. If Node isn't installed or the file
 /// fails to execute, returns an error.
@@ -177,8 +177,8 @@ mod tests {
             return;
         }
 
-        // Write a test .kungfu file.
-        let tmp = std::env::temp_dir().join(format!("kungfu-ssr-test-{}.kungfu", std::process::id()));
+        // Write a test .kng file.
+        let tmp = std::env::temp_dir().join(format!("kungfu-ssr-test-{}.kng", std::process::id()));
         std::fs::write(&tmp, r#"
 export async function data(req) { return { name: 'Bruce' }; }
 export function template({ name }) { return `<h1>Hello, ${name}!</h1>`; }

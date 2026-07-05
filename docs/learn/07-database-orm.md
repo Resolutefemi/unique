@@ -169,5 +169,5 @@ CREATE TABLE IF NOT EXISTS users (
 
 ## Next steps
 
-Continue to [Frontend & SSR](./08-frontend-ssr.md) to learn about `.kungfu`
+Continue to [Frontend & SSR](./08-frontend-ssr.md) to learn about `.kng`
 files and live reload.

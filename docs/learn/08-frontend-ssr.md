@@ -5,16 +5,16 @@
 Kungfu's frontend story is JS/TS-only — that's where the ecosystem is. The
 framework provides:
 
-1. **`.kungfu` SSR files** — a Svelte/Astro-like file format for server-rendered pages.
+1. **`.kng` SSR files** — a Svelte/Astro-like file format for server-rendered pages.
 2. **WebSocket live reload** — automatic page refresh on file changes.
 3. **End-to-end TypeScript types** — auto-generated route types (tRPC-style).
 
-## The .kungfu file format
+## The .kng file format
 
-A `.kungfu` file exports `data()` and `template()` functions:
+A `.kng` file exports `data()` and `template()` functions:
 
 ```typescript
-// src/pages/index.kungfu
+// src/pages/index.kng
 export async function data(req) {
   return { user: { name: 'Bruce', role: 'master' } };
 }
@@ -26,7 +26,7 @@ export function template({ user }) {
 }
 ```
 
-At build time, Kungfu compiles each `.kungfu` file into a server-rendered
+At build time, Kungfu compiles each `.kng` file into a server-rendered
 route. At request time, `data()` is called, then `template()` is invoked
 with the data, and the resulting HTML is sent to the client.
 
@@ -36,19 +36,19 @@ Files in `src/pages/` become routes automatically:
 
 | File | Route |
 |---|---|
-| `src/pages/index.kungfu` | `/` |
-| `src/pages/about.kungfu` | `/about` |
-| `src/pages/users/index.kungfu` | `/users` |
-| `src/pages/users/[id].kungfu` | `/users/:id` |
-| `src/pages/blog/[slug]/index.kungfu` | `/blog/:slug` |
-| `src/pages/assets/[...path].kungfu` | `/assets/*path` |
+| `src/pages/index.kng` | `/` |
+| `src/pages/about.kng` | `/about` |
+| `src/pages/users/index.kng` | `/users` |
+| `src/pages/users/[id].kng` | `/users/:id` |
+| `src/pages/blog/[slug]/index.kng` | `/blog/:slug` |
+| `src/pages/assets/[...path].kng` | `/assets/*path` |
 
 The `[name]` syntax becomes `:name` route parameters. The `[...path]`
 syntax becomes `*path` wildcards.
 
 ## Static HTML + front matter
 
-A `.kungfu` file can include static HTML after the `---` separator:
+A `.kng` file can include static HTML after the `---` separator:
 
 ```typescript
 export async function data() {
@@ -76,7 +76,7 @@ injects:
 ```rust
 use kungfu_frontend::{parse_kungfu_file, render_page, SsrContext};
 
-let file = parse_kungfu_file(file_contents, "src/pages/index.kungfu")?;
+let file = parse_kungfu_file(file_contents, "src/pages/index.kng")?;
 let data = serde_json::json!({"user": {"name": "Bruce"}});
 let rendered_template = "<main>Hello, Bruce!</main>";
 

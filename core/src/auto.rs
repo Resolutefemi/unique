@@ -4,7 +4,7 @@
 //! 1. Serves files from `public/` if the directory exists.
 //! 2. Injects the livereload script into HTML responses in dev mode.
 //! 3. Emits `routes.d.ts` on every route registration.
-//! 4. Registers `.kungfu` files from `src/pages/` as routes.
+//! 4. Registers `.kng` files from `src/pages/` as routes.
 
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
@@ -19,7 +19,7 @@ use crate::{Method, Middleware};
 pub struct AutoConfig {
     /// Serve files from this directory if it exists (default: `public`).
     pub public_dir: PathBuf,
-    /// Register .kungfu files from this directory (default: `src/pages`).
+    /// Register .kng files from this directory (default: `src/pages`).
     pub pages_dir: PathBuf,
     /// Emit TypeScript types to this file (default: `frontend/routes.d.ts`).
     pub types_path: PathBuf,
@@ -49,11 +49,11 @@ pub fn auto_configure(router: &mut Router, config: &AutoConfig) {
         tracing::info!("auto: serving static files from {}", config.public_dir.display());
     }
 
-    // 2. Register .kungfu pages if src/pages/ exists.
+    // 2. Register .kng pages if src/pages/ exists.
     if config.pages_dir.exists() {
         match register_kungfu_pages(router, &config.pages_dir) {
             Ok(count) if count > 0 => {
-                tracing::info!("auto: registered {count} .kungfu pages from {}", config.pages_dir.display());
+                tracing::info!("auto: registered {count} .kng pages from {}", config.pages_dir.display());
             }
             Ok(_) => {}
             Err(e) => {
@@ -85,11 +85,11 @@ pub fn auto_configure(router: &mut Router, config: &AutoConfig) {
     }
 }
 
-/// Register .kungfu files from a directory as routes.
+/// Register .kng files from a directory as routes.
 fn register_kungfu_pages(router: &mut Router, pages_dir: &Path) -> std::io::Result<usize> {
     // Delegate to the frontend crate's file_routing module.
     // Since we can't depend on kungfu-frontend from kungfu-core, we do a
-    // simplified version here: walk the directory, parse .kungfu files,
+    // simplified version here: walk the directory, parse .kng files,
     // register placeholder routes. The real SSR happens via the frontend crate.
     let mut count = 0;
     for entry in walkdir::WalkDir::new(pages_dir).into_iter().filter_map(|e| e.ok()) {
@@ -133,10 +133,10 @@ fn register_kungfu_pages(router: &mut Router, pages_dir: &Path) -> std::io::Resu
     Ok(count)
 }
 
-/// Convert a file path like `users/[id].kungfu` into `/users/:id`.
+/// Convert a file path like `users/[id].kng` into `/users/:id`.
 fn derive_route_path(rel: &Path) -> String {
     let s = rel.to_string_lossy().replace('\\', "/");
-    let path = s.trim_end_matches(".kungfu");
+    let path = s.trim_end_matches(".kng");
 
     let mut out = String::from("/");
     for (i, seg) in path.split('/').enumerate() {
@@ -160,7 +160,7 @@ fn derive_route_path(rel: &Path) -> String {
         }
     }
 
-    // Handle index.kungfu → /
+    // Handle index.kng → /
     if out.ends_with("/index") {
         out = out.trim_end_matches("/index").to_string();
     }
@@ -231,10 +231,10 @@ mod tests {
 
     #[test]
     fn derives_route_paths() {
-        assert_eq!(derive_route_path(std::path::Path::new("index.kungfu")), "/");
-        assert_eq!(derive_route_path(std::path::Path::new("about.kungfu")), "/about");
-        assert_eq!(derive_route_path(std::path::Path::new("users/[id].kungfu")), "/users/:id");
-        assert_eq!(derive_route_path(std::path::Path::new("assets/[...path].kungfu")), "/assets/*path");
+        assert_eq!(derive_route_path(std::path::Path::new("index.kng")), "/");
+        assert_eq!(derive_route_path(std::path::Path::new("about.kng")), "/about");
+        assert_eq!(derive_route_path(std::path::Path::new("users/[id].kng")), "/users/:id");
+        assert_eq!(derive_route_path(std::path::Path::new("assets/[...path].kng")), "/assets/*path");
     }
 
     #[test]

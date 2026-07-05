@@ -49,7 +49,7 @@ How to migrate from popular frameworks to Kungfu.js.
 
 | Next.js | Kungfu.js |
 |---|---|
-| `pages/index.tsx` | `src/pages/index.kungfu` |
+| `pages/index.tsx` | `src/pages/index.kng` |
 | `export async function getServerSideProps()` | `export async function data()` |
 | `export default function Page({data})` | `export function template({data})` |
 | `next dev` | `kungfu start --watch` |

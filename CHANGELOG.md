@@ -60,7 +60,7 @@ others planned), a JS/TS-only frontend, and a built-in CSS engine + ORM.
 - `compile_directory()` produces a single minimal CSS bundle in microseconds.
 
 #### Frontend (`kungfu-frontend`)
-- `.kungfu` file parser (`data()` + `template()` exports + optional static HTML).
+- `.kng` file parser (`data()` + `template()` exports + optional static HTML).
 - SSR page renderer with livereload script injection + `__KUNGFU_DATA__` hydration.
 - WebSocket-based live reload server (`broadcast::Sender`).
 - TypeScript type generation from route metadata (tRPC-style).

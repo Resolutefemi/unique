@@ -1,6 +1,6 @@
-//! `.kungfu` file parser.
+//! `.kng` file parser.
 //!
-//! A `.kungfu` file has two sections separated by a front-matter delimiter
+//! A `.kng` file has two sections separated by a front-matter delimiter
 //! `---`. The top section is TypeScript/JavaScript that exports `data` and
 //! `template` functions. The bottom section (after `---`) is optional
 //! static HTML/CSS that's prepended to the rendered template.
@@ -31,11 +31,11 @@ pub struct KungfuFile {
     /// Static HTML appended to the rendered template (everything after `---`).
     pub static_html: Option<String>,
     /// File path (without extension) used to derive the route.
-    /// e.g. `src/pages/users/[id].kungfu` → `/users/:id`
+    /// e.g. `src/pages/users/[id].kng` → `/users/:id`
     pub route_path: String,
 }
 
-/// Parse a `.kungfu` file's content.
+/// Parse a `.kng` file's content.
 pub fn parse_kungfu_file(content: &str, source_path: &str) -> Result<KungfuFile, ParseError> {
     let (code, static_html) = match content.find("\n---\n") {
         Some(idx) => {
@@ -49,7 +49,7 @@ pub fn parse_kungfu_file(content: &str, source_path: &str) -> Result<KungfuFile,
     // Validate that the code exports `data` and `template`.
     if !code.contains("export") {
         return Err(ParseError::Syntax(
-            "no exports found — `.kungfu` files must export `data` and `template`".into(),
+            "no exports found — `.kng` files must export `data` and `template`".into(),
         ));
     }
     let has_data = code.contains("export async function data") || code.contains("export function data");
@@ -70,14 +70,14 @@ pub fn parse_kungfu_file(content: &str, source_path: &str) -> Result<KungfuFile,
     })
 }
 
-/// Convert a file path like `src/pages/users/[id].kungfu` into a route
+/// Convert a file path like `src/pages/users/[id].kng` into a route
 /// path like `/users/:id`.
 fn derive_route_path(source_path: &str) -> String {
     let path = source_path
         .trim_start_matches("./")
         .trim_start_matches("src/pages/")
         .trim_start_matches("pages/")
-        .trim_end_matches(".kungfu");
+        .trim_end_matches(".kng");
 
     // `index` → `/`; `users/index` → `/users`
     let path = if path == "index" {
@@ -126,7 +126,7 @@ export function template({ user }) {
   return `<div>Hello, ${user.name}!</div>`;
 }
 "#;
-        let file = parse_kungfu_file(content, "src/pages/index.kungfu").unwrap();
+        let file = parse_kungfu_file(content, "src/pages/index.kng").unwrap();
         assert!(file.code.contains("export async function data"));
         assert!(file.code.contains("export function template"));
         assert!(file.static_html.is_none());
@@ -141,7 +141,7 @@ export function template() { return '<main>hi</main>'; }
 ---
 <footer>© 2026</footer>
 "#;
-        let file = parse_kungfu_file(content, "src/pages/index.kungfu").unwrap();
+        let file = parse_kungfu_file(content, "src/pages/index.kng").unwrap();
         assert!(file.static_html.is_some());
         assert!(file.static_html.as_ref().unwrap().contains("footer"));
     }
@@ -150,7 +150,7 @@ export function template() { return '<main>hi</main>'; }
     fn derives_route_path_with_params() {
         let file = parse_kungfu_file(
             "export function data() { return {}; }\nexport function template() { return ''; }",
-            "src/pages/users/[id].kungfu",
+            "src/pages/users/[id].kng",
         )
         .unwrap();
         assert_eq!(file.route_path, "/users/:id");
@@ -159,7 +159,7 @@ export function template() { return '<main>hi</main>'; }
     #[test]
     fn errors_on_missing_data_export() {
         let content = "export function template() { return ''; }";
-        let result = parse_kungfu_file(content, "src/pages/index.kungfu");
+        let result = parse_kungfu_file(content, "src/pages/index.kng");
         assert!(matches!(result, Err(ParseError::MissingDataExport)));
     }
 }

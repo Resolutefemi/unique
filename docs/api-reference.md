@@ -79,10 +79,10 @@ cargo doc --workspace --no-deps --open
 - `compile_directory("./src")` — scan source files + emit CSS bundle
 
 ### Frontend (`kungfu-frontend`)
-- `parse_kungfu_file(content, path)` — parse .kungfu file
+- `parse_kungfu_file(content, path)` — parse .kng file
 - `render_page(file, ctx, template, data)` — render SSR page
 - `render_kungfu_file(path, req_json, ctx)` — render via Node.js subprocess
-- `register_pages(router, "src/pages")` — auto-register .kungfu routes
+- `register_pages(router, "src/pages")` — auto-register .kng routes
 - `generate_typescript(routes)` — generate routes.d.ts
 - `DevMode::new(paths, types_path)` — dev mode controller
 

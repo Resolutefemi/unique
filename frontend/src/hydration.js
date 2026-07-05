@@ -8,7 +8,7 @@
 //   - Client-side fetch wrapper (kungfu.fetch)
 //   - Simple state management (kungfu.state)
 //
-// Usage in .kungfu files:
+// Usage in .kng files:
 //   <div data-kungfu-bind="user.name">Loading...</div>
 //   <button data-kungfu-click="refresh">Refresh</button>
 //   <form data-kungfu-submit="/api/users" data-kungfu-method="POST">...</form>
@@ -50,8 +50,8 @@
       el.addEventListener('click', (e) => {
         e.preventDefault();
         const action = el.getAttribute('data-kungfu-click');
-        if (typeof window.kungfuActions?.[action] === 'function') {
-          window.kungfuActions[action](state);
+        if (typeof window.kngActions?.[action] === 'function') {
+          window.kngActions[action](state);
         }
       });
     });
@@ -137,10 +137,10 @@
   }
 
   // Expose the Kungfu client API.
-  window.kungfu = {
+  window.kng = {
     state,
     fetch: kungfuFetch,
-    actions: window.kungfuActions || {},
+    actions: window.kngActions || {},
     updateBindings,
   };
 

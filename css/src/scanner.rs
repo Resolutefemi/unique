@@ -1,6 +1,6 @@
 //! Source-file scanner — extract used CSS classes from project files.
 //!
-//! Scans `.html`, `.kungfu`, `.tsx`, `.jsx`, `.ts`, `.js` files for class
+//! Scans `.html`, `.kng`, `.tsx`, `.jsx`, `.ts`, `.js` files for class
 //! strings. Recognises both `class="..."` (HTML) and `className="..."` (JSX)
 //! attributes.
 

@@ -1,5 +1,5 @@
 {
-  "scopeName": "source.kungfu-ts",
+  "scopeName": "source.kng-ts",
   "patterns": [{ "include": "#expression" }],
   "repository": {
     "expression": {
@@ -15,37 +15,37 @@
     },
     "keywords": {
       "match": "\\b(const|let|var|function|return|if|else|for|while|async|await|import|export|from|class|extends|implements|interface|type|enum|new|this|super|try|catch|finally|throw|typeof|instanceof|in|of|delete|void|yield|default|break|continue|switch|case|do|with|public|private|protected|readonly|static|abstract|as|is|keyof|infer|namespace|declare|module)\\b",
-      "name": "keyword.control.kungfu-ts"
+      "name": "keyword.control.kng-ts"
     },
     "types": {
       "match": "\\b(string|number|boolean|any|unknown|never|void|null|undefined|object|symbol|bigint)\\b",
-      "name": "support.type.kungfu-ts"
+      "name": "support.type.kng-ts"
     },
     "decorators": {
       "match": "@[a-zA-Z_][\\w]*",
-      "name": "meta.decorator.kungfu-ts"
+      "name": "meta.decorator.kng-ts"
     },
     "strings": {
-      "name": "string.quoted.kungfu-ts",
+      "name": "string.quoted.kng-ts",
       "patterns": [
-        { "match": "'[^']*'", "name": "string.quoted.single.kungfu-ts" },
-        { "match": "\"[^\"]*\"", "name": "string.quoted.double.kungfu-ts" },
-        { "match": "`[^`]*`", "name": "string.quoted.template.kungfu-ts" }
+        { "match": "'[^']*'", "name": "string.quoted.single.kng-ts" },
+        { "match": "\"[^\"]*\"", "name": "string.quoted.double.kng-ts" },
+        { "match": "`[^`]*`", "name": "string.quoted.template.kng-ts" }
       ]
     },
     "comments": {
       "patterns": [
-        { "match": "//.*$", "name": "comment.line.double-slash.kungfu-ts" },
-        { "match": "/\\*[\\s\\S]*?\\*/", "name": "comment.block.kungfu-ts" }
+        { "match": "//.*$", "name": "comment.line.double-slash.kng-ts" },
+        { "match": "/\\*[\\s\\S]*?\\*/", "name": "comment.block.kng-ts" }
       ]
     },
     "numbers": {
       "match": "\\b\\d+(\\.\\d+)?\\b",
-      "name": "constant.numeric.kungfu-ts"
+      "name": "constant.numeric.kng-ts"
     },
     "functions": {
       "match": "\\b([a-zA-Z_$][\\w$]*)\\s*(?=\\()",
-      "name": "entity.name.function.kungfu-ts"
+      "name": "entity.name.function.kng-ts"
     }
   }
 }

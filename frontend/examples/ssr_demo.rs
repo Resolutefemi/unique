@@ -1,9 +1,9 @@
-//! Example: kungfu-frontend — parse a .kungfu file and render an SSR page.
+//! Example: kungfu-frontend — parse a .kng file and render an SSR page.
 //!
 //! Run with: `cargo run -p kungfu-frontend --example ssr_demo`
 //!
 //! Demonstrates:
-//! - Parsing a .kungfu file (data() + template() exports + optional static HTML)
+//! - Parsing a .kng file (data() + template() exports + optional static HTML)
 //! - Deriving a route path from the file path
 //! - Rendering a complete HTML page with livereload script + hydration data
 
@@ -23,8 +23,8 @@ export function template({ user }) {
 "#;
 
 fn main() {
-    let file = parse_kungfu_file(KUNGFU_FILE, "src/pages/index.kungfu").unwrap();
-    println!("--- Parsed .kungfu file ---");
+    let file = parse_kungfu_file(KUNGFU_FILE, "src/pages/index.kng").unwrap();
+    println!("--- Parsed .kng file ---");
     println!("Route path: {}", file.route_path);
     println!("Code length: {} chars", file.code.len());
     println!("Has static HTML: {}", file.static_html.is_some());
@@ -48,11 +48,11 @@ fn main() {
 
     // Demonstrate route path derivation.
     let paths = [
-        "src/pages/index.kungfu",
-        "src/pages/users/index.kungfu",
-        "src/pages/users/[id].kungfu",
-        "src/pages/blog/[slug]/index.kungfu",
-        "src/pages/assets/[...path].kungfu",
+        "src/pages/index.kng",
+        "src/pages/users/index.kng",
+        "src/pages/users/[id].kng",
+        "src/pages/blog/[slug]/index.kng",
+        "src/pages/assets/[...path].kng",
     ];
     println!("\n--- Route path derivation ---");
     for path in &paths {

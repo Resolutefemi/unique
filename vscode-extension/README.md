@@ -30,7 +30,7 @@ code --install-extension kungfu-1.0.0.vsix
 |---|---|---|
 | `.jsk` | Kungfu JS | JavaScript files using the Kungfu.js framework |
 | `.tsk` | Kungfu TS | TypeScript files using the Kungfu.js framework |
-| `.kungfu` | Kungfu Page | SSR page files (data + template) |
+| `.kng` | Kungfu Page | SSR page files (data + template) |
 
 ## Snippets
 

@@ -263,15 +263,15 @@ function getTutorialContent(lang: string, chapter: string): string {
     return [
       `<h1>Frontend and SSR in ${langName}</h1>`,
       `<p>The frontend of Kungfu.js is JavaScript/TypeScript only. The backend can be in any language.</p>`,
-      `<h2>.kungfu Files</h2>`,
-      `<p>A .kungfu file exports a data() function and a template() function. The server calls data() at request time, passes the result to template(), and sends the rendered HTML to the client.</p>`,
-      `<pre><code>// src/pages/index.kungfu\nexport async function data(req) {\n  return { user: { name: 'Bruce' } };\n}\n\nexport function template({ user }) {\n  return '&lt;h1&gt;Hello, ' + user.name + '!&lt;/h1&gt;';\n}</code></pre>`,
+      `<h2>.kng Files</h2>`,
+      `<p>A .kng file exports a data() function and a template() function. The server calls data() at request time, passes the result to template(), and sends the rendered HTML to the client.</p>`,
+      `<pre><code>// src/pages/index.kng\nexport async function data(req) {\n  return { user: { name: 'Bruce' } };\n}\n\nexport function template({ user }) {\n  return '&lt;h1&gt;Hello, ' + user.name + '!&lt;/h1&gt;';\n}</code></pre>`,
       `<h2>File-based Routing</h2>`,
       `<p>Files in src/pages/ automatically become routes:</p>`,
       `<ul>`,
-      `<li><code>index.kungfu</code> becomes <code>/</code></li>`,
-      `<li><code>about.kungfu</code> becomes <code>/about</code></li>`,
-      `<li><code>users/[id].kungfu</code> becomes <code>/users/:id</code></li>`,
+      `<li><code>index.kng</code> becomes <code>/</code></li>`,
+      `<li><code>about.kng</code> becomes <code>/about</code></li>`,
+      `<li><code>users/[id].kng</code> becomes <code>/users/:id</code></li>`,
       `</ul>`,
       `<h2>Client-side Hydration</h2>`,
       `<p>The hydration script is injected automatically. It provides reactive data binding, form submission helpers, and live reload.</p>`,
@@ -342,7 +342,7 @@ function getInstallSteps(lang: string): string {
     case 'python': return '<pre><code>pip install kungfu</code></pre>';
     case 'go': return '<pre><code>go get github.com/Resolutefemi/kungfu/bindings/go</code></pre>';
     case 'java':
-    case 'kotlin': return '<pre><code>&lt;dependency&gt;\n  &lt;groupId&gt;com.kungfu&lt;/groupId&gt;\n  &lt;artifactId&gt;kungfu&lt;/artifactId&gt;\n  &lt;version&gt;1.0.0&lt;/version&gt;\n&lt;/dependency&gt;</code></pre>';
+    case 'kotlin': return '<pre><code>&lt;dependency&gt;\n  &lt;groupId&gt;com.kng&lt;/groupId&gt;\n  &lt;artifactId&gt;kungfu&lt;/artifactId&gt;\n  &lt;version&gt;1.0.0&lt;/version&gt;\n&lt;/dependency&gt;</code></pre>';
     case 'dart': return '<pre><code>dart pub add kungfu</code></pre>';
     case 'swift': return '<pre><code>.package(url: "https://github.com/Resolutefemi/kungfu.git", branch: "main")</code></pre>';
     case 'cpp': return '<pre><code>#include "kungfu.hpp"\n// Link against libkungfu_core.so</code></pre>';
@@ -363,8 +363,8 @@ function getHelloWorld(lang: string): string {
     case 'typescript': return '<pre><code>import { Kungfu } from \'@kungfu/core\';\nconst app = new Kungfu();\n\napp.get(\'/hello\', (req) => {\n    return { status: 200, body: JSON.stringify({ message: \'world\' }) };\n});\n\napp.listen(3000);</code></pre>';
     case 'python': return '<pre><code>from kungfu import KungfuApp\nimport json\n\napp = KungfuApp()\n\napp.get(\'/hello\', lambda req: app.respond(\n    json.loads(req)[\'request_id\'], 200,\n    json.dumps({\'message\': \'world\'})\n))\n\napp.listen(3000)</code></pre>';
     case 'go': return '<pre><code>package main\nimport "github.com/Resolutefemi/kungfu/bindings/go/kungfu"\n\nfunc main() {\n    app := kungfu.New()\n    app.Get("/hello", func(w kungfu.ResponseWriter, r *kungfu.Request) {\n        w.Text(200, "world")\n    })\n    app.Run(":3000")\n}</code></pre>';
-    case 'java': return '<pre><code>import com.kungfu.Kungfu;\n\npublic class Main {\n    public static void main(String[] args) {\n        Kungfu app = new Kungfu();\n        app.get("/hello", (req, res) -> {\n            res.status(200).text("world");\n        });\n        app.listen(3000);\n    }\n}</code></pre>';
-    case 'kotlin': return '<pre><code>import com.kungfu.Kungfu\n\nfun main() {\n    val app = Kungfu()\n    app.get("/hello") { req, res ->\n        res.status(200).text("world")\n    }\n    app.listen(3000)\n}</code></pre>';
+    case 'java': return '<pre><code>import com.kng.Kungfu;\n\npublic class Main {\n    public static void main(String[] args) {\n        Kungfu app = new Kungfu();\n        app.get("/hello", (req, res) -> {\n            res.status(200).text("world");\n        });\n        app.listen(3000);\n    }\n}</code></pre>';
+    case 'kotlin': return '<pre><code>import com.kng.Kungfu\n\nfun main() {\n    val app = Kungfu()\n    app.get("/hello") { req, res ->\n        res.status(200).text("world")\n    }\n    app.listen(3000)\n}</code></pre>';
     case 'dart': return '<pre><code>import \'package:kungfu/kungfu.dart\';\n\nvoid main() {\n    final app = Kungfu();\n    app.get(\'/hello\', (req, res) => res.text(\'world\'));\n    app.listen(3000);\n}</code></pre>';
     case 'swift': return '<pre><code>import Kungfu\n\nlet app = Kungfu()\napp.get("/hello") { req, res in\n    res.text("world")\n}\napp.run(port: 3000)</code></pre>';
     case 'cpp': return '<pre><code>#include "kungfu.hpp"\n\nint main() {\n    kungfu::KungfuRouter router;\n    router.get("/hello", [](kungfu::Request& req, kungfu::Response& res) {\n        res.text("world");\n    });\n    kungfu::KungfuServer server(std::move(router));\n    server.listen(3000);\n}</code></pre>';

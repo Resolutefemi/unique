@@ -22,9 +22,9 @@ cargo build -p kungfu-core --release --features ffi
 ## Quickstart
 
 ```java
-import com.kungfu.Kungfu;
-import com.kungfu.Request;
-import com.kungfu.Response;
+import com.kng.Kungfu;
+import com.kng.Request;
+import com.kng.Response;
 
 public class Main {
     public main() {

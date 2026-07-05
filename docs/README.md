@@ -16,7 +16,7 @@ The [Learn](./learn/) section is a step-by-step tutorial, similar to
 5. [Cookies & Sessions](./learn/05-cookies-sessions.md) — auth basics
 6. [Static Files](./learn/06-static-files.md) — serving assets + the CSS engine
 7. [Database & ORM](./learn/07-database-orm.md) — Model derive, queries, migrations
-8. [Frontend & SSR](./learn/08-frontend-ssr.md) — .kungfu files, live reload
+8. [Frontend & SSR](./learn/08-frontend-ssr.md) — .kng files, live reload
 9. [OpenAPI & Docs](./learn/09-openapi-docs.md) — auto-generated API docs
 10. [Deployment](./learn/10-deployment.md) — Docker, serverless, CI/CD
 

@@ -63,7 +63,7 @@ export const languages: Language[] = [
     icon: '☕',
     description: 'C ABI via JNI',
     fileExtension: '.java',
-    packageName: 'com.kungfu:kungfu',
+    packageName: 'com.kng:kungfu',
     registry: 'Maven Central',
   },
   {
@@ -72,7 +72,7 @@ export const languages: Language[] = [
     icon: '🟪',
     description: 'JVM binding, same as Java',
     fileExtension: '.kt',
-    packageName: 'com.kungfu:kungfu',
+    packageName: 'com.kng:kungfu',
     registry: 'Maven Central',
   },
   {
@@ -173,6 +173,6 @@ export const chapters: TutorialChapter[] = [
   { slug: '06-auth', title: 'Authentication', description: 'JWT, sessions, RBAC, OAuth2' },
   { slug: '07-websocket', title: 'WebSocket', description: 'Real-time communication' },
   { slug: '08-css', title: 'CSS Engine', description: 'Tailwind-like utility classes' },
-  { slug: '09-frontend', title: 'Frontend and SSR', description: '.kungfu files and hydration' },
+  { slug: '09-frontend', title: 'Frontend and SSR', description: '.kng files and hydration' },
   { slug: '10-deployment', title: 'Deployment', description: 'Docker, systemd, production tuning' },
 ];

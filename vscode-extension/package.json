@@ -36,8 +36,8 @@
       },
       {
         "id": "kungfu-page",
-        "aliases": ["Kungfu Page", "kungfu"],
-        "extensions": [".kungfu"],
+        "aliases": ["Kungfu Page", "kng"],
+        "extensions": [".kng", ".jsk", ".tsk"],
         "icon": {
           "light": "images/logo-light.svg",
           "dark": "images/logo-dark.svg"
@@ -47,12 +47,12 @@
     "grammars": [
       {
         "language": "kungfu-js",
-        "scopeName": "source.kungfu-js",
+        "scopeName": "source.kng-js",
         "path": "./syntaxes/kungfu-js.tmLanguage.json"
       },
       {
         "language": "kungfu-ts",
-        "scopeName": "source.kungfu-ts",
+        "scopeName": "source.kng-ts",
         "path": "./syntaxes/kungfu-ts.tmLanguage.json"
       }
     ],

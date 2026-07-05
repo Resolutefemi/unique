@@ -1,6 +1,6 @@
 //! Server-side rendering entry point.
 //!
-//! Wraps a `.kungfu` file's `data()` + `template()` calls (executed in a
+//! Wraps a `.kng` file's `data()` + `template()` calls (executed in a
 //! JS runtime) and produces a complete HTML page with the live-reload
 //! script injected.
 
@@ -27,7 +27,7 @@ impl Default for SsrContext {
     }
 }
 
-/// Render a `.kungfu` file into a complete HTML page.
+/// Render a `.kng` file into a complete HTML page.
 ///
 /// `rendered_template` is the HTML string returned by the file's
 /// `template()` function (the JS runtime executes this — we don't do it
@@ -73,7 +73,7 @@ mod tests {
     fn renders_page_with_data_and_template() {
         let file = crate::parser::parse_kungfu_file(
             "export function data() { return {}; }\nexport function template() { return '<h1>hi</h1>'; }",
-            "src/pages/index.kungfu",
+            "src/pages/index.kng",
         )
         .unwrap();
         let ctx = SsrContext::default();
@@ -89,7 +89,7 @@ mod tests {
     fn render_omits_livereload_when_disabled() {
         let file = crate::parser::parse_kungfu_file(
             "export function data() { return {}; }\nexport function template() { return ''; }",
-            "src/pages/index.kungfu",
+            "src/pages/index.kng",
         )
         .unwrap();
         let ctx = SsrContext {

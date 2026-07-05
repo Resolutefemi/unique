@@ -76,7 +76,7 @@ app.listen(3000)
 | CSS engine (Tailwind-like) | Yes |
 | Auto OpenAPI + Swagger UI | Yes |
 | TLS/HTTPS | Yes |
-| SSR (.kungfu files) | Yes |
+| SSR (.kng files) | Yes |
 | Client-side hydration | Yes |
 | Multipart file uploads | Yes |
 | Gzip compression | Yes |
@@ -89,14 +89,14 @@ app.listen(3000)
 
 | Language | Backend | Frontend |
 |---|---|---|
-| Rust | Full support | SSR via .kungfu |
+| Rust | Full support | SSR via .kng |
 | JavaScript/TypeScript | Handler bridging | Full support |
-| Python | Handler bridging | SSR via .kungfu |
-| Go | Standalone impl | SSR via .kungfu |
-| Java | C ABI scaffold | SSR via .kungfu |
-| Dart | C ABI scaffold | SSR via .kungfu |
-| Swift | C ABI scaffold | SSR via .kungfu |
-| C++ | C ABI wrapper | SSR via .kungfu |
+| Python | Handler bridging | SSR via .kng |
+| Go | Standalone impl | SSR via .kng |
+| Java | C ABI scaffold | SSR via .kng |
+| Dart | C ABI scaffold | SSR via .kng |
+| Swift | C ABI scaffold | SSR via .kng |
+| C++ | C ABI wrapper | SSR via .kng |
 
 ## File Extensions
 
@@ -104,7 +104,7 @@ app.listen(3000)
 |---|---|---|
 | `.jsk` | JavaScript Kungfu | Kungfu JS source files |
 | `.tsk` | TypeScript Kungfu | Kungfu TS source files |
-| `.kungfu` | All | SSR page files |
+| `.kng` | All | SSR page files |
 
 ## Build with Max Performance
 

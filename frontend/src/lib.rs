@@ -1,19 +1,19 @@
 //! Frontend module for the Kungfu.js framework.
 //!
 //! Brings the framework into full-stack territory:
-//!   - `.kungfu` files: a Svelte/Astro-like SSR file format that exports
+//!   - `.kng` files: a Svelte/Astro-like SSR file format that exports
 //!     `data()` and `template()` functions.
 //!   - WebSocket live reload: a built-in dev server that pushes a refresh
 //!     signal to the browser when any source file changes.
 //!   - End-to-end type safety: generate TypeScript types from backend route
 //!     metadata so the frontend gets autocomplete when calling the API.
 //!
-//! ## The .kungfu file format
+//! ## The .kng file format
 //!
-//! A `.kungfu` file is a TypeScript module that exports `data` and `template`:
+//! A `.kng` file is a TypeScript module that exports `data` and `template`:
 //!
 //! ```typescript
-//! // src/pages/index.kungfu
+//! // src/pages/index.kng
 //! export async function data(req) {
 //!   return { user: { name: 'Bruce' } };
 //! }
@@ -23,7 +23,7 @@
 //! }
 //! ```
 //!
-//! At build time, Kungfu compiles each `.kungfu` file into a server-rendered
+//! At build time, Kungfu compiles each `.kng` file into a server-rendered
 //! route. At request time, `data()` is called, then `template()` is invoked
 //! with the data, and the resulting HTML is sent to the client.
 //!

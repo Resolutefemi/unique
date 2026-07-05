@@ -1,5 +1,5 @@
 {
-  "scopeName": "source.kungfu-js",
+  "scopeName": "source.kng-js",
   "patterns": [{ "include": "#expression" }],
   "repository": {
     "expression": {
@@ -13,29 +13,29 @@
     },
     "keywords": {
       "match": "\\b(const|let|var|function|return|if|else|for|while|async|await|import|export|from|class|extends|new|this|super|try|catch|finally|throw|typeof|instanceof|in|of|delete|void|yield|default|break|continue|switch|case|do|with)\\b",
-      "name": "keyword.control.kungfu-js"
+      "name": "keyword.control.kng-js"
     },
     "strings": {
-      "name": "string.quoted.kungfu-js",
+      "name": "string.quoted.kng-js",
       "patterns": [
-        { "match": "'[^']*'", "name": "string.quoted.single.kungfu-js" },
-        { "match": "\"[^\"]*\"", "name": "string.quoted.double.kungfu-js" },
-        { "match": "`[^`]*`", "name": "string.quoted.template.kungfu-js" }
+        { "match": "'[^']*'", "name": "string.quoted.single.kng-js" },
+        { "match": "\"[^\"]*\"", "name": "string.quoted.double.kng-js" },
+        { "match": "`[^`]*`", "name": "string.quoted.template.kng-js" }
       ]
     },
     "comments": {
       "patterns": [
-        { "match": "//.*$", "name": "comment.line.double-slash.kungfu-js" },
-        { "match": "/\\*[\\s\\S]*?\\*/", "name": "comment.block.kungfu-js" }
+        { "match": "//.*$", "name": "comment.line.double-slash.kng-js" },
+        { "match": "/\\*[\\s\\S]*?\\*/", "name": "comment.block.kng-js" }
       ]
     },
     "numbers": {
       "match": "\\b\\d+(\\.\\d+)?\\b",
-      "name": "constant.numeric.kungfu-js"
+      "name": "constant.numeric.kng-js"
     },
     "functions": {
       "match": "\\b([a-zA-Z_$][\\w$]*)\\s*(?=\\()",
-      "name": "entity.name.function.kungfu-js"
+      "name": "entity.name.function.kng-js"
     }
   }
 }

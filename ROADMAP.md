@@ -15,7 +15,7 @@ This document tracks the path from V1 to "fastest framework ever" and beyond.
 | JS/TS binding (napi-rs) | ✅ scaffold |
 | ORM (mock driver + sqlx feature gates) | ✅ shipped |
 | kungfu-css (Tailwind-like engine) | ✅ shipped |
-| Frontend module (.kungfu SSR + livereload + TS type gen) | ✅ shipped |
+| Frontend module (.kng SSR + livereload + TS type gen) | ✅ shipped |
 | Benchmark suite vs actix/express/fastapi | ✅ scripts + harness |
 
 ## V1 — Status: shipped (2026-06-21)
@@ -34,7 +34,7 @@ on GitHub. Below is what's been done + what's left for future point releases.
 | JS/TS binding (napi-rs) | ✅ scaffold |
 | ORM (mock driver + sqlx feature gates wired) | ✅ shipped |
 | kungfu-css (Tailwind-like engine) | ✅ shipped |
-| Frontend module (.kungfu SSR + livereload + TS type gen) | ✅ shipped |
+| Frontend module (.kng SSR + livereload + TS type gen) | ✅ shipped |
 | Benchmark suite vs actix/express/fastapi | ✅ scripts + harness |
 | WebSocket routes (RFC 6455) | ✅ shipped |
 | Multipart body parsing | ✅ shipped |
@@ -51,9 +51,9 @@ on GitHub. Below is what's been done + what's left for future point releases.
 | Swift binding (C interop scaffold) | ✅ shipped |
 | Python binding (pyo3) | ✅ scaffold |
 | Go binding (net/http) | ✅ shipped |
-| `.kungfu` SSR execution via Node subprocess | ✅ shipped |
+| `.kng` SSR execution via Node subprocess | ✅ shipped |
 | DevMode controller (livereload + routes.d.ts wiring) | ✅ shipped |
-| File-based routing (auto-register .kungfu files) | ✅ shipped |
+| File-based routing (auto-register .kng files) | ✅ shipped |
 | JWT authentication middleware (scaffold) | ✅ shipped |
 | Background jobs queue | ✅ shipped |
 | Plugin system (scaffold) | ✅ shipped |
@@ -81,7 +81,7 @@ on GitHub. Below is what's been done + what's left for future point releases.
 - ⏳ Query cache keyed by SQL + params.
 
 ### Frontend
-- ⏳ `.kungfu` client-side hydration (currently SSR-only).
+- ⏳ `.kng` client-side hydration (currently SSR-only).
 - ⏳ WebSocket livereload server wired into HTTP listener (currently `DevMode` exists but isn't auto-wired).
 - ⏳ End-to-end type safety (auto-emit `routes.d.ts` on every route registration).
 
@@ -120,8 +120,8 @@ Path to 3M req/s on 16-core production hardware:
 ## V3 — Full-stack + ecosystem (3-6 months)
 
 - **Admin dashboard generator** — `kungfu generate admin` produces a React app served at `/admin` with CRUD interfaces auto-generated from model definitions.
-- **`.kungfu` full client-side hydration** — currently we SSR with no hydration. V3 adds a JS client that picks up `__KUNGFU_DATA__` and hydrates the page into a reactive SPA.
-- **File-based routing** — `src/pages/users/[id].kungfu` automatically becomes the `/users/:id` route.
+- **`.kng` full client-side hydration** — currently we SSR with no hydration. V3 adds a JS client that picks up `__KUNGFU_DATA__` and hydrates the page into a reactive SPA.
+- **File-based routing** — `src/pages/users/[id].kng` automatically becomes the `/users/:id` route.
 - **Built-in authentication** — `Kungfu::auth(AuthProvider::Jwt(...))` middleware with `@RequireAuth` handler attribute.
 - **WebSocket routes** — `ws!("/chat", handler)` macro for real-time.
 - **Background jobs** — `Kungfu::queue(QueueConfig)` with `#[job]` proc macro.
