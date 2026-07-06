@@ -64,7 +64,41 @@ pre code {
   font-size: 0.875rem;
 }
 
-/* Syntax highlighting colors */
+/*
+ * Prism.js syntax highlighting — uses the prism-tomorrow theme loaded by
+ * PrismLoader. The theme applies its own dark background to
+ * pre[class*="language-"] and code[class*="language-"], so we let it win
+ * by NOT setting a background on those selectors here. We only tune the
+ * border + radius to match the rest of the site.
+ */
+pre[class*="language-"],
+code[class*="language-"] {
+  border: none;
+  text-shadow: none;
+  font-family: 'Fira Code', 'SF Mono', 'Courier New', monospace;
+}
+
+pre[class*="language-"] {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 1.25rem 0;
+  padding: 1.25rem;
+  overflow-x: auto;
+}
+
+/* Inline code inside prose paragraphs should keep the site theme, not
+ * Prism's dark box. Only <pre><code> blocks get the Prism treatment. */
+p code, li code, td code {
+  background: var(--bg-code);
+  color: var(--text);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+/* Local syntax-highlighting fallback colors — used only if the Prism
+ * theme hasn't loaded yet. Once Prism runs, its token classes have
+ * higher specificity (.token.keyword vs .keyword) and win. */
 .token.keyword { color: #c678dd; }
 .token.string { color: #98c379; }
 .token.number { color: #d19a66; }
@@ -75,6 +109,18 @@ pre code {
 .token.property { color: #e06c75; }
 .token.tag { color: #e06c75; }
 .token.attr-value { color: #98c379; }
+.token.class-name { color: #e5c07b; }
+.token.boolean { color: #d19a66; }
+.token.constant { color: #d19a66; }
+.token.builtin { color: #61afef; }
+.token.symbol { color: #56b6c2; }
+.token.selector { color: #98c379; }
+.token.attr-name { color: #d19a66; }
+.token.char { color: #98c379; }
+.token.regex { color: #98c379; }
+.token.url { color: #98c379; }
+.token.entity { color: #56b6c2; }
+.token.variable { color: #e06c75; }
 
 /* Navbar */
 .navbar {
@@ -87,10 +133,10 @@ pre code {
   top: 0;
   background: var(--nav-bg);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   z-index: 1000;
   width: 100%;
   box-sizing: border-box;
-  overflow: hidden;
 }
 
 .navbar-brand {
@@ -106,11 +152,13 @@ pre code {
 
 .navbar-brand:hover { text-decoration: none; }
 
-.navbar-right {
+/* Desktop link bar — hidden on mobile, replaced by hamburger dropdown */
+.navbar-desktop-links {
   display: flex;
   align-items: center;
   gap: 1.25rem;
-  flex-shrink: 0;
+  flex: 1;
+  justify-content: center;
 }
 
 .navbar-link {
@@ -118,19 +166,32 @@ pre code {
   font-size: 0.9rem;
   font-weight: 500;
   white-space: nowrap;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
 }
 
 .navbar-link:hover { color: var(--accent); text-decoration: none; }
+.navbar-link--active { color: var(--accent); }
+
+/* Right-side actions: theme toggle (always visible) + hamburger (mobile only) */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
 
 .theme-toggle {
   background: var(--bg-secondary);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 0.35rem 0.6rem;
+  padding: 0.4rem 0.65rem;
   cursor: pointer;
   font-size: 1rem;
+  line-height: 1;
   color: var(--text);
-  transition: all 0.2s;
+  transition: border-color 0.2s, background 0.2s;
   flex-shrink: 0;
 }
 
@@ -142,13 +203,90 @@ pre code {
   border: 1px solid var(--border);
   border-radius: 8px;
   cursor: pointer;
-  font-size: 1.2rem;
   color: var(--text);
-  padding: 0.35rem 0.6rem;
+  padding: 0.55rem 0.6rem;
   flex-shrink: 0;
+  line-height: 0;
 }
 
-/* Mobile: show hamburger + theme toggle, hide links in dropdown */
+.hamburger:hover { border-color: var(--accent); }
+
+/* Animated 3-bar hamburger icon (collapses to an X when open) */
+.hamburger-icon {
+  display: inline-block;
+  width: 18px;
+  height: 14px;
+  position: relative;
+}
+
+.hamburger-icon span {
+  display: block;
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  background: currentColor;
+  border-radius: 2px;
+  left: 0;
+  transition: transform 0.25s ease, opacity 0.2s ease, top 0.25s ease;
+}
+
+.hamburger-icon span:nth-child(1) { top: 0; }
+.hamburger-icon span:nth-child(2) { top: 6px; }
+.hamburger-icon span:nth-child(3) { top: 12px; }
+
+.hamburger-icon[data-open="true"] span:nth-child(1) {
+  top: 6px;
+  transform: rotate(45deg);
+}
+.hamburger-icon[data-open="true"] span:nth-child(2) { opacity: 0; }
+.hamburger-icon[data-open="true"] span:nth-child(3) {
+  top: 6px;
+  transform: rotate(-45deg);
+}
+
+/* Mobile dropdown menu — rendered when the hamburger is clicked */
+.navbar-mobile-menu {
+  position: absolute;
+  top: 100%;
+  right: 0.75rem;
+  left: 0.75rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  padding: 0.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  /* Animate in */
+  animation: navbar-menu-in 0.18s ease-out;
+}
+
+@keyframes navbar-menu-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.navbar-mobile-link {
+  display: block;
+  padding: 0.7rem 0.85rem;
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.navbar-mobile-link:hover {
+  background: var(--bg-secondary);
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* Mobile: hide desktop link bar, show hamburger */
 @media (max-width: 768px) {
   .navbar {
     padding: 0.6rem 0.75rem;
@@ -158,54 +296,12 @@ pre code {
     font-size: 1rem;
   }
 
-  .hamburger {
-    display: block;
-  }
-
-  /* Links hidden by default, shown as dropdown */
-  .navbar-link {
+  .navbar-desktop-links {
     display: none;
   }
 
-  .navbar-right.open .navbar-link {
+  .hamburger {
     display: block;
-    width: 100%;
-    padding: 0.6rem 0.75rem;
-    border-radius: 6px;
-  }
-
-  .navbar-right.open .navbar-link:hover {
-    background: var(--bg-secondary);
-  }
-
-  .navbar-right {
-    position: relative;
-  }
-
-  .navbar-right.open {
-    position: absolute;
-    top: 100%;
-    right: 0.75rem;
-    flex-direction: column;
-    gap: 0;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 0 0 10px 10px;
-    padding: 0.5rem;
-    min-width: 160px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    z-index: 1001;
-  }
-
-  /* Theme toggle ALWAYS visible, even when menu is closed */
-  .navbar-right .theme-toggle {
-    display: block;
-  }
-
-  .navbar-right.open .theme-toggle {
-    width: 100%;
-    text-align: center;
-    margin-top: 0.25rem;
   }
 }
 

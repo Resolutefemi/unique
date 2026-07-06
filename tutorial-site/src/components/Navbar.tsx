@@ -1,16 +1,41 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { ThemeToggle } from './ThemeToggle';
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Close the menu whenever the route changes (so a click on a Link
+  // doesn't leave the dropdown dangling open over the new page).
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
+  // Close the menu on Escape (a11y) and on resize to desktop.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuOpen(false);
+    };
+    const onResize = () => {
+      if (window.innerWidth > 768) setMenuOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('resize', onResize);
+    };
+  }, [menuOpen]);
 
   return (
     <nav className="navbar">
-      <Link href="/" className="navbar-brand" onClick={() => setMenuOpen(false)}>
-        <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <Link href="/" className="navbar-brand">
+        <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <polygon points="16,2 28,9 28,23 16,30 4,23 4,9" fill="#00C853" stroke="#00C853" strokeWidth="1" strokeLinejoin="round"/>
           <circle cx="16" cy="16" r="3" fill="#FFFFFF"/>
           <circle cx="16" cy="16" r="1.5" fill="#00C853"/>
@@ -18,55 +43,66 @@ export function Navbar() {
         Kungfu.js
       </Link>
 
-      {/* Theme toggle is ALWAYS visible - not inside the menu */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
+      {/* Desktop links — hidden on mobile, replaced by hamburger dropdown */}
+      <div className="navbar-desktop-links">
+        <Link href="/" className={`navbar-link ${pathname === '/' ? 'navbar-link--active' : ''}`}>
+          Home
+        </Link>
+        <Link
+          href="/learn/rust/01-getting-started"
+          className={`navbar-link ${pathname?.startsWith('/learn') ? 'navbar-link--active' : ''}`}
+        >
+          Learn
+        </Link>
+        <a
+          href="https://github.com/Resolutefemi/kungfu"
+          className="navbar-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GitHub
+        </a>
+      </div>
+
+      {/* Right side: theme toggle (always visible) + hamburger (mobile only) */}
+      <div className="navbar-actions">
         <ThemeToggle />
         <button
           className="hamburger"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle menu"
+          onClick={() => setMenuOpen((v) => !v)}
+          aria-label="Toggle navigation menu"
           aria-expanded={menuOpen}
+          aria-controls="navbar-mobile-menu"
         >
-          {menuOpen ? '\u2715' : '\u2630'}
+          <span className="hamburger-icon" data-open={menuOpen}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
         </button>
       </div>
 
-      {/* Dropdown menu for links only */}
+      {/* Mobile dropdown menu */}
       {menuOpen && (
-        <div
-          style={{
-            position: 'absolute',
-            top: '100%',
-            right: '0.75rem',
-            background: 'var(--bg)',
-            border: '1px solid var(--border)',
-            borderRadius: '0 0 10px 10px',
-            padding: '0.5rem',
-            minWidth: '160px',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-            zIndex: 1001,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 0,
-          }}
-        >
-          <Link
-            href="/"
-            className="navbar-link"
-            onClick={() => setMenuOpen(false)}
-            style={{ display: 'block', padding: '0.6rem 0.75rem', borderRadius: '6px' }}
-          >
+        <div id="navbar-mobile-menu" className="navbar-mobile-menu" role="menu">
+          <Link href="/" className="navbar-mobile-link" onClick={() => setMenuOpen(false)}>
             Home
+          </Link>
+          <Link
+            href="/learn/rust/01-getting-started"
+            className="navbar-mobile-link"
+            onClick={() => setMenuOpen(false)}
+          >
+            Learn
           </Link>
           <a
             href="https://github.com/Resolutefemi/kungfu"
-            className="navbar-link"
+            className="navbar-mobile-link"
             target="_blank"
-            rel="noopener"
+            rel="noopener noreferrer"
             onClick={() => setMenuOpen(false)}
-            style={{ display: 'block', padding: '0.6rem 0.75rem', borderRadius: '6px' }}
           >
-            GitHub
+            GitHub ↗
           </a>
         </div>
       )}
