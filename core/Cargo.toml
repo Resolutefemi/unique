@@ -4,7 +4,14 @@ version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
-description = "Core engine for the Kungfu.js polyglot web framework"
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+description = "Core engine for the Kungfu.js polyglot web framework — HTTP/1.1 server, trie router, middleware pipeline, WebSocket, HTTP/3, TLS"
 
 [lib]
 name = "kungfu_core"

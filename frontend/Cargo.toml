@@ -4,6 +4,13 @@ version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+readme.workspace = true
+keywords = ["web", "framework", "ssr", "frontend", "kungfu"]
+categories = ["web-programming", "template-engine"]
+rust-version.workspace = true
 description = "Frontend module for the Kungfu.js framework — SSR, .kng files, live reload, type generation"
 
 [lib]

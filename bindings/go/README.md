@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-go get github.com/kungfu-js/kungfu/bindings/go
+go get github.com/Resolutefemi/kungfu/bindings/go
 ```
 
 ## Quickstart
@@ -13,7 +13,7 @@ go get github.com/kungfu-js/kungfu/bindings/go
 ```go
 package main
 
-import "github.com/kungfu-js/kungfu/bindings/go/kungfu"
+import "github.com/Resolutefemi/kungfu/bindings/go/kungfu"
 
 func main() {
     app := kungfu.New()

@@ -1,0 +1,399 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g. 1.0.0)'
+        required: true
+        type: string
+      dry_run:
+        description: 'Dry run (skip actual uploads)?'
+        required: true
+        type: boolean
+        default: false
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # 1. CRATES.IO — publish all Rust crates in dependency order
+  # ---------------------------------------------------------------------------
+  publish-crates:
+    name: crates.io
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install system deps
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq python3-dev
+      - name: Verify workspace builds
+        run: cargo build --workspace
+      - name: Verify all tests pass
+        run: cargo test --workspace --lib
+      - name: Cargo login
+        if: ${{ !inputs.dry_run }}
+        run: cargo login ${{ secrets.CRATES_IO_TOKEN }}
+      - name: Publish kungfu-macros
+        run: |
+          cd kungfu-macros
+          cargo publish ${{ inputs.dry_run && '--dry-run' || '' }}
+      - name: Publish kungfu-core
+        run: |
+          cd core
+          cargo publish ${{ inputs.dry_run && '--dry-run' || '' }}
+      - name: Publish kungfu-css
+        run: |
+          cd css
+          cargo publish ${{ inputs.dry_run && '--dry-run' || '' }}
+      - name: Publish kungfu-orm
+        run: |
+          cd orm
+          cargo publish ${{ inputs.dry_run && '--dry-run' || '' }}
+      - name: Publish kungfu-frontend
+        run: |
+          cd frontend
+          cargo publish ${{ inputs.dry_run && '--dry-run' || '' }}
+      - name: Publish kungfu (umbrella)
+        run: |
+          cd kungfu
+          cargo publish ${{ inputs.dry_run && '--dry-run' || '' }}
+      - name: Publish kungfu-cli
+        run: |
+          cd cli
+          cargo publish ${{ inputs.dry_run && '--dry-run' || '' }}
+
+  # ---------------------------------------------------------------------------
+  # 2. NPM — napi-rs per-platform matrix, then umbrella publish
+  # ---------------------------------------------------------------------------
+  publish-npm:
+    name: npm (${{ matrix.settings.target }})
+    needs: publish-crates
+    runs-on: ${{ matrix.settings.host }}
+    strategy:
+      fail-fast: false
+      matrix:
+        settings:
+          - host: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            build: cd bindings/js && napi build --platform --release --target x86_64-unknown-linux-gnu
+          - host: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+            build: cd bindings/js && napi build --platform --release --target aarch64-unknown-linux-gnu
+          - host: macos-latest
+            target: x86_64-apple-darwin
+            build: cd bindings/js && napi build --platform --release --target x86_64-apple-darwin
+          - host: macos-latest
+            target: aarch64-apple-darwin
+            build: cd bindings/js && napi build --platform --release --target aarch64-apple-darwin
+          - host: windows-latest
+            target: x86_64-pc-windows-msvc
+            build: cd bindings/js && napi build --platform --release --target x86_64-pc-windows-msvc
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.settings.target }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install JS deps
+        run: cd bindings/js && npm install
+      - name: Build per-platform .node
+        run: ${{ matrix.settings.build }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: napi-${{ matrix.settings.target }}
+          path: |
+            bindings/js/*.node
+            bindings/js/index.js
+            bindings/js/index.d.ts
+
+  publish-npm-umbrella:
+    name: npm (umbrella)
+    needs: publish-npm
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Download all platform artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: napi-*
+          path: bindings/js
+          merge-multiple: true
+      - name: Run prepublishOnly
+        run: |
+          cd bindings/js
+          npm install
+          # Build the optionalDependencies sub-packages from the downloaded
+          # per-platform .node files.
+          npm run prepublishOnly
+      - name: npm publish
+        if: ${{ !inputs.dry_run }}
+        run: |
+          cd bindings/js
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  # ---------------------------------------------------------------------------
+  # 3. PYPI — maturin publish on a per-platform matrix
+  # ---------------------------------------------------------------------------
+  publish-pypi:
+    name: PyPI (${{ matrix.os }} / ${{ matrix.python-version }})
+    needs: publish-crates
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ['3.10', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install maturin
+        run: pip install maturin
+      - name: Build wheel
+        run: |
+          cd bindings/python
+          maturin build --release --interpreter $(which python)
+      - name: Upload wheel artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pypi-wheels-${{ matrix.os }}-${{ matrix.python-version }}
+          path: bindings/python/target/wheels/*.whl
+
+  publish-pypi-upload:
+    name: PyPI (upload)
+    needs: publish-pypi
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: pypi-wheels-*
+          path: wheels
+          merge-multiple: true
+      - name: Install twine
+        run: pip install twine
+      - name: Upload to PyPI
+        if: ${{ !inputs.dry_run }}
+        run: twine upload wheels/*.whl
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+
+  # ---------------------------------------------------------------------------
+  # 4. MAVEN CENTRAL — Java + Kotlin (same artifact, same coordinates)
+  # ---------------------------------------------------------------------------
+  publish-maven:
+    name: Maven Central
+    needs: publish-crates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          server-id: ossrh
+          server-username: MAVEN_CENTRAL_USERNAME
+          server-password: MAVEN_CENTRAL_PASSWORD
+      - name: Import GPG key
+        if: ${{ !inputs.dry_run }}
+        run: |
+          echo "${{ secrets.MAVEN_GPG_PRIVATE_KEY }}" | gpg --batch --import
+          echo "default-cache-ttl 7200" > ~/.gnupg/gpg-agent.conf
+          echo "max-cache-ttl 31536000" >> ~/.gnupg/gpg-agent.conf
+          gpg-connect-agent reloadagent /bye
+      - name: Build + install Java binding
+        run: |
+          cd bindings/java
+          mvn -B clean install
+      - name: Deploy to Sonatype OSSRH
+        if: ${{ !inputs.dry_run }}
+        run: |
+          cd bindings/java
+          mvn -B deploy \
+            -Dgpg.passphrase="${{ secrets.MAVEN_GPG_PASSPHRASE }}"
+        env:
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+
+  # ---------------------------------------------------------------------------
+  # 5. NUGET — C# binding
+  # ---------------------------------------------------------------------------
+  publish-nuget:
+    name: NuGet
+    needs: publish-crates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Pack
+        run: |
+          cd bindings/csharp
+          dotnet pack -c Release
+      - name: Push to NuGet
+        if: ${{ !inputs.dry_run }}
+        run: |
+          cd bindings/csharp
+          dotnet nuget push bin/Release/*.nupkg \
+            --api-key ${{ secrets.NUGET_API_KEY }} \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
+
+  # ---------------------------------------------------------------------------
+  # 6. RUBYGEMS — Ruby binding
+  # ---------------------------------------------------------------------------
+  publish-rubygems:
+    name: RubyGems
+    needs: publish-crates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+      - name: Build gem
+        run: |
+          cd bindings/ruby
+          gem build kungfu.gemspec
+      - name: Push to RubyGems
+        if: ${{ !inputs.dry_run }}
+        run: |
+          cd bindings/ruby
+          gem push kungfu-*.gem
+        env:
+          GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
+
+  # ---------------------------------------------------------------------------
+  # 7. HEX.PM — Elixir binding
+  # ---------------------------------------------------------------------------
+  publish-hex:
+    name: hex.pm
+    needs: publish-crates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: '26'
+          elixir-version: '1.15'
+      - name: Install hex + rebar
+        run: |
+          mix local.hex --force
+          mix local.rebar --force
+      - name: Build + publish
+        run: |
+          cd bindings/elixir
+          mix deps.get
+          mix hex.publish --yes
+        env:
+          HEX_API_KEY: ${{ secrets.HEX_API_KEY }}
+
+  # ---------------------------------------------------------------------------
+  # 8. LUAROCKS — Lua binding
+  # ---------------------------------------------------------------------------
+  publish-luarocks:
+    name: LuaRocks
+    needs: publish-crates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install luarocks
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq luarocks
+      - name: Upload rockspec
+        if: ${{ !inputs.dry_run }}
+        run: |
+          cd bindings/lua
+          luarocks upload kungfu-1.0.0-1.rockspec --api-key="${{ secrets.LUAROCKS_API_KEY }}"
+
+  # ---------------------------------------------------------------------------
+  # 9. GITHUB RELEASE — attach C/C++ pre-built binaries + headers
+  # ---------------------------------------------------------------------------
+  github-release:
+    name: GitHub Release (C/C++ binaries)
+    needs: publish-crates
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            artifact: libkungfu_core.so
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            artifact: libkungfu_core.dylib
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            artifact: kungfu_core.dll
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - name: Build libkungfu_core
+        run: cargo build -p kungfu-core --release --features ffi --target ${{ matrix.target }}
+      - name: Package (Unix)
+        if: matrix.os != 'windows-latest'
+        run: |
+          mkdir -p kungfu-c-abi
+          cp target/${{ matrix.target }}/release/${{ matrix.artifact }} kungfu-c-abi/
+          cp core/kungfu.h kungfu-c-abi/
+          cp bindings/cpp/kungfu.hpp kungfu-c-abi/
+          cp LICENSE-MIT LICENSE-APACHE kungfu-c-abi/
+          tar czf kungfu-c-abi-${{ matrix.target }}.tar.gz kungfu-c-abi
+      - name: Package (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          mkdir kungfu-c-abi
+          copy target\${{ matrix.target }}\release\${{ matrix.artifact }} kungfu-c-abi\
+          copy core\kungfu.h kungfu-c-abi\
+          copy bindings\cpp\kungfu.hpp kungfu-c-abi\
+          copy LICENSE-MIT kungfu-c-abi\
+          copy LICENSE-APACHE kungfu-c-abi\
+          7z a kungfu-c-abi-${{ matrix.target }}.zip kungfu-c-abi
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kungfu-c-abi-${{ matrix.target }}
+          path: |
+            kungfu-c-abi-*.tar.gz
+            kungfu-c-abi-*.zip
+
+  github-release-attach:
+    name: Attach C/C++ binaries to GitHub Release
+    needs: github-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: kungfu-c-abi-*
+          path: release-assets
+          merge-multiple: true
+      - name: Create / attach to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-assets/*
+          generate_release_notes: true
+          draft: ${{ inputs.dry_run || false }}

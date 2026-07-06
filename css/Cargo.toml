@@ -4,7 +4,14 @@ version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
-description = "Tailwind-like utility CSS engine for the Kungfu.js framework"
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+readme.workspace = true
+keywords = ["web", "framework", "css", "tailwind", "kungfu"]
+categories = ["web-programming", "parsing"]
+rust-version.workspace = true
+description = "Tailwind-like utility CSS engine for the Kungfu.js framework — 100+ utility classes, responsive prefixes, state variants"
 
 [lib]
 name = "kungfu_css"

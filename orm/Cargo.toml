@@ -4,7 +4,14 @@ version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
-description = "Built-in ORM for the Kungfu.js framework"
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+readme.workspace = true
+keywords = ["web", "framework", "orm", "database", "kungfu"]
+categories = ["web-programming", "database"]
+rust-version.workspace = true
+description = "Built-in ORM for the Kungfu.js framework — CRUD, JOINs, transactions, Argon2id password hashing, migrations"
 
 [lib]
 name = "kungfu_orm"

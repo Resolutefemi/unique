@@ -2,6 +2,8 @@
 name = "todo-app"
 version = "0.1.0"
 edition = "2021"
+publish = false
+description = "Example todo app built with Kungfu.js (not published to crates.io)"
 
 [[bin]]
 name = "todo-app"

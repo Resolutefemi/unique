@@ -4,11 +4,14 @@ version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
-description = "Idiomatic Rust API for the Kungfu.js polyglot web framework"
-repository = "https://github.com/Resolutefemi/kungfu"
-homepage = "https://github.com/Resolutefemi/kungfu"
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+readme.workspace = true
 keywords = ["web", "framework", "http", "server", "polyglot"]
-categories = ["web-programming", "network-programming"]
+categories.workspace = true
+rust-version.workspace = true
+description = "Idiomatic Rust API for the Kungfu.js polyglot web framework — fast, secure, simple"
 
 [lib]
 name = "kungfu"

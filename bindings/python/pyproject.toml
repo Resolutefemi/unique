@@ -5,15 +5,35 @@ build-backend = "maturin"
 [project]
 name = "kungfu"
 version = "1.0.0"
-description = "Python binding for the Kungfu.js polyglot web framework"
+description = "Python binding for the Kungfu.js polyglot web framework — Rust core, polyglot bindings"
+readme = "README.md"
 requires-python = ">=3.8"
+license = "MIT OR Apache-2.0"
+authors = [
+  { name = "Kungfu.js Contributors", email = "noreply@kungfu.js.org" }
+]
+keywords = ["web", "framework", "http", "server", "rust", "pyo3", "asyncio", "polyglot"]
 classifiers = [
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Rust",
     "Framework :: AsyncIO",
     "License :: OSI Approved :: MIT License",
     "License :: OSI Approved :: Apache Software License",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+
+[project.urls]
+Homepage = "https://kungfu.js.org"
+Repository = "https://github.com/Resolutefemi/kungfu"
+Documentation = "https://github.com/Resolutefemi/kungfu/tree/main/bindings/python#readme"
+Issues = "https://github.com/Resolutefemi/kungfu/issues"
+Changelog = "https://github.com/Resolutefemi/kungfu/blob/main/CHANGELOG.md"
 
 [tool.maturin]
 features = ["pyo3/extension-module"]

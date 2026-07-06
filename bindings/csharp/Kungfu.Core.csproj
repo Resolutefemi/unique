@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <PackageId>Kungfu.Core</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Kungfu.js Contributors</Authors>
+    <Company>Kungfu.js</Company>
+    <Description>C# binding for the Kungfu.js polyglot web framework — Rust core, polyglot bindings. Uses P/Invoke to call libkungfu_core.</Description>
+    <Copyright>Copyright (c) 2026 Kungfu.js Contributors</Copyright>
+    <PackageLicenseExpression>MIT OR Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://kungfu.js.org</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/Resolutefemi/kungfu</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>web;framework;rust;http;server;polyglot;dotnet;csharp;pinvoke</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

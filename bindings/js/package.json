@@ -4,6 +4,12 @@
   "description": "One API surface, infinite languages. A polyglot web framework with a Rust core.",
   "main": "index.js",
   "types": "index.d.ts",
+  "author": "Kungfu.js Contributors <noreply@kungfu.js.org>",
+  "license": "MIT OR Apache-2.0",
+  "homepage": "https://kungfu.js.org",
+  "bugs": {
+    "url": "https://github.com/Resolutefemi/kungfu/issues"
+  },
   "napi": {
     "name": "kungfu",
     "triples": {
@@ -37,10 +43,9 @@
     "index.d.ts",
     "README.md"
   ],
-  "license": "MIT OR Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kungfu-js/kungfu.git",
+    "url": "https://github.com/Resolutefemi/kungfu.git",
     "directory": "bindings/js"
   },
   "keywords": [

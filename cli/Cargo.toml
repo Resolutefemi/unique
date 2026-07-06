@@ -4,7 +4,14 @@ version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
-description = "The `kungfu` command-line tool"
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+readme.workspace = true
+keywords = ["web", "framework", "cli", "server", "kungfu"]
+categories = ["web-programming", "command-line-utilities", "development-tools"]
+rust-version.workspace = true
+description = "The `kungfu` command-line tool — new, start --watch, build, migrate, generate admin, deploy"
 
 [[bin]]
 name = "kungfu"

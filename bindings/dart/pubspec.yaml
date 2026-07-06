@@ -1,7 +1,27 @@
 name: kungfu
 version: 1.0.0
-description: Dart binding for the Kungfu.js polyglot web framework
+description: "Dart binding for the Kungfu.js polyglot web framework — Rust core, polyglot bindings. FFI to libkungfu_core."
+homepage: https://kungfu.js.org
+repository: https://github.com/Resolutefemi/kungfu
+issue_tracker: https://github.com/Resolutefemi/kungfu/issues
+documentation: https://github.com/Resolutefemi/kungfu/tree/main/bindings/dart#readme
+
 environment:
   sdk: '>=3.0.0 <4.0.0'
+
+platforms:
+  linux:
+  macos:
+  windows:
+
+topics:
+  - web
+  - http-server
+  - ffi
+  - rust
+
 dependencies:
   ffi: ^2.0.0
+
+dev_dependencies:
+  lints: ^3.0.0

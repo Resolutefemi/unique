@@ -15,6 +15,8 @@ bindings/js/dist/
 bindings/js/build/
 bindings/js/*.tgz
 bindings/js/.npmrc
+# napi-rs builds per-platform .node binaries at publish time — never commit them.
+bindings/js/*.node
 
 # Python
 __pycache__/

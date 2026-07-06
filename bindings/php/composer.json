@@ -1,0 +1,34 @@
+{
+    "name": "kungfu/kungfu",
+    "description": "PHP binding for the Kungfu.js polyglot web framework — Rust core, polyglot bindings. Uses PHP FFI to call libkungfu_core.",
+    "type": "library",
+    "license": "MIT OR Apache-2.0",
+    "version": "1.0.0",
+    "keywords": ["web", "framework", "http", "server", "rust", "ffi", "polyglot"],
+    "homepage": "https://kungfu.js.org",
+    "authors": [
+        {
+            "name": "Kungfu.js Contributors",
+            "email": "noreply@kungfu.js.org",
+            "homepage": "https://kungfu.js.org"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/Resolutefemi/kungfu/issues",
+        "source": "https://github.com/Resolutefemi/kungfu/tree/main/bindings/php"
+    },
+    "require": {
+        "php": ">=8.0",
+        "ext-ffi": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kungfu\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
+        }
+    }
+}
