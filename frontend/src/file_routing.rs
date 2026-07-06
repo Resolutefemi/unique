@@ -40,7 +40,7 @@ pub fn register_pages(router: &mut Router, pages_dir: &Path) -> std::io::Result<
             continue;
         }
         let path = entry.path();
-        if path.extension().and_then(|e| e.to_str()) != Some("kungfu") {
+        if path.extension().and_then(|e| e.to_str()) != Some("kng") {
             continue;
         }
 
