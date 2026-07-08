@@ -14,7 +14,7 @@ import time
 import urllib.request
 import json
 
-REPO = "Resolutefemi/kungfu"
+REPO = "Resolutefemi/unique"
 TOKEN = os.environ.get("GITHUB_TOKEN")
 if not TOKEN:
     print("ERROR: GITHUB_TOKEN not set")

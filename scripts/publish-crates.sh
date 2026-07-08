@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Publish all Rust crates of the Kungfu.js workspace to crates.io.
+# Publish all Rust crates of the Unique.js workspace to crates.io.
 #
 # Usage:
 #   scripts/publish-crates.sh            # actually publish
@@ -30,32 +30,32 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$REPO_ROOT"
 
 # Publish order: leaves first, then dependents.
-# - kungfu-macros has no workspace deps
-# - kungfu-core has no workspace deps
-# - kungfu depends on kungfu-core
-# - kungfu-css, kungfu-orm (deps kungfu-macros + kungfu-core),
-#   kungfu-frontend (deps kungfu-core + kungfu-css) can publish in any order
-# - kungfu-cli depends on kungfu + kungfu-core
+# - unique-macros has no workspace deps
+# - unique-core has no workspace deps
+# - unique depends on unique-core
+# - unique-css, unique-orm (deps unique-macros + unique-core),
+#   unique-frontend (deps unique-core + unique-css) can publish in any order
+# - unique-cli depends on unique + unique-core
 CRATES=(
-  "kungfu-macros"
-  "core"            # kungfu-core
-  "kungfu"          # kungfu
-  "css"             # kungfu-css
-  "orm"             # kungfu-orm
-  "frontend"        # kungfu-frontend
-  "cli"             # kungfu-cli
+  "unique-macros"
+  "core"            # unique-core
+  "unique"          # unique
+  "css"             # unique-css
+  "orm"             # unique-orm
+  "frontend"        # unique-frontend
+  "cli"             # unique-cli
 )
 
-# kungfu-macros must be first because orm and frontend depend on it.
-# core must come before everything except kungfu-macros.
-# kungfu must come before cli.
+# unique-macros must be first because orm and frontend depend on it.
+# core must come before everything except unique-macros.
+# unique must come before cli.
 ORDERED_CRATES=(
-  "kungfu-macros"
+  "unique-macros"
   "core"
   "css"
   "orm"
   "frontend"
-  "kungfu"
+  "unique"
   "cli"
 )
 

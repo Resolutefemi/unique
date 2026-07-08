@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Publish the Kungfu.js Python binding to PyPI using maturin.
+# Publish the Unique.js Python binding to PyPI using maturin.
 #
 # Usage:
 #   scripts/publish-pypi.sh            # actually publish

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Compare kungfu vs actix-web vs express vs fastapi on the same machine.
+# Compare unique vs actix-web vs express vs fastapi on the same machine.
 #
 # Usage:
 #   ./scripts/run-bench-suite.sh
@@ -51,12 +51,12 @@ run_load() {
 
 start_server() {
   local name=$1; shift
-  local pidfile="/tmp/kungfu-bench-$name.pid"
+  local pidfile="/tmp/unique-bench-$name.pid"
   # Kill any leftover server.
   if [[ -f "$pidfile" ]] && kill -0 "$(cat $pidfile)" 2>/dev/null; then
     kill "$(cat $pidfile)" 2>/dev/null || true
   fi
-  "$@" > "/tmp/kungfu-bench-$name.log" 2>&1 &
+  "$@" > "/tmp/unique-bench-$name.log" 2>&1 &
   echo $! > "$pidfile"
   # Wait for the port to be live.
   sleep 2
@@ -64,24 +64,24 @@ start_server() {
 
 stop_server() {
   local name=$1
-  local pidfile="/tmp/kungfu-bench-$name.pid"
+  local pidfile="/tmp/unique-bench-$name.pid"
   if [[ -f "$pidfile" ]]; then
     kill "$(cat $pidfile)" 2>/dev/null || true
     rm -f "$pidfile"
   fi
 }
 
-# --- kungfu ---
-echo "▶ Building kungfu bench binary..."
-( cd "$REPO_ROOT" && cargo build -p kungfu-cli --bin kungfu_bench --release )
-start_server kungfu "$REPO_ROOT/target/release/kungfu_bench"
-echo "▶ Benchmarking kungfu..."
-KUNGFU_RESULT=$(run_load 3000)
-stop_server kungfu
+# --- unique ---
+echo "▶ Building unique bench binary..."
+( cd "$REPO_ROOT" && cargo build -p unique-cli --bin unique_bench --release )
+start_server unique "$REPO_ROOT/target/release/unique_bench"
+echo "▶ Benchmarking unique..."
+UNIQUE_RESULT=$(run_load 3000)
+stop_server unique
 
 # --- actix-web ---
 echo "▶ Building actix-web bench binary..."
-( cd "$REPO_ROOT" && cargo build -p kungfu-bench-actix --release )
+( cd "$REPO_ROOT" && cargo build -p unique-bench-actix --release )
 start_server actix "$REPO_ROOT/target/release/actix_bench"
 echo "▶ Benchmarking actix-web..."
 ACTIX_RESULT=$(run_load 3001)
@@ -106,7 +106,7 @@ stop_server fastapi
 # --- Write results ---
 RESULTS_FILE="$RESULTS_DIR/RESULTS.md"
 cat > "$RESULTS_FILE" <<EOF
-# Kungfu vs the world — benchmark results
+# Unique vs the world — benchmark results
 
 **Date:** $(date -u +"%Y-%m-%dT%H:%M:%SZ")
 **Host:** $(uname -a)
@@ -115,16 +115,16 @@ cat > "$RESULTS_FILE" <<EOF
 
 | Framework | Throughput (req/s) | p99 latency |
 |---|---|---|
-| kungfu (Rust) | $(echo "$KUNGFU_RESULT"  | grep -oE '[0-9.]+ req/s' | head -1) | $(echo "$KUNGFU_RESULT"  | grep -oE '[0-9.]+ms' | tail -1) |
+| unique (Rust) | $(echo "$UNIQUE_RESULT"  | grep -oE '[0-9.]+ req/s' | head -1) | $(echo "$UNIQUE_RESULT"  | grep -oE '[0-9.]+ms' | tail -1) |
 | actix-web (Rust) | $(echo "$ACTIX_RESULT"    | grep -oE '[0-9.]+ req/s' | head -1) | $(echo "$ACTIX_RESULT"    | grep -oE '[0-9.]+ms' | tail -1) |
 | express (Node.js) | $(echo "$EXPRESS_RESULT" | grep -oE '[0-9.]+ req/s' | head -1) | $(echo "$EXPRESS_RESULT" | grep -oE '[0-9.]+ms' | tail -1) |
 | fastapi (Python) | $(echo "$FASTAPI_RESULT" | grep -oE '[0-9.]+ req/s' | head -1) | $(echo "$FASTAPI_RESULT" | grep -oE '[0-9.]+ms' | tail -1) |
 
 ## Raw output
 
-### kungfu
+### unique
 \`\`\`
-$KUNGFU_RESULT
+$UNIQUE_RESULT
 \`\`\`
 
 ### actix-web

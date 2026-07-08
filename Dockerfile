@@ -1,4 +1,4 @@
-# Kungfu.js — Official Docker Image
+# Unique.js — Official Docker Image
 # Multi-stage build for minimal image size.
 
 FROM rust:1.96 AS builder
@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 # Build with maximum performance features.
-RUN cargo build --release --features "kungfu-core/io_uring kungfu-core/simd"
+RUN cargo build --release --features "unique-core/io_uring unique-core/simd"
 
 # Runtime stage — minimal image.
 FROM debian:bookworm-slim
@@ -18,8 +18,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy the binary.
-COPY --from=builder /app/target/release/kungfu /usr/local/bin/kungfu
-COPY --from=builder /app/target/release/kungfu_bench /usr/local/bin/kungfu_bench
+COPY --from=builder /app/target/release/unique /usr/local/bin/unique
+COPY --from=builder /app/target/release/unique_bench /usr/local/bin/unique_bench
 
 # Expose the default port.
 EXPOSE 3000
@@ -29,4 +29,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:3000/hello || exit 1
 
 # Run the demo server by default.
-CMD ["kungfu", "demo"]
+CMD ["unique", "demo"]

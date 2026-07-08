@@ -15,10 +15,10 @@
 #        - bindings/python/pyproject.toml
 #        - bindings/dart/pubspec.yaml
 #        - bindings/php/composer.json
-#        - bindings/ruby/lib/kungfu/version.rb
+#        - bindings/ruby/lib/unique/version.rb
 #        - bindings/elixir/mix.exs (@version)
-#        - bindings/lua/kungfu-*-1.rockspec (version + package)
-#        - bindings/csharp/Kungfu.Core.csproj (<Version>)
+#        - bindings/lua/unique-*-1.rockspec (version + package)
+#        - bindings/csharp/Unique.Core.csproj (<Version>)
 #        - bindings/java/pom.xml (<version>)
 #        - bindings/kotlin/build.gradle.kts (version = ...)
 #   3. Commit the version bump.
@@ -56,10 +56,10 @@ git push origin "$TAG"
 
 echo ""
 echo "=== Tag pushed. The release workflow will now run at: ==="
-echo "    https://github.com/Resolutefemi/kungfu/actions/workflows/release.yml"
+echo "    https://github.com/Resolutefemi/unique/actions/workflows/release.yml"
 echo ""
 echo "=== Required GitHub Actions secrets (configure at ==="
-echo "    https://github.com/Resolutefemi/kungfu/settings/secrets/actions): ==="
+echo "    https://github.com/Resolutefemi/unique/settings/secrets/actions): ==="
 echo "    - CRATES_IO_TOKEN        (crates.io publish token)"
 echo "    - NPM_TOKEN              (npm automation token)"
 echo "    - PYPI_API_TOKEN         (PyPI upload token)"

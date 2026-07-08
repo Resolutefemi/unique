@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Push the Kungfu.js repo to GitHub.
+# Push the Unique.js repo to GitHub.
 #
 # Usage:
 #   ./scripts/push-to-github.sh                       # interactive (browser)
 #   GITHUB_TOKEN=ghp_xxx ./scripts/push-to-github.sh  # non-interactive (token)
-#   REPO_OWNER=youruser REPO_NAME=kungfu ./scripts/push-to-github.sh
+#   REPO_OWNER=youruser REPO_NAME=unique ./scripts/push-to-github.sh
 #
 # What this does:
 #   1. Ensures `gh` CLI is on PATH (uses ~/.local/bin/gh if installed there)
@@ -27,8 +27,8 @@ if [[ -z "$GH" ]]; then
 fi
 
 # --- Auth ---
-REPO_OWNER="${REPO_OWNER:-kungfu-js}"
-REPO_NAME="${REPO_NAME:-kungfu}"
+REPO_OWNER="${REPO_OWNER:-unique-js}"
+REPO_NAME="${REPO_NAME:-unique}"
 if [[ "${PRIVATE:-0}" == "1" ]]; then VIS="private"; else VIS="public"; fi
 
 if [[ -n "${GITHUB_TOKEN:-}" ]]; then

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Publish the Kungfu.js JavaScript / TypeScript binding to npm.
+# Publish the Unique.js JavaScript / TypeScript binding to npm.
 #
 # Usage:
 #   scripts/publish-npm.sh            # actually publish

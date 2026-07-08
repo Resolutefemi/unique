@@ -1,9 +1,9 @@
-# Kungfu.js — Helm Chart values
-# Deploy Kungfu.js to Kubernetes.
+# Unique.js — Helm Chart values
+# Deploy Unique.js to Kubernetes.
 
 apiVersion: v2
-name: kungfu
-description: Kungfu.js web framework — polyglot, fast, secure by default
+name: unique
+description: Unique.js web framework — polyglot, fast, secure by default
 type: application
 version: 1.0.0
 appVersion: "1.0.0"
@@ -11,7 +11,7 @@ appVersion: "1.0.0"
 replicaCount: 3
 
 image:
-  repository: kungfujs/kungfu
+  repository: uniquejs/unique
   pullPolicy: IfNotPresent
   tag: "1.0.0"
 
