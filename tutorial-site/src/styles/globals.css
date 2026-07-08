@@ -472,9 +472,9 @@ p code, li code, td code {
 /* Quick navigation cards on homepage */
 .quick-nav {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 1rem;
-  max-width: 800px;
+  max-width: 1000px;
   margin: 2rem auto 0;
 }
 

@@ -7,15 +7,20 @@ export default function HomePage() {
     <>
       <Navbar />
       <section className="hero">
-        <h1>Learn Unique.js</h1>
+        <h1>Unique.js</h1>
         <p>
-          A polyglot web framework with a Rust core.
-          Write your backend in any language. Frontend in JS/TS only.
+          One API surface, infinite languages. A polyglot web framework with a Rust core.
+          Write your backend in any of 16 languages. Frontend in JS/TS only.
           Fast, secure, simple.
         </p>
 
         {/* Quick navigation cards */}
         <div className="quick-nav">
+          <Link href="/quick-start" className="quick-nav-card">
+            <span className="quick-nav-icon">🚀</span>
+            <span className="quick-nav-title">Quick Start</span>
+            <span className="quick-nav-desc">Running in 5 minutes</span>
+          </Link>
           <Link href="/learn/rust/01-getting-started" className="quick-nav-card">
             <span className="quick-nav-icon">📚</span>
             <span className="quick-nav-title">Tutorial</span>
