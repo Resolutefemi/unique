@@ -1,5 +1,8 @@
 {
   "buildCommand": "cd tutorial-site && npm install && npm run build",
-  "outputDirectory": "tutorial-site/out",
-  "framework": "nextjs"
+  "outputDirectory": "tutorial-site/.next",
+  "framework": "nextjs",
+  "github": {
+    "silent": true
+  }
 }
