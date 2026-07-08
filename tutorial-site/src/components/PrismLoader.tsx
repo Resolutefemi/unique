@@ -16,7 +16,7 @@ declare global {
 const PRISM_VERSION = '1.29.0';
 const PRISON_BASE = `https://cdnjs.cloudflare.com/ajax/libs/prism/${PRISM_VERSION}`;
 
-// Languages used across the 16 Kungfu.js bindings. Order matters only in
+// Languages used across the 16 Unique.js bindings. Order matters only in
 // that 'clike' must load before 'javascript' (which extends it) — but our
 // loader waits for ALL of them anyway, so order in this list is irrelevant.
 const PRISM_LANGS = [

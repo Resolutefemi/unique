@@ -40,7 +40,7 @@ export function Navbar() {
           <circle cx="16" cy="16" r="3" fill="#FFFFFF"/>
           <circle cx="16" cy="16" r="1.5" fill="#00C853"/>
         </svg>
-        Kungfu.js
+        Unique.js
       </Link>
 
       {/* Desktop links — hidden on mobile, replaced by hamburger dropdown */}
@@ -55,7 +55,7 @@ export function Navbar() {
           Learn
         </Link>
         <a
-          href="https://github.com/Resolutefemi/kungfu"
+          href="https://github.com/Resolutefemi/unique"
           className="navbar-link"
           target="_blank"
           rel="noopener noreferrer"
@@ -96,7 +96,7 @@ export function Navbar() {
             Learn
           </Link>
           <a
-            href="https://github.com/Resolutefemi/kungfu"
+            href="https://github.com/Resolutefemi/unique"
             className="navbar-mobile-link"
             target="_blank"
             rel="noopener noreferrer"

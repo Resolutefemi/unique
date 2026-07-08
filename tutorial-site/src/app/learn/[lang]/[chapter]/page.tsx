@@ -8,12 +8,12 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   const lang = languages.find(l => l.id === params.lang);
   if (!lang) return {};
   return {
-    title: `Kungfu.js Tutorial - ${lang.name} - From Beginner to Pro`,
-    description: `Learn Kungfu.js in ${lang.name}. Complete tutorial from installation to deployment. ${lang.description}`,
-    keywords: `kungfu, ${lang.name}, tutorial, web framework, ${lang.fileExtension}`,
+    title: `Unique.js Tutorial - ${lang.name} - From Beginner to Pro`,
+    description: `Learn Unique.js in ${lang.name}. Complete tutorial from installation to deployment. ${lang.description}`,
+    keywords: `unique, ${lang.name}, tutorial, web framework, ${lang.fileExtension}`,
     openGraph: {
-      title: `Learn Kungfu.js in ${lang.name}`,
-      description: `Complete ${lang.name} tutorial for the Kungfu.js polyglot web framework.`,
+      title: `Learn Unique.js in ${lang.name}`,
+      description: `Complete ${lang.name} tutorial for the Unique.js polyglot web framework.`,
     },
   };
 }

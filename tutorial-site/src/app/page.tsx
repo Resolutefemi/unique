@@ -7,7 +7,7 @@ export default function HomePage() {
     <>
       <Navbar />
       <section className="hero">
-        <h1>Learn Kungfu.js</h1>
+        <h1>Learn Unique.js</h1>
         <p>
           A polyglot web framework with a Rust core.
           Write your backend in any language. Frontend in JS/TS only.

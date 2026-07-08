@@ -7,7 +7,7 @@ export function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('kungfu-theme') || 'light';
+    const saved = localStorage.getItem('unique-theme') || 'light';
     setTheme(saved);
     document.documentElement.setAttribute('data-theme', saved);
     setMounted(true);
@@ -17,7 +17,7 @@ export function ThemeToggle() {
     const next = theme === 'light' ? 'dark' : 'light';
     setTheme(next);
     document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('kungfu-theme', next);
+    localStorage.setItem('unique-theme', next);
   };
 
   if (!mounted) return null;

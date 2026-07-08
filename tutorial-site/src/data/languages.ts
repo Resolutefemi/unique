@@ -18,7 +18,7 @@ export const languages: Language[] = [
     iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg',
     description: 'Native performance, full API access',
     fileExtension: '.rs',
-    packageName: 'kungfu',
+    packageName: 'unique',
     registry: 'crates.io',
   },
   {
@@ -27,7 +27,7 @@ export const languages: Language[] = [
     iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
     description: 'Node.js binding via napi-rs',
     fileExtension: '.jsk',
-    packageName: '@kungfu/core',
+    packageName: '@unique/core',
     registry: 'npm',
   },
   {
@@ -36,7 +36,7 @@ export const languages: Language[] = [
     iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
     description: 'Type-safe JS with .tsk files',
     fileExtension: '.tsk',
-    packageName: '@kungfu/core',
+    packageName: '@unique/core',
     registry: 'npm',
   },
   {
@@ -45,7 +45,7 @@ export const languages: Language[] = [
     iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
     description: 'pyo3 binding, decorator API',
     fileExtension: '.py',
-    packageName: 'kungfu',
+    packageName: 'unique',
     registry: 'PyPI',
   },
   {
@@ -54,7 +54,7 @@ export const languages: Language[] = [
     iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg',
     description: 'Standalone net/http implementation',
     fileExtension: '.go',
-    packageName: 'github.com/Resolutefemi/kungfu/bindings/go',
+    packageName: 'github.com/Resolutefemi/unique/bindings/go',
     registry: 'pkg.go.dev',
   },
   {
@@ -63,7 +63,7 @@ export const languages: Language[] = [
     iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
     description: 'C ABI via JNI',
     fileExtension: '.java',
-    packageName: 'com.kungfu:kungfu',
+    packageName: 'com.unique:unique',
     registry: 'Maven Central',
   },
   {
@@ -72,7 +72,7 @@ export const languages: Language[] = [
     iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-original.svg',
     description: 'JVM binding, same as Java',
     fileExtension: '.kt',
-    packageName: 'com.kungfu:kungfu',
+    packageName: 'com.unique:unique',
     registry: 'Maven Central',
   },
   {
@@ -81,7 +81,7 @@ export const languages: Language[] = [
     iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dart/dart-original.svg',
     description: 'dart:ffi via C ABI',
     fileExtension: '.dart',
-    packageName: 'kungfu',
+    packageName: 'unique',
     registry: 'pub.dev',
   },
   {
@@ -90,7 +90,7 @@ export const languages: Language[] = [
     iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg',
     description: 'C interop via module map',
     fileExtension: '.swift',
-    packageName: 'Kungfu',
+    packageName: 'Unique',
     registry: 'Swift Package Manager',
   },
   {
@@ -99,7 +99,7 @@ export const languages: Language[] = [
     iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',
     description: 'Header-only wrapper around C ABI',
     fileExtension: '.cpp',
-    packageName: 'kungfu.hpp',
+    packageName: 'unique.hpp',
     registry: 'GitHub',
   },
   {
@@ -108,7 +108,7 @@ export const languages: Language[] = [
     iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg',
     description: 'FFI extension to C library',
     fileExtension: '.php',
-    packageName: 'kungfu/kungfu',
+    packageName: 'unique/unique',
     registry: 'Packagist',
   },
   {
@@ -117,7 +117,7 @@ export const languages: Language[] = [
     iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ruby/ruby-original.svg',
     description: 'FFI gem to C library',
     fileExtension: '.rb',
-    packageName: 'kungfu',
+    packageName: 'unique',
     registry: 'RubyGems',
   },
   {
@@ -126,7 +126,7 @@ export const languages: Language[] = [
     iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg',
     description: 'P/Invoke to C library',
     fileExtension: '.cs',
-    packageName: 'Kungfu.Core',
+    packageName: 'Unique.Core',
     registry: 'NuGet',
   },
   {
@@ -135,7 +135,7 @@ export const languages: Language[] = [
     iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg',
     description: 'Direct C ABI, no wrapper needed',
     fileExtension: '.c',
-    packageName: 'kungfu.h',
+    packageName: 'unique.h',
     registry: 'GitHub',
   },
   {
@@ -144,7 +144,7 @@ export const languages: Language[] = [
     iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/elixir/elixir-original.svg',
     description: 'NIF binding to C library',
     fileExtension: '.ex',
-    packageName: 'kungfu',
+    packageName: 'unique',
     registry: 'hex.pm',
   },
   {
@@ -153,7 +153,7 @@ export const languages: Language[] = [
     iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/lua/lua-original.svg',
     description: 'LuaJIT FFI to C library',
     fileExtension: '.lua',
-    packageName: 'kungfu',
+    packageName: 'unique',
     registry: 'LuaRocks',
   },
 ];
@@ -165,10 +165,10 @@ export interface TutorialChapter {
 }
 
 export const chapters: TutorialChapter[] = [
-  { slug: '01-getting-started', title: 'Getting Started', description: 'Install Kungfu.js and build your first app' },
+  { slug: '01-getting-started', title: 'Getting Started', description: 'Install Unique.js and build your first app' },
   { slug: '02-installation', title: 'Installation Deep Dive', description: 'Detailed setup for your language and OS' },
   { slug: '03-hello-world', title: 'Hello World Explained', description: 'Line by line breakdown of your first server' },
-  { slug: '04-project-structure', title: 'Project Structure', description: 'How to organize your Kungfu.js project' },
+  { slug: '04-project-structure', title: 'Project Structure', description: 'How to organize your Unique.js project' },
   { slug: '05-routing-basics', title: 'Routing Basics', description: 'Static routes and the trie router explained' },
   { slug: '06-path-parameters', title: 'Path Parameters', description: 'Capture dynamic values from URLs' },
   { slug: '07-wildcards', title: 'Wildcards and Catch-All', description: 'Match multiple path segments' },
