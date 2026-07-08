@@ -1,6 +1,6 @@
-# Kungfu.js Documentation
+# Unique.js Documentation
 
-Welcome to the Kungfu.js documentation. Kungfu is a polyglot full-stack
+Welcome to the Unique.js documentation. Unique is a polyglot full-stack
 web framework with a Rust core. Backend: any language. Frontend: JS/TS only.
 
 ## Learn
@@ -22,7 +22,7 @@ The [Learn](./learn/) section is a step-by-step tutorial, similar to
 
 ## API Reference
 
-- [Rust API](./api/rust.md) (`kungfu`, `kungfu-core`, `kungfu-orm`, `kungfu-css`, `kungfu-frontend`)
+- [Rust API](./api/rust.md) (`unique`, `unique-core`, `unique-orm`, `unique-css`, `unique-frontend`)
 - [JavaScript/TypeScript API](./api/js.md) (`bindings/js/`)
 - [Python API](./api/python.md) (`bindings/python/`)
 - [Go API](./api/go.md) (`bindings/go/`)
@@ -31,7 +31,7 @@ The [Learn](./learn/) section is a step-by-step tutorial, similar to
 
 See the [`examples/`](../examples/) directories of each crate for working code:
 
-- [`kungfu/examples/`](../kungfu/examples/) — `hello`, `simple`, `middleware`, `params`, `errors`
+- [`unique/examples/`](../unique/examples/) — `hello`, `simple`, `middleware`, `params`, `errors`
 - [`orm/examples/`](../orm/examples/) — `orm_mock`
 - [`css/examples/`](../css/examples/) — `css_demo`
 - [`frontend/examples/`](../frontend/examples/) — `ssr_demo`
@@ -41,10 +41,10 @@ See the [`examples/`](../examples/) directories of each crate for working code:
 
 ## Comparisons
 
-- [Kungfu vs Next.js](./api/comparisons/nextjs.md) — why Kungfu for full-stack?
-- [Kungfu vs Express/Fastify](./api/comparisons/express.md) — why Kungfu for Node?
-- [Kungfu vs FastAPI](./api/comparisons/fastapi.md) — why Kungfu for Python?
-- [Kungfu vs Actix/Axum](./api/comparisons/actix.md) — why Kungfu for Rust?
+- [Unique vs Next.js](./api/comparisons/nextjs.md) — why Unique for full-stack?
+- [Unique vs Express/Fastify](./api/comparisons/express.md) — why Unique for Node?
+- [Unique vs FastAPI](./api/comparisons/fastapi.md) — why Unique for Python?
+- [Unique vs Actix/Axum](./api/comparisons/actix.md) — why Unique for Rust?
 
 ## Performance
 

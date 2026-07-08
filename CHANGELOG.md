@@ -1,19 +1,19 @@
 # Changelog
 
-All notable changes to Kungfu.js are documented in this file.
+All notable changes to Unique.js are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.0.0] — 2026-06-21
 
-First stable release. Kungfu.js V1.0 is a polyglot full-stack web framework
+First stable release. Unique.js V1.0 is a polyglot full-stack web framework
 with a Rust core, idiomatic backend bindings (Rust first, JS/TS scaffolded,
 others planned), a JS/TS-only frontend, and a built-in CSS engine + ORM.
 
 ### Added
 
-#### Core engine (`kungfu-core`)
+#### Core engine (`unique-core`)
 - Hand-rolled HTTP/1.1 server on tokio + httparse (no `hyper`).
 - Trie router with `:params` + `*wildcards` + method dispatch.
 - Onion-style middleware pipeline.
@@ -37,44 +37,44 @@ others planned), a JS/TS-only frontend, and a built-in CSS engine + ORM.
 - **`simd`** — SIMD-accelerated JSON via `simd-json` on x86_64 with AVX2.
   Wired into both `Request::json()` and `Response::json()`.
 
-#### Idiomatic Rust API (`kungfu` crate)
-- `Kungfu::new().route(...).run(addr)` fluent builder.
+#### Idiomatic Rust API (`unique` crate)
+- `Unique::new().route(...).run(addr)` fluent builder.
 - `get!` / `post!` / `put!` / `delete!` / `patch!` macros.
-- `KungfuBuilder::run_with_hot_reload()` entry point.
+- `UniqueBuilder::run_with_hot_reload()` entry point.
 
-#### Proc macros (`kungfu-macros`)
+#### Proc macros (`unique-macros`)
 - `#[derive(Model)]` with `#[field]` attributes:
   `primary`, `auto_increment`, `unique`, `sensitive`, `min`, `max`, `skip`.
 
-#### ORM (`kungfu-orm`)
+#### ORM (`unique-orm`)
 - Type-safe parameterised query builder (SQL-injection-proof).
 - Mock in-process driver for tests.
 - `sqlx` feature-gated real drivers (`postgres`, `mysql`, `sqlite`).
 - CREATE TABLE migration generator from Model definitions.
 
-#### CSS engine (`kungfu-css`)
+#### CSS engine (`unique-css`)
 - Class-string parser with responsive (`sm`/`md`/`lg`/`xl`/`2xl`) and
   state (`hover`/`focus`/`active`/`disabled`) prefixes.
 - 100+ utility mappings (layout, spacing, colors, typography, borders, flexbox, gap).
 - Source-file scanner for `class=` / `className=` attributes.
 - `compile_directory()` produces a single minimal CSS bundle in microseconds.
 
-#### Frontend (`kungfu-frontend`)
+#### Frontend (`unique-frontend`)
 - `.kng` file parser (`data()` + `template()` exports + optional static HTML).
-- SSR page renderer with livereload script injection + `__KUNGFU_DATA__` hydration.
+- SSR page renderer with livereload script injection + `__UNIQUE_DATA__` hydration.
 - WebSocket-based live reload server (`broadcast::Sender`).
 - TypeScript type generation from route metadata (tRPC-style).
 
 #### JS/TS binding (`bindings/js`, napi-rs)
-- `Kungfu` class with `.get()` / `.post()` / `.put()` / `.delete()` / `.patch()` / `.listen()`.
+- `Unique` class with `.get()` / `.post()` / `.put()` / `.delete()` / `.patch()` / `.listen()`.
 - `ThreadsafeFunction` bridging to Rust async runtime.
 - TypeScript definitions.
 - Idiomatic wrapper with chainable `ResponseBuilder`.
 
-#### CLI (`kungfu-cli`)
-- `kungfu demo` — built-in demo server (uses cached responses + multi-acceptor).
-- `kungfu --version`, `kungfu --help`.
-- `kungfu_bench` throughput benchmark binary.
+#### CLI (`unique-cli`)
+- `unique demo` — built-in demo server (uses cached responses + multi-acceptor).
+- `unique --version`, `unique --help`.
+- `unique_bench` throughput benchmark binary.
 
 #### Benchmark suite (`bench/`)
 - actix-web, Express, FastAPI equivalents.

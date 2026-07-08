@@ -1,6 +1,6 @@
 # Performance — path to 3M req/s
 
-Kungfu is engineered to be the fastest web framework available. This document
+Unique is engineered to be the fastest web framework available. This document
 explains what's been done, what the current numbers are, and what's needed
 to hit 3 million requests per second on production hardware.
 
@@ -142,17 +142,17 @@ estimate is ~300k req/s on a 16-core box → 12× = 3.6M req/s. ✅
 
 ## How to benchmark properly
 
-The bundled `kungfu_bench` binary uses an in-process client, which competes
+The bundled `unique_bench` binary uses an in-process client, which competes
 with the server for CPU. For real numbers:
 
 1. **Build the release binary** on the server machine:
    ```bash
-   cargo build -p kungfu-cli --bin kungfu_bench --release
+   cargo build -p unique-cli --bin unique_bench --release
    ```
 
 2. **Start the server** (note: bind to all interfaces if load-gen is remote):
    ```bash
-   ./target/release/kungfu_bench
+   ./target/release/unique_bench
    ```
 
 3. **From a separate machine** (or at least a separate process), run `oha`:
@@ -160,7 +160,7 @@ with the server for CPU. For real numbers:
    oha -z 10s -c 1024 --qps 0 http://<server-ip>:<port>/hello
    ```
 
-4. **Or use the comparison harness** to see how Kungfu stacks up against
+4. **Or use the comparison harness** to see how Unique stacks up against
    Actix-web, Express, and FastAPI:
    ```bash
    ./scripts/run-bench-suite.sh
@@ -188,7 +188,7 @@ serialisation" test (the standard industry benchmark for HTTP frameworks):
 - **tokio-minihttp** (Rust, experimental): ~1.8M req/s
 - **gemini** (C++): ~2.2M req/s
 
-Kungfu's architecture (hand-rolled HTTP, trie router, buffer pool, cached
+Unique's architecture (hand-rolled HTTP, trie router, buffer pool, cached
 responses, multi-acceptor SO_REUSEPORT) matches or exceeds all of these on
 the hot path. The remaining gap to 3M is closed by io_uring + pipelining +
 SIMD JSON, all of which are on the V1.0 roadmap.

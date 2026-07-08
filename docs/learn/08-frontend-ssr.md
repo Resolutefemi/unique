@@ -2,7 +2,7 @@
 
 > ⏱️ 8 minutes
 
-Kungfu's frontend story is JS/TS-only — that's where the ecosystem is. The
+Unique's frontend story is JS/TS-only — that's where the ecosystem is. The
 framework provides:
 
 1. **`.kng` SSR files** — a Svelte/Astro-like file format for server-rendered pages.
@@ -26,7 +26,7 @@ export function template({ user }) {
 }
 ```
 
-At build time, Kungfu compiles each `.kng` file into a server-rendered
+At build time, Unique compiles each `.kng` file into a server-rendered
 route. At request time, `data()` is called, then `template()` is invoked
 with the data, and the resulting HTML is sent to the client.
 
@@ -59,7 +59,7 @@ export function template({ user }) {
   return `<main>Hello, ${user.name}!</main>`;
 }
 ---
-<footer class="text-center p-4 text-gray-500">© 2026 Kungfu.js</footer>
+<footer class="text-center p-4 text-gray-500">© 2026 Unique.js</footer>
 ```
 
 The static HTML is appended to the rendered template.
@@ -69,14 +69,14 @@ The static HTML is appended to the rendered template.
 The SSR renderer wraps the template output in a complete HTML page and
 injects:
 
-- `<link rel="stylesheet" href="/kungfu.css">` — the CSS bundle
-- `<script>window.__KUNGFU_DATA__ = {...}</script>` — the data for client-side hydration
-- `<script src="/__kungfu_livereload.js"></script>` — live reload (dev only)
+- `<link rel="stylesheet" href="/unique.css">` — the CSS bundle
+- `<script>window.__UNIQUE_DATA__ = {...}</script>` — the data for client-side hydration
+- `<script src="/__unique_livereload.js"></script>` — live reload (dev only)
 
 ```rust
-use kungfu_frontend::{parse_kungfu_file, render_page, SsrContext};
+use unique_frontend::{parse_unique_file, render_page, SsrContext};
 
-let file = parse_kungfu_file(file_contents, "src/pages/index.kng")?;
+let file = parse_unique_file(file_contents, "src/pages/index.kng")?;
 let data = serde_json::json!({"user": {"name": "Bruce"}});
 let rendered_template = "<main>Hello, Bruce!</main>";
 
@@ -90,12 +90,12 @@ let html = render_page(&file, &ctx, rendered_template, &data);
 
 ## Live reload
 
-In dev mode, every SSR page opens a WebSocket to `/__kungfu_livereload`.
+In dev mode, every SSR page opens a WebSocket to `/__unique_livereload`.
 When the file watcher detects a change, all connected clients receive a
 `reload` message and refresh.
 
 ```rust
-use kungfu_frontend::LiveReloadServer;
+use unique_frontend::LiveReloadServer;
 
 let livereload = LiveReloadServer::new();
 
@@ -105,13 +105,13 @@ livereload.trigger_reload();
 
 ## TypeScript type generation
 
-Kungfu generates a `routes.d.ts` file from your route metadata, so the
+Unique generates a `routes.d.ts` file from your route metadata, so the
 frontend gets full autocomplete when calling backend routes (similar to
 tRPC):
 
 ```typescript
 // routes.d.ts (generated)
-declare namespace KungfuRoutes {
+declare namespace UniqueRoutes {
   interface GetUsersById {
     path: '/users/:id';
     method: 'GET';
@@ -128,7 +128,7 @@ declare namespace KungfuRoutes {
 ```
 
 ```rust
-use kungfu_frontend::generate_typescript;
+use unique_frontend::generate_typescript;
 
 let routes = router.routes();
 let typescript = generate_typescript(&routes);

@@ -1,6 +1,6 @@
-# Releasing Kungfu.js
+# Releasing Unique.js
 
-This document describes how to cut a release of Kungfu.js across **all**
+This document describes how to cut a release of Unique.js across **all**
 language package managers. The release is fully automated via a GitHub
 Actions workflow that triggers on tag push (`v*`).
 
@@ -18,31 +18,31 @@ git push origin v1.0.0
 ```
 
 The tag push triggers
-[release.yml](https://github.com/Resolutefemi/kungfu/actions/workflows/release.yml),
+[release.yml](https://github.com/Resolutefemi/unique/actions/workflows/release.yml),
 which publishes to every registry listed in the next section.
 
 ## Registries published to
 
 | # | Registry        | Package                                | Triggered by job      | Notes                                          |
 | - | --------------- | -------------------------------------- | --------------------- | ---------------------------------------------- |
-| 1 | crates.io       | `kungfu`, `kungfu-core`, `kungfu-orm`, `kungfu-css`, `kungfu-macros`, `kungfu-frontend`, `kungfu-cli` | `publish-crates` | In dependency order; built on Ubuntu. |
-| 2 | npm             | `kungfu` (+ per-platform sub-packages) | `publish-npm` + `publish-npm-umbrella` | 5-target matrix (linux x64/arm64, macOS x64/arm64, Windows x64). |
-| 3 | PyPI            | `kungfu`                               | `publish-pypi` + `publish-pypi-upload` | 3-OS × 3-Python matrix → wheels uploaded via twine. |
-| 4 | Maven Central   | `com.kungfu:kungfu`                    | `publish-maven`       | Requires Sonatype OSSRH + GPG signing.         |
-| 5 | NuGet           | `Kungfu.Core`                          | `publish-nuget`       | .NET 8 SDK.                                    |
-| 6 | RubyGems        | `kungfu`                               | `publish-rubygems`    | Ruby 3.3.                                      |
-| 7 | hex.pm          | `kungfu`                               | `publish-hex`         | OTP 26 + Elixir 1.15.                          |
-| 8 | LuaRocks        | `kungfu`                               | `publish-luarocks`    | LuaRocks upload of rockspec.                   |
+| 1 | crates.io       | `unique`, `unique-core`, `unique-orm`, `unique-css`, `unique-macros`, `unique-frontend`, `unique-cli` | `publish-crates` | In dependency order; built on Ubuntu. |
+| 2 | npm             | `unique` (+ per-platform sub-packages) | `publish-npm` + `publish-npm-umbrella` | 5-target matrix (linux x64/arm64, macOS x64/arm64, Windows x64). |
+| 3 | PyPI            | `unique`                               | `publish-pypi` + `publish-pypi-upload` | 3-OS × 3-Python matrix → wheels uploaded via twine. |
+| 4 | Maven Central   | `com.unique:unique`                    | `publish-maven`       | Requires Sonatype OSSRH + GPG signing.         |
+| 5 | NuGet           | `Unique.Core`                          | `publish-nuget`       | .NET 8 SDK.                                    |
+| 6 | RubyGems        | `unique`                               | `publish-rubygems`    | Ruby 3.3.                                      |
+| 7 | hex.pm          | `unique`                               | `publish-hex`         | OTP 26 + Elixir 1.15.                          |
+| 8 | LuaRocks        | `unique`                               | `publish-luarocks`    | LuaRocks upload of rockspec.                   |
 | 9 | Go proxy        | auto-picked-up                         | (none — implicit)    | `go get` works as soon as the tag exists.      |
 | 10 | Swift SPM      | auto-picked-up                         | (none — implicit)    | `import Package` from URL works once tagged.   |
-| 11 | pub.dev        | `kungfu`                               | manual `dart pub publish` | Dart pub.dev requires manual `publish` — OAuth-only flow. |
-| 12 | Packagist      | `kungfu/kungfu`                        | manual submit         | PHP Packagist auto-publishes from git tags.    |
-| 13 | GitHub Release | `kungfu-c-abi-*.tar.gz` / `.zip`       | `github-release` + `github-release-attach` | Pre-built `libkungfu_core` + headers for C/C++ consumers. |
+| 11 | pub.dev        | `unique`                               | manual `dart pub publish` | Dart pub.dev requires manual `publish` — OAuth-only flow. |
+| 12 | Packagist      | `unique/unique`                        | manual submit         | PHP Packagist auto-publishes from git tags.    |
+| 13 | GitHub Release | `unique-c-abi-*.tar.gz` / `.zip`       | `github-release` + `github-release-attach` | Pre-built `libunique_core` + headers for C/C++ consumers. |
 
 ## Required GitHub Actions secrets
 
 Configure at
-<https://github.com/Resolutefemi/kungfu/settings/secrets/actions>.
+<https://github.com/Resolutefemi/unique/settings/secrets/actions>.
 
 | Secret                       | Used by             | How to obtain                                                          |
 | ---------------------------- | ------------------- | ---------------------------------------------------------------------- |
@@ -81,7 +81,7 @@ Each language has a `--dry-run` publish script under `scripts/`:
 For an end-to-end dry-run of the full release workflow, use
 `workflow_dispatch` from the Actions UI with `dry_run=true`:
 
-<https://github.com/Resolutefemi/kungfu/actions/workflows/release.yml>
+<https://github.com/Resolutefemi/unique/actions/workflows/release.yml>
 
 ## Version numbers
 
@@ -102,11 +102,11 @@ To bump from `1.0.0` → `1.1.0`, edit:
 | `bindings/dart/pubspec.yaml`                     | `version:`                           |
 | `bindings/java/pom.xml`                          | `<version>`                          |
 | `bindings/kotlin/build.gradle.kts`               | `version = "..."`                    |
-| `bindings/csharp/Kungfu.Core.csproj`             | `<Version>`                          |
+| `bindings/csharp/Unique.Core.csproj`             | `<Version>`                          |
 | `bindings/php/composer.json`                     | `"version"`                          |
-| `bindings/ruby/lib/kungfu/version.rb`            | `VERSION = "..."`                    |
+| `bindings/ruby/lib/unique/version.rb`            | `VERSION = "..."`                    |
 | `bindings/elixir/mix.exs`                        | `@version "..."`                     |
-| `bindings/lua/kungfu-X.Y.Z-1.rockspec`           | `version = "X.Y.Z-1"` + filename     |
+| `bindings/lua/unique-X.Y.Z-1.rockspec`           | `version = "X.Y.Z-1"` + filename     |
 
 Then commit, tag `vX.Y.Z`, and push the tag.
 
@@ -127,11 +127,11 @@ Each registry has a different policy for unpublishing / yanking:
 | Registry     | How to roll back                                                    |
 | ------------ | ------------------------------------------------------------------- |
 | crates.io    | `cargo yank --vers <version>` (does not delete, just prevents new dependents) |
-| npm          | `npm unpublish kungfu@<version>` (within 72h) or `npm deprecate`   |
+| npm          | `npm unpublish unique@<version>` (within 72h) or `npm deprecate`   |
 | PyPI         | Not possible. Upload a `1.0.1` patch instead.                       |
 | Maven Central| Not possible. Upload a new version.                                 |
 | NuGet         | `dotnet nuget delete` (only within 72h)                             |
-| RubyGems     | `gem yank kungfu -v <version>`                                      |
+| RubyGems     | `gem yank unique -v <version>`                                      |
 | hex.pm        | `mix hex.publish --revert <version>`                                |
 | LuaRocks     | Not possible. Upload a new rockspec.                                |
 | Go proxy     | Not possible (immutable). Bump module path with `/v2`, `/v3` suffix. |
@@ -140,9 +140,9 @@ Each registry has a different policy for unpublishing / yanking:
 
 ## Common pitfalls
 
-- **Crates.io dependency ordering.** `kungfu-cli` depends on `kungfu`
-  and `kungfu-core`. If `kungfu-core` hasn't propagated yet when
-  `kungfu-cli` publishes, the publish will fail with "no matching
+- **Crates.io dependency ordering.** `unique-cli` depends on `unique`
+  and `unique-core`. If `unique-core` hasn't propagated yet when
+  `unique-cli` publishes, the publish will fail with "no matching
   package." The CI workflow adds a 30s sleep between crate publishes
   to mitigate this. If it still fails, re-run the failed job only.
 - **npm per-platform binaries.** napi-rs's `prepublishOnly` builds

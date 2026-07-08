@@ -2,13 +2,13 @@
 
 > ⏱️ 8 minutes
 
-Middleware is a function that runs before/after every request. Kungfu's
+Middleware is a function that runs before/after every request. Unique's
 middleware uses the classic "onion" model — outermost middleware runs
 first on the way in, last on the way out.
 
 ## Built-in middleware
 
-Kungfu installs these automatically (secure-by-default):
+Unique installs these automatically (secure-by-default):
 
 | Middleware | What it does |
 |---|---|
@@ -34,11 +34,11 @@ These are available but not installed by default:
 A middleware is a closure `Fn(Request, Next) -> Future<Response>`:
 
 ```rust
-use kungfu::prelude::*;
+use unique::prelude::*;
 use std::sync::Arc;
 
 fn main() {
-    let add_request_id: kungfu::Middleware = Arc::new(|req, next| {
+    let add_request_id: unique::Middleware = Arc::new(|req, next| {
         Box::pin(async move {
             // Before handler runs.
             let request_id = req
@@ -57,7 +57,7 @@ fn main() {
 
     let rt = tokio::runtime::Runtime::new().unwrap();
     rt.block_on(
-        Kungfu::new()
+        Unique::new()
             .use_middleware(add_request_id)
             .handle_get("/hello", |_req, res| res.text("world"))
             .run("0.0.0.0:3000"),
@@ -71,11 +71,11 @@ If you don't call `next(req)`, the chain stops. This is how you implement
 authentication:
 
 ```rust
-let auth_required: kungfu::Middleware = Arc::new(|req, next| {
+let auth_required: unique::Middleware = Arc::new(|req, next| {
     Box::pin(async move {
         if req.header("x-api-key").is_none() {
-            return kungfu::Response::new()
-                .status(kungfu::StatusCode::Unauthorized)
+            return unique::Response::new()
+                .status(unique::StatusCode::Unauthorized)
                 .json(&serde_json::json!({"error": "Missing API key"}));
         }
         next(req).await
@@ -88,7 +88,7 @@ let auth_required: kungfu::Middleware = Arc::new(|req, next| {
 Middleware is applied in the order you register it. Outermost first:
 
 ```rust
-Kungfu::new()
+Unique::new()
     .use_middleware(logger_middleware)      // 1st in, last out
     .use_middleware(auth_middleware)        // 2nd in, 2nd-to-last out
     .use_middleware(rate_limit_middleware)  // 3rd in, 3rd-to-last out
@@ -106,9 +106,9 @@ logger → auth → rate_limit → handler → rate_limit → auth → logger
 Serve files from a directory:
 
 ```rust
-use kungfu::middleware_builtin::serve_static;
+use unique::middleware_builtin::serve_static;
 
-Kungfu::new()
+Unique::new()
     .use_middleware(serve_static("./public"))
     .handle_get("/api/health", |_req, res| res.text("ok"))
     .run("0.0.0.0:3000")
@@ -129,9 +129,9 @@ The `etag` middleware generates an ETag for each response body and handles
 `If-None-Match` requests automatically:
 
 ```rust
-use kungfu::middleware_builtin::etag;
+use unique::middleware_builtin::etag;
 
-Kungfu::new()
+Unique::new()
     .use_middleware(etag())
     .handle_get("/large.json", |_req, res| res.json(&big_data()))
 ```

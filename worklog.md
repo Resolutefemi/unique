@@ -42,4 +42,4 @@ Stage Summary:
   - tutorial-site/src/components/PrismLoader.tsx (Window.Prism global type)
 - 1 new file: tutorial-site/.gitignore
 - Local build verified green: 804/804 static pages prerendered
-- Pushed to https://github.com/Resolutefemi/kungfu commit 88aa8ce on main
+- Pushed to https://github.com/Resolutefemi/unique commit 88aa8ce on main

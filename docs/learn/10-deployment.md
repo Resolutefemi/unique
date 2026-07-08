@@ -2,7 +2,7 @@
 
 > ⏱️ 5 minutes
 
-This chapter covers the common deployment patterns for a Kungfu app:
+This chapter covers the common deployment patterns for a Unique app:
 Docker, systemd, and serverless.
 
 ## Building for production
@@ -12,7 +12,7 @@ Docker, systemd, and serverless.
 cargo build --release
 
 # Maximum performance on Linux 5.1+ with AVX2
-cargo build --release --features "kungfu-core/io_uring kungfu-core/simd"
+cargo build --release --features "unique-core/io_uring unique-core/simd"
 ```
 
 The release binary is at `./target/release/your-app-name`. It's a single
@@ -26,7 +26,7 @@ A minimal Dockerfile:
 FROM rust:1.96 AS builder
 WORKDIR /app
 COPY . .
-RUN cargo build --release --features "kungfu-core/io_uring kungfu-core/simd"
+RUN cargo build --release --features "unique-core/io_uring unique-core/simd"
 
 FROM debian:bookworm-slim
 RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
@@ -38,8 +38,8 @@ CMD ["your-app"]
 Build and run:
 
 ```bash
-docker build -t my-kungfu-app .
-docker run -p 3000:3000 my-kungfu-app
+docker build -t my-unique-app .
+docker run -p 3000:3000 my-unique-app
 ```
 
 For smaller images, use a `scratch` base:
@@ -60,18 +60,18 @@ This produces a ~10MB image.
 
 ## systemd
 
-Create `/etc/systemd/system/kungfu-app.service`:
+Create `/etc/systemd/system/unique-app.service`:
 
 ```ini
 [Unit]
-Description=My Kungfu App
+Description=My Unique App
 After=network.target
 
 [Service]
 Type=simple
-User=kungfu
-WorkingDirectory=/opt/kungfu-app
-ExecStart=/opt/kungfu-app/your-app
+User=unique
+WorkingDirectory=/opt/unique-app
+ExecStart=/opt/unique-app/your-app
 Restart=on-failure
 RestartSec=5
 Environment=RUST_LOG=info
@@ -84,16 +84,16 @@ WantedBy=multi-user.target
 Enable and start:
 
 ```bash
-sudo systemctl enable kungfu-app
-sudo systemctl start kungfu-app
-sudo systemctl status kungfu-app
+sudo systemctl enable unique-app
+sudo systemctl start unique-app
+sudo systemctl status unique-app
 ```
 
 ## Behind a reverse proxy
 
-In production, run Kungfu behind a TLS-terminating reverse proxy (nginx,
+In production, run Unique behind a TLS-terminating reverse proxy (nginx,
 Caddy, or HAProxy). The proxy handles HTTPS and forwards plain HTTP to
-Kungfu.
+Unique.
 
 ### nginx
 
@@ -138,10 +138,10 @@ See `PERF.md` for the full tuning checklist. Key items:
 Add a `/health` endpoint for load balancers:
 
 ```rust
-Kungfu::new()
+Unique::new()
     .json_get("/health", || serde_json::json!({
         "status": "ok",
-        "version": kungfu::VERSION,
+        "version": unique::VERSION,
     }))
     .run("0.0.0.0:3000")
 ```
@@ -161,7 +161,7 @@ V1.1 will add proper SIGTERM handling that:
 
 ## Serverless
 
-Kungfu doesn't currently support serverless platforms (AWS Lambda, Vercel,
+Unique doesn't currently support serverless platforms (AWS Lambda, Vercel,
 Cloudflare Workers) — the io_uring + SO_REUSEPORT model assumes a
 long-running process. V1.1 will add a `serverless` feature that uses
 plain tokio (no io_uring) for environments where only short-lived
@@ -169,9 +169,9 @@ invocations are possible.
 
 ## Next steps
 
-You've completed the Kungfu tutorial! 🎉
+You've completed the Unique tutorial! 🎉
 
-- Browse the [examples](https://github.com/Resolutefemi/kungfu/tree/main/kungfu/examples)
-- Read the [API reference](https://github.com/Resolutefemi/kungfu/blob/main/docs/api/)
-- Star the repo: https://github.com/Resolutefemi/kungfu
+- Browse the [examples](https://github.com/Resolutefemi/unique/tree/main/unique/examples)
+- Read the [API reference](https://github.com/Resolutefemi/unique/blob/main/docs/api/)
+- Star the repo: https://github.com/Resolutefemi/unique
 - File issues for bugs or feature requests

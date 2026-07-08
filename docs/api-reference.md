@@ -1,4 +1,4 @@
-# Kungfu.js API Reference
+# Unique.js API Reference
 
 Auto-generated from rustdoc. To generate locally:
 
@@ -6,7 +6,7 @@ Auto-generated from rustdoc. To generate locally:
 cargo doc --workspace --no-deps --open
 ```
 
-## Core crate (`kungfu-core`)
+## Core crate (`unique-core`)
 
 ### Server
 - `Server::new(router, addr)` — create a server
@@ -34,7 +34,7 @@ cargo doc --workspace --no-deps --open
 - `Response::new().text("hello")` — text response
 - `Response::new().html("<h1>hi</h1>")` — HTML response
 - `Response::new().json_bytes(cached_bytes)` — cached JSON (fastest path)
-- `Response::new().error(KungfuError)` — error response
+- `Response::new().error(UniqueError)` — error response
 - `Response::html_escape(s)` — XSS-safe HTML escaping
 
 ### Middleware (built-in)
@@ -59,7 +59,7 @@ cargo doc --workspace --no-deps --open
 - `PasswordReset::new(secret)` — password reset tokens
 - `OAuth2Config` — OAuth2 provider config (Google/GitHub/Discord)
 
-### ORM (`kungfu-orm`)
+### ORM (`unique-orm`)
 - `Db::mock()` — in-memory database
 - `Db::connect(&config)` — connect to Postgres/MySQL/SQLite
 - `Model::insert(&self, &db)` — insert a row
@@ -74,14 +74,14 @@ cargo doc --workspace --no-deps --open
 - `Db::aggregate(sql, params)` — COUNT/SUM/AVG
 - `hash_password(plain)` / `verify_password(plain, hash)` — Argon2id
 
-### CSS Engine (`kungfu-css`)
+### CSS Engine (`unique-css`)
 - `compile_classes("flex p-4 text-red-500")` — compile class string to CSS
 - `compile_directory("./src")` — scan source files + emit CSS bundle
 
-### Frontend (`kungfu-frontend`)
-- `parse_kungfu_file(content, path)` — parse .kng file
+### Frontend (`unique-frontend`)
+- `parse_unique_file(content, path)` — parse .kng file
 - `render_page(file, ctx, template, data)` — render SSR page
-- `render_kungfu_file(path, req_json, ctx)` — render via Node.js subprocess
+- `render_unique_file(path, req_json, ctx)` — render via Node.js subprocess
 - `register_pages(router, "src/pages")` — auto-register .kng routes
 - `generate_typescript(routes)` — generate routes.d.ts
 - `DevMode::new(paths, types_path)` — dev mode controller
@@ -103,11 +103,11 @@ cargo doc --workspace --no-deps --open
 - `Cookie / CookieJar` — cookie management
 - `Headers` — SmallVec-backed header storage
 
-## CLI (`kungfu-cli`)
-- `kungfu new <name>` — scaffold a new project
-- `kungfu demo` — run the demo server
-- `kungfu start [--watch]` — run with optional hot reload
-- `kungfu build` — release build
-- `kungfu migrate` — generate SQL migrations
-- `kungfu generate admin` — generate admin dashboard
-- `kungfu deploy [port]` — generate Dockerfile + docker-compose + systemd
+## CLI (`unique-cli`)
+- `unique new <name>` — scaffold a new project
+- `unique demo` — run the demo server
+- `unique start [--watch]` — run with optional hot reload
+- `unique build` — release build
+- `unique migrate` — generate SQL migrations
+- `unique generate admin` — generate admin dashboard
+- `unique deploy [port]` — generate Dockerfile + docker-compose + systemd

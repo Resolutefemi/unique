@@ -2,7 +2,7 @@
 
 > ⏱️ 10 minutes
 
-Kungfu's router is a trie — path lookup is O(path depth), which means
+Unique's router is a trie — path lookup is O(path depth), which means
 routing stays fast even with thousands of registered routes.
 
 ## Static paths
@@ -10,13 +10,13 @@ routing stays fast even with thousands of registered routes.
 The simplest route is a static path:
 
 ```rust
-use kungfu::prelude::*;
+use unique::prelude::*;
 
 fn main() {
     tracing_subscriber::fmt().with_env_filter("info").init();
     let rt = tokio::runtime::Runtime::new().unwrap();
     rt.block_on(
-        Kungfu::new()
+        Unique::new()
             .handle_get("/", |_req, res| res.text("home"))
             .handle_get("/about", |_req, res| res.text("about"))
             .handle_get("/contact", |_req, res| res.text("contact"))
@@ -30,7 +30,7 @@ fn main() {
 Use `:name` to capture a single segment:
 
 ```rust
-Kungfu::new()
+Unique::new()
     .handle_get("/users/:id", |req, res| {
         let id = req.param("id").unwrap_or("unknown");
         res.text(format!("User {}", id))
@@ -91,7 +91,7 @@ $ curl 'http://localhost:3000/search?q=rust&limit=5'
 
 ## HTTP methods
 
-Kungfu has separate methods for each HTTP verb:
+Unique has separate methods for each HTTP verb:
 
 | Method | Builder fn |
 |---|---|
@@ -110,7 +110,7 @@ For endpoints that just return JSON, use `json_get` / `json_post` to skip
 the `Response::new().json(...)` boilerplate:
 
 ```rust
-Kungfu::new()
+Unique::new()
     // Equivalent to .handle_get("/health", |_req, res| res.json(&...))
     .json_get("/health", || serde_json::json!({"status":"ok"}))
     // Parse the body into a typed struct automatically.
@@ -126,13 +126,13 @@ If you want to add summaries, tags, or schemas to the OpenAPI spec,
 use the `add_with_meta` API:
 
 ```rust
-use kungfu::{Kungfu, Method, RouteMeta, Handler};
+use unique::{Unique, Method, RouteMeta, Handler};
 
 let handler: Handler = std::sync::Arc::new(|_req| {
-    Box::pin(async { kungfu::Response::new().text("hi") })
+    Box::pin(async { unique::Response::new().text("hi") })
 });
 
-Kungfu::new()
+Unique::new()
     .add_with_meta(
         RouteMeta {
             path: "/hello".into(),

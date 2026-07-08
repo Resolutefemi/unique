@@ -2,13 +2,13 @@
 
 > ⏱️ 4 minutes
 
-Kungfu generates an OpenAPI 3.1 spec automatically from your route
+Unique generates an OpenAPI 3.1 spec automatically from your route
 definitions. No annotations needed — every route you register is
 reflected in the spec.
 
 ## The Swagger UI
 
-Start any Kungfu server and visit http://localhost:3000/docs. You'll see
+Start any Unique server and visit http://localhost:3000/docs. You'll see
 Swagger UI with all your routes, ready to test interactively.
 
 The raw spec is at http://localhost:3000/openapi.json.
@@ -18,14 +18,14 @@ The raw spec is at http://localhost:3000/openapi.json.
 For richer docs, register routes with `RouteMeta`:
 
 ```rust
-use kungfu::{Kungfu, Method, RouteMeta, Handler};
+use unique::{Unique, Method, RouteMeta, Handler};
 use std::sync::Arc;
 
 let handler: Handler = Arc::new(|_req| {
-    Box::pin(async { kungfu::Response::new().text("hi") })
+    Box::pin(async { unique::Response::new().text("hi") })
 });
 
-Kungfu::new()
+Unique::new()
     .add_with_meta(
         RouteMeta {
             path: "/hello".into(),
@@ -75,7 +75,7 @@ automatically using the `validate_json` middleware.
 ## Validating requests
 
 ```rust
-use kungfu::middleware_builtin::validate_json;
+use unique::middleware_builtin::validate_json;
 use serde_json::json;
 
 let user_schema = json!({
@@ -87,7 +87,7 @@ let user_schema = json!({
     "required": ["email", "password"]
 });
 
-Kungfu::new()
+Unique::new()
     .use_middleware(validate_json("/users", Method::Post, user_schema))
     .handle_post("/users", |_req, res| res.text("created"))
 ```
@@ -113,7 +113,7 @@ structured error message:
 If you don't want the `/openapi.json` and `/docs` endpoints:
 
 ```rust
-Kungfu::new()
+Unique::new()
     .disable_auto_docs()
     .run("0.0.0.0:3000")
 ```
@@ -131,4 +131,4 @@ The generated spec can be fed to other tools:
 ## Next steps
 
 Continue to [Deployment](./10-deployment.md) to learn how to ship your
-Kungfu app to production.
+Unique app to production.

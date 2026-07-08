@@ -1,13 +1,13 @@
 # Migration Guides
 
-How to migrate from popular frameworks to Kungfu.js.
+How to migrate from popular frameworks to Unique.js.
 
 ## From Express.js
 
-| Express | Kungfu.js (Rust) |
+| Express | Unique.js (Rust) |
 |---|---|
-| `const express = require('express')` | `use kungfu::prelude::*` |
-| `const app = express()` | `let app = Kungfu::new()` |
+| `const express = require('express')` | `use unique::prelude::*` |
+| `const app = express()` | `let app = Unique::new()` |
 | `app.get('/hello', (req, res) => res.json({msg:'world'}))` | `.handle_get("/hello", \|_req, res\| res.json(&json!({"msg":"world"})))` |
 | `app.listen(3000)` | `.run("0.0.0.0:3000")` |
 | `app.use(express.json())` | Built-in (automatic) |
@@ -21,7 +21,7 @@ How to migrate from popular frameworks to Kungfu.js.
 | `next()` (middleware) | `next(req).await` |
 
 ### Key differences
-- Kungfu handlers are **async by default** — use `.handle_get_async()` for DB calls
+- Unique handlers are **async by default** — use `.handle_get_async()` for DB calls
 - **No body parser middleware needed** — `req.json()` parses automatically
 - **No CORS middleware needed** — installed by default
 - **No helmet needed** — security headers are built-in
@@ -29,10 +29,10 @@ How to migrate from popular frameworks to Kungfu.js.
 
 ## From FastAPI (Python)
 
-| FastAPI | Kungfu.js (Python binding) |
+| FastAPI | Unique.js (Python binding) |
 |---|---|
-| `from fastapi import FastAPI` | `from kungfu import Kungfu` |
-| `app = FastAPI()` | `app = Kungfu()` |
+| `from fastapi import FastAPI` | `from unique import Unique` |
+| `app = FastAPI()` | `app = Unique()` |
 | `@app.get('/hello')` | `@app.get('/hello')` |
 | `def hello(): return {'msg':'world'}` | `def hello(req): return {'status':200,'body':{'msg':'world'}}` |
 | `uvicorn.run(app, port=3000)` | `app.run(port=3000)` |
@@ -40,24 +40,24 @@ How to migrate from popular frameworks to Kungfu.js.
 | `Depends()` | Middleware + request headers |
 
 ### Key differences
-- Kungfu runs the **HTTP server in Rust** — Python is only called for business logic
+- Unique runs the **HTTP server in Rust** — Python is only called for business logic
 - **10-50x faster** than FastAPI on the same hardware
 - **Auto OpenAPI** at `/docs` — same as FastAPI
 - **No async/await needed in Python** — the async happens in Rust
 
 ## From Next.js
 
-| Next.js | Kungfu.js |
+| Next.js | Unique.js |
 |---|---|
 | `pages/index.tsx` | `src/pages/index.kng` |
 | `export async function getServerSideProps()` | `export async function data()` |
 | `export default function Page({data})` | `export function template({data})` |
-| `next dev` | `kungfu start --watch` |
-| `next build` | `kungfu build` |
-| API routes (`pages/api/*`) | `Kungfu::new().handle_get(...)` |
+| `next dev` | `unique start --watch` |
+| `next build` | `unique build` |
+| API routes (`pages/api/*`) | `Unique::new().handle_get(...)` |
 | `_app.tsx` (wrapper) | Middleware |
 | `next/image` | Static file serving |
-| Tailwind CSS | Built-in CSS engine (`kungfu-css`) |
+| Tailwind CSS | Built-in CSS engine (`unique-css`) |
 
 ### Key differences
 - Backend can be in **any language** — not just JS/TS
@@ -69,9 +69,9 @@ How to migrate from popular frameworks to Kungfu.js.
 
 ## From Actix-web
 
-| Actix-web | Kungfu.js (Rust) |
+| Actix-web | Unique.js (Rust) |
 |---|---|
-| `HttpServer::new(|| App::new()...)` | `Kungfu::new()...` |
+| `HttpServer::new(|| App::new()...)` | `Unique::new()...` |
 | `.service(web::resource("/hello").to(hello))` | `.handle_get("/hello", handler)` |
 | `#[get("/hello")]` | `get!("/hello", handler)` or `.handle_get(...)` |
 | `App::wrap(cors())` | Built-in (automatic) |

@@ -2,7 +2,7 @@
 
 > ⏱️ 10 minutes
 
-Kungfu ships with a built-in ORM (`kungfu-orm`) that uses parameterised
+Unique ships with a built-in ORM (`unique-orm`) that uses parameterised
 queries (SQL-injection-proof), auto-hashes passwords with Argon2id, and
 generates migrations from your model definitions.
 
@@ -11,7 +11,7 @@ generates migrations from your model definitions.
 Use `#[derive(Model)]` with `#[field]` attributes:
 
 ```rust
-use kungfu_macros::Model;
+use unique_macros::Model;
 use serde::{Deserialize, Serialize};
 
 #[derive(Model, Serialize, Deserialize)]
@@ -47,11 +47,11 @@ tests). Real Postgres / MySQL / SQLite drivers are feature-gated:
 
 ```toml
 [dependencies]
-kungfu-orm = { path = "../orm", features = ["postgres"] }
+unique-orm = { path = "../orm", features = ["postgres"] }
 ```
 
 ```rust
-use kungfu_orm::{Db, DbConfig};
+use unique_orm::{Db, DbConfig};
 
 // Mock driver — no setup:
 let db = Db::mock();
@@ -124,7 +124,7 @@ into the SQL. This is the framework's primary SQL-injection defence.
 ## Verifying passwords
 
 ```rust
-use kungfu_orm::password::verify_password;
+use unique_orm::password::verify_password;
 
 // On login:
 let user = User::find()
@@ -147,7 +147,7 @@ match user {
 Generate a `CREATE TABLE` migration from your model definition:
 
 ```rust
-use kungfu_orm::generate_migration;
+use unique_orm::generate_migration;
 
 let migration = generate_migration::<User>();
 println!("Migration: {}", migration.name);

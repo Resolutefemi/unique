@@ -4,15 +4,15 @@
 
 | Crate | Tests | Status |
 |---|---|---|
-| `kungfu-core` | 34 | ✅ all passing |
-| `kungfu-css` | 16 | ✅ all passing |
-| `kungfu-frontend` | 10 | ✅ all passing |
-| `kungfu-orm` | 7 | ✅ all passing |
-| `kungfu-macros` | 0 | (proc-macro crate, tested via kungfu-orm) |
-| `kungfu` | 0 | (re-exports only) |
+| `unique-core` | 34 | ✅ all passing |
+| `unique-css` | 16 | ✅ all passing |
+| `unique-frontend` | 10 | ✅ all passing |
+| `unique-orm` | 7 | ✅ all passing |
+| `unique-macros` | 0 | (proc-macro crate, tested via unique-orm) |
+| `unique` | 0 | (re-exports only) |
 | **Total** | **67** | ✅ |
 
-Plus 1 doctest in `kungfu` (the Quickstart example).
+Plus 1 doctest in `unique` (the Quickstart example).
 
 ## Running tests
 
@@ -21,7 +21,7 @@ Plus 1 doctest in `kungfu` (the Quickstart example).
 cargo test --workspace --lib
 
 # Core tests with all V1 features enabled:
-cargo test -p kungfu-core --lib --features "io_uring simd"
+cargo test -p unique-core --lib --features "io_uring simd"
 
 # Verbose output:
 cargo test --workspace --lib -- --nocapture
@@ -29,7 +29,7 @@ cargo test --workspace --lib -- --nocapture
 
 ## What's covered
 
-### `kungfu-core` (34 tests)
+### `unique-core` (34 tests)
 
 - **`router`** (6): static path, `:params`, `*wildcards`, method-not-allowed, not-found, route collection
 - **`middleware`** (5): chain order, short-circuit, rate-limiter allow/block, leaky-bucket refill, buffer pool reuse
@@ -42,21 +42,21 @@ cargo test --workspace --lib -- --nocapture
 - **`pool`** (1): pool reuses buffers
 - **`response::pool`** (3): pre-warmed acquisition, release returns to pool, reset clears state
 
-### `kungfu-css` (16 tests)
+### `unique-css` (16 tests)
 
 - **`parser`** (5): plain utility, responsive prefix, state prefix, both prefixes, class string
 - **`emitter`** (5): basic layout, spacing, colors, responsive media queries, flexbox expansion
 - **`scanner`** (2): HTML class attribute, directory recursion
 - **`lib`** (4): basic utilities, responsive prefix, hover state, unknown classes skipped
 
-### `kungfu-frontend` (10 tests)
+### `unique-frontend` (10 tests)
 
 - **`parser`** (4): simple file, static HTML section, route path with params, missing data export
 - **`ssr`** (2): page render with data + livereload, livereload omit when disabled
 - **`livereload`** (2): broadcast reaches all subscribers, tracks client count
 - **`types`** (2): basic interface generation, interface name derivation per method
 
-### `kungfu-orm` (7 tests)
+### `unique-orm` (7 tests)
 
 - **`query`** (4): select all, where_eq, where_in, multiple wheres, order + limit
 - **`connection`** (1): mock insert assigns auto-increment ID

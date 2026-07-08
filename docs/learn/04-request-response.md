@@ -40,7 +40,7 @@ struct CreateUser {
     password: String,
 }
 
-Kungfu::new()
+Unique::new()
     .json_post("/users", |body: CreateUser| {
         // body is already parsed — no boilerplate.
         User { id: 1, email: body.email }
@@ -101,7 +101,7 @@ There are two ways to build a response: the chainable `ResponseBuilder`
 ### `ResponseBuilder` (recommended)
 
 ```rust
-Kungfu::new()
+Unique::new()
     .handle_get("/hello", |_req, res| res.text("world"))
     .handle_get("/html", |_req, res| res.html("<h1>hi</h1>"))
     .handle_get("/json", |_req, res| res.json(&serde_json::json!({"ok":true})))
@@ -117,8 +117,8 @@ that returns the final `Response`.
 
 ```rust
 .handle_get("/custom", |_req, _res| {
-    kungfu::Response::new()
-        .status(kungfu::StatusCode::Created)
+    unique::Response::new()
+        .status(unique::StatusCode::Created)
         .header("x-custom", "yes")
         .json(&serde_json::json!({"created":true}))
 })
@@ -137,14 +137,14 @@ let cached_body: Bytes = Bytes::from(
 );
 let cached_for_handler = cached_body.clone();
 
-Kungfu::new()
+Unique::new()
     .handle_get("/hello", move |_req, _res| {
         // Bytes::clone() is an atomic Arc increment — ~5ns.
-        kungfu::Response::new().json_bytes(cached_for_handler.clone())
+        unique::Response::new().json_bytes(cached_for_handler.clone())
     })
 ```
 
-This is the fastest possible response path in Kungfu.
+This is the fastest possible response path in Unique.
 
 ## Errors
 
@@ -153,8 +153,8 @@ shape (`code`, `message`, `detail`, `suggestion`):
 
 ```rust
 .handle_get("/not-found", |_req, _res| {
-    kungfu::Response::new().error(
-        kungfu::KungfuError::not_found("User not found")
+    unique::Response::new().error(
+        unique::UniqueError::not_found("User not found")
             .with_detail("The user has been deleted")
             .with_suggestion("Try GET /users to list all users"),
     )

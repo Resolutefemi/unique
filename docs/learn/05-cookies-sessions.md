@@ -2,16 +2,16 @@
 
 > ⏱️ 5 minutes
 
-Kungfu provides built-in cookie support via the `Cookie`, `CookieJar`, and
+Unique provides built-in cookie support via the `Cookie`, `CookieJar`, and
 `SameSite` types. Use cookies for session IDs, theme preferences, "remember
 me" tokens, and other small pieces of state stored on the client.
 
 ## Reading cookies
 
 ```rust
-use kungfu::cookies::CookieJar;
+use unique::cookies::CookieJar;
 
-Kungfu::new()
+Unique::new()
     .handle_get("/dashboard", |req, res| {
         let jar = CookieJar::from_request(&req);
         match jar.get("session_id") {
@@ -26,9 +26,9 @@ Kungfu::new()
 ## Setting cookies
 
 ```rust
-use kungfu::cookies::{Cookie, CookieJar};
+use unique::cookies::{Cookie, CookieJar};
 
-Kungfu::new()
+Unique::new()
     .handle_post("/login", |_req, res| {
         let mut jar = CookieJar::new();
         jar.set(
@@ -61,13 +61,13 @@ Kungfu::new()
 
 ## Sessions
 
-Kungfu doesn't ship a session store in V1, but you can build one on top of
+Unique doesn't ship a session store in V1, but you can build one on top of
 cookies. A common pattern is to store a session ID in a cookie and look up
 the session data in a database:
 
 ```rust
-use kungfu::cookies::CookieJar;
-use kungfu_orm::{Db, Model};
+use unique::cookies::CookieJar;
+use unique_orm::{Db, Model};
 use serde::{Deserialize, Serialize};
 
 #[derive(Model, Serialize, Deserialize)]
@@ -79,7 +79,7 @@ struct Session {
     expires_at: i64,
 }
 
-async fn get_session(req: &kungfu::Request, db: &Db) -> Option<Session> {
+async fn get_session(req: &unique::Request, db: &Db) -> Option<Session> {
     let jar = CookieJar::from_request(req);
     let session_id = jar.get("session_id")?;
     Session::find()

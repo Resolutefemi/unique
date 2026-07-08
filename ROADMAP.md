@@ -1,4 +1,4 @@
-# Kungfu.js Roadmap
+# Unique.js Roadmap
 
 This document tracks the path from V1 to "fastest framework ever" and beyond.
 
@@ -14,7 +14,7 @@ This document tracks the path from V1 to "fastest framework ever" and beyond.
 | Response object pooling | ✅ shipped |
 | JS/TS binding (napi-rs) | ✅ scaffold |
 | ORM (mock driver + sqlx feature gates) | ✅ shipped |
-| kungfu-css (Tailwind-like engine) | ✅ shipped |
+| unique-css (Tailwind-like engine) | ✅ shipped |
 | Frontend module (.kng SSR + livereload + TS type gen) | ✅ shipped |
 | Benchmark suite vs actix/express/fastapi | ✅ scripts + harness |
 
@@ -33,7 +33,7 @@ on GitHub. Below is what's been done + what's left for future point releases.
 | Response object pooling | ✅ shipped |
 | JS/TS binding (napi-rs) | ✅ scaffold |
 | ORM (mock driver + sqlx feature gates wired) | ✅ shipped |
-| kungfu-css (Tailwind-like engine) | ✅ shipped |
+| unique-css (Tailwind-like engine) | ✅ shipped |
 | Frontend module (.kng SSR + livereload + TS type gen) | ✅ shipped |
 | Benchmark suite vs actix/express/fastapi | ✅ scripts + harness |
 | WebSocket routes (RFC 6455) | ✅ shipped |
@@ -44,7 +44,7 @@ on GitHub. Below is what's been done + what's left for future point releases.
 | ETag + conditional GET middleware | ✅ shipped |
 | Static file serving middleware | ✅ shipped |
 | Cookie/CookieJar/SameSite | ✅ shipped |
-| C ABI via cbindgen (kungfu.h) | ✅ shipped (feature flag `ffi`) |
+| C ABI via cbindgen (unique.h) | ✅ shipped (feature flag `ffi`) |
 | C++ binding (header-only) | ✅ shipped |
 | Java binding (JNI scaffold) | ✅ shipped |
 | Dart binding (dart:ffi scaffold) | ✅ shipped |
@@ -57,12 +57,12 @@ on GitHub. Below is what's been done + what's left for future point releases.
 | JWT authentication middleware (scaffold) | ✅ shipped |
 | Background jobs queue | ✅ shipped |
 | Plugin system (scaffold) | ✅ shipped |
-| CLI: kungfu new | ✅ shipped |
-| CLI: kungfu start --watch (source-code hot reload) | ✅ shipped |
-| CLI: kungfu build | ✅ shipped |
-| CLI: kungfu migrate | ✅ shipped (generates guidance) |
-| CLI: kungfu generate admin | ✅ shipped |
-| CLI: kungfu deploy (Dockerfile/compose/systemd) | ✅ shipped |
+| CLI: unique new | ✅ shipped |
+| CLI: unique start --watch (source-code hot reload) | ✅ shipped |
+| CLI: unique build | ✅ shipped |
+| CLI: unique migrate | ✅ shipped (generates guidance) |
+| CLI: unique generate admin | ✅ shipped |
+| CLI: unique deploy (Dockerfile/compose/systemd) | ✅ shipped |
 | NextJS-style tutorial (10 chapters) | ✅ shipped |
 
 ## Future work (post-V1)
@@ -119,20 +119,20 @@ Path to 3M req/s on 16-core production hardware:
 
 ## V3 — Full-stack + ecosystem (3-6 months)
 
-- **Admin dashboard generator** — `kungfu generate admin` produces a React app served at `/admin` with CRUD interfaces auto-generated from model definitions.
-- **`.kng` full client-side hydration** — currently we SSR with no hydration. V3 adds a JS client that picks up `__KUNGFU_DATA__` and hydrates the page into a reactive SPA.
+- **Admin dashboard generator** — `unique generate admin` produces a React app served at `/admin` with CRUD interfaces auto-generated from model definitions.
+- **`.kng` full client-side hydration** — currently we SSR with no hydration. V3 adds a JS client that picks up `__UNIQUE_DATA__` and hydrates the page into a reactive SPA.
 - **File-based routing** — `src/pages/users/[id].kng` automatically becomes the `/users/:id` route.
-- **Built-in authentication** — `Kungfu::auth(AuthProvider::Jwt(...))` middleware with `@RequireAuth` handler attribute.
+- **Built-in authentication** — `Unique::auth(AuthProvider::Jwt(...))` middleware with `@RequireAuth` handler attribute.
 - **WebSocket routes** — `ws!("/chat", handler)` macro for real-time.
-- **Background jobs** — `Kungfu::queue(QueueConfig)` with `#[job]` proc macro.
-- **Plugin system** — `kungfu-plugin` crate with a stable ABI for third-party extensions.
+- **Background jobs** — `Unique::queue(QueueConfig)` with `#[job]` proc macro.
+- **Plugin system** — `unique-plugin` crate with a stable ABI for third-party extensions.
 
 ## Long-term vision
 
-Kungfu aims to be the **fastest framework ever** that's also **polyglot** and **full-stack**. The competition:
+Unique aims to be the **fastest framework ever** that's also **polyglot** and **full-stack**. The competition:
 
-- **For speed**: gemini (C++), may_minihttp (Rust). Kungfu matches these architecturally; V1.3 closes the remaining gap.
+- **For speed**: gemini (C++), may_minihttp (Rust). Unique matches these architecturally; V1.3 closes the remaining gap.
 - **For polyglot**: no real competitor. Most frameworks are language-locked.
-- **For full-stack**: Next.js, Nuxt, SvelteKit — but they're JS-only on the backend. Kungfu lets you write the backend in any language while keeping the frontend in JS/TS.
+- **For full-stack**: Next.js, Nuxt, SvelteKit — but they're JS-only on the backend. Unique lets you write the backend in any language while keeping the frontend in JS/TS.
 
 The "fastest framework ever" claim becomes defensible once V1.3 lands. The "polyglot full-stack" claim is already defensible.

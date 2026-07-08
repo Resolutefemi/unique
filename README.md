@@ -1,6 +1,6 @@
-# 🥋 Kungfu.js
+# 🥋 Unique.js
 
-[![CI](https://github.com/Resolutefemi/kungfu/actions/workflows/ci.yml/badge.svg)](https://github.com/Resolutefemi/kungfu/actions/workflows/ci.yml)
+[![CI](https://github.com/Resolutefemi/unique/actions/workflows/ci.yml/badge.svg)](https://github.com/Resolutefemi/unique/actions/workflows/ci.yml)
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](./LICENSE-MIT)
 
 A polyglot web framework with a Rust core. Write your backend in any language. Frontend in JS/TS only.
@@ -14,9 +14,9 @@ A polyglot web framework with a Rust core. Write your backend in any language. F
 ## Quick Start
 
 ```bash
-git clone https://github.com/Resolutefemi/kungfu.git
-cd kungfu
-cargo run -p kungfu-cli -- demo
+git clone https://github.com/Resolutefemi/unique.git
+cd unique
+cargo run -p unique-cli -- demo
 ```
 
 Visit http://localhost:3000/hello
@@ -24,12 +24,12 @@ Visit http://localhost:3000/hello
 ## Hello World (Rust)
 
 ```rust
-use kungfu::prelude::*;
+use unique::prelude::*;
 
 fn main() {
     let rt = tokio::runtime::Runtime::new().unwrap();
     rt.block_on(
-        Kungfu::new()
+        Unique::new()
             .handle_get("/hello", |_req, res| res.text("world"))
             .run("0.0.0.0:3000"),
     ).unwrap();
@@ -39,8 +39,8 @@ fn main() {
 ## Hello World (JavaScript)
 
 ```js
-const { Kungfu } = require('kungfu');
-const app = new Kungfu();
+const { Unique } = require('unique');
+const app = new Unique();
 
 app.get('/hello', (req) => {
     return { status: 200, body: JSON.stringify({ message: 'world' }) };
@@ -52,10 +52,10 @@ app.listen(3000);
 ## Hello World (Python)
 
 ```python
-from kungfu import KungfuApp
+from unique import UniqueApp
 import json
 
-app = KungfuApp()
+app = UniqueApp()
 
 app.get('/hello', lambda req: app.respond(
     json.loads(req)['request_id'], 200,
@@ -102,19 +102,19 @@ app.listen(3000)
 
 | Extension | Language | Purpose |
 |---|---|---|
-| `.jsk` | JavaScript Kungfu | Kungfu JS source files |
-| `.tsk` | TypeScript Kungfu | Kungfu TS source files |
+| `.jsk` | JavaScript Unique | Unique JS source files |
+| `.tsk` | TypeScript Unique | Unique TS source files |
 | `.kng` | All | SSR page files |
 
 ## Build with Max Performance
 
 ```bash
-cargo build --workspace --release --features "kungfu-core/io_uring kungfu-core/simd"
+cargo build --workspace --release --features "unique-core/io_uring unique-core/simd"
 ```
 
 ## Tutorial
 
-Visit the interactive tutorial: https://github.com/Resolutefemi/kungfu/tree/main/tutorial-site
+Visit the interactive tutorial: https://github.com/Resolutefemi/unique/tree/main/tutorial-site
 
 Or read the text tutorials in `docs/learn/`.
 
