@@ -49,6 +49,12 @@ export function Navbar() {
           Home
         </Link>
         <Link
+          href="/quick-start"
+          className={`navbar-link ${pathname?.startsWith('/quick-start') ? 'navbar-link--active' : ''}`}
+        >
+          Quick Start
+        </Link>
+        <Link
           href="/learn/rust/01-getting-started"
           className={`navbar-link ${pathname?.startsWith('/learn') ? 'navbar-link--active' : ''}`}
         >
@@ -105,6 +111,13 @@ export function Navbar() {
         <div id="navbar-mobile-menu" className="navbar-mobile-menu" role="menu">
           <Link href="/" className="navbar-mobile-link" onClick={() => setMenuOpen(false)}>
             Home
+          </Link>
+          <Link
+            href="/quick-start"
+            className="navbar-mobile-link"
+            onClick={() => setMenuOpen(false)}
+          >
+            Quick Start
           </Link>
           <Link
             href="/learn/rust/01-getting-started"
