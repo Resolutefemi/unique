@@ -54,6 +54,24 @@ export function Navbar() {
         >
           Learn
         </Link>
+        <Link
+          href="/api"
+          className={`navbar-link ${pathname?.startsWith('/api') ? 'navbar-link--active' : ''}`}
+        >
+          API
+        </Link>
+        <Link
+          href="/examples"
+          className={`navbar-link ${pathname?.startsWith('/examples') ? 'navbar-link--active' : ''}`}
+        >
+          Examples
+        </Link>
+        <Link
+          href="/faq"
+          className={`navbar-link ${pathname?.startsWith('/faq') ? 'navbar-link--active' : ''}`}
+        >
+          FAQ
+        </Link>
         <a
           href="https://github.com/Resolutefemi/unique"
           className="navbar-link"
@@ -94,6 +112,27 @@ export function Navbar() {
             onClick={() => setMenuOpen(false)}
           >
             Learn
+          </Link>
+          <Link
+            href="/api"
+            className="navbar-mobile-link"
+            onClick={() => setMenuOpen(false)}
+          >
+            API Reference
+          </Link>
+          <Link
+            href="/examples"
+            className="navbar-mobile-link"
+            onClick={() => setMenuOpen(false)}
+          >
+            Examples
+          </Link>
+          <Link
+            href="/faq"
+            className="navbar-mobile-link"
+            onClick={() => setMenuOpen(false)}
+          >
+            FAQ
           </Link>
           <a
             href="https://github.com/Resolutefemi/unique"
