@@ -1,5 +1,5 @@
 {
-  "Kungfu GET route": {
+  "Unique GET route": {
     "prefix": "kget",
     "body": [
       "app.get('${1:/path}', (req) => {",
@@ -8,7 +8,7 @@
     ],
     "description": "Register a GET route"
   },
-  "Kungfu POST route": {
+  "Unique POST route": {
     "prefix": "kpost",
     "body": [
       "app.post('${1:/path}', (req) => {",
@@ -18,12 +18,12 @@
     ],
     "description": "Register a POST route"
   },
-  "Kungfu App setup": {
-    "prefix": "kungfu",
+  "Unique App setup": {
+    "prefix": "unique",
     "body": [
-      "const { Kungfu } = require('kungfu');",
+      "const { Unique } = require('unique');",
       "",
-      "const app = new Kungfu();",
+      "const app = new Unique();",
       "",
       "app.get('${1:/hello}', (req) => {",
       "  return { status: 200, body: JSON.stringify({ message: '${2:world}' }) };",
@@ -31,9 +31,9 @@
       "",
       "app.listen(${3:3000});"
     ],
-    "description": "Complete Kungfu.js app setup"
+    "description": "Complete Unique.js app setup"
   },
-  "Kungfu async route": {
+  "Unique async route": {
     "prefix": "kasync",
     "body": [
       "app.get('${1:/path}', async (req) => {",
@@ -43,10 +43,10 @@
     ],
     "description": "Async route handler"
   },
-  "Kungfu CSS import": {
+  "Unique CSS import": {
     "prefix": "kcss",
     "body": [
-      "const { compileCss } = require('kungfu');",
+      "const { compileCss } = require('unique');",
       "const css = compileCss('${1:flex p-4 text-red-500}');"
     ],
     "description": "Compile CSS utility classes"

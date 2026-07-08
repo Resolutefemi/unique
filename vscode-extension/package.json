@@ -1,22 +1,22 @@
 {
-  "name": "kungfu",
-  "displayName": "Kungfu.js",
-  "description": "Support for .jsk and .tsk Kungfu.js files. Syntax highlighting, snippets, and the Kungfu.js logo.",
+  "name": "unique",
+  "displayName": "Unique.js",
+  "description": "Support for .jsk and .tsk Unique.js files. Syntax highlighting, snippets, and the Unique.js logo.",
   "version": "1.0.0",
   "publisher": "Resolutefemi",
   "icon": "images/logo.png",
   "engines": { "vscode": "^1.80.0" },
   "categories": ["Programming Languages", "Snippets"],
-  "keywords": ["kungfu", "jsk", "tsk", "web", "framework", "rust"],
+  "keywords": ["unique", "jsk", "tsk", "web", "framework", "rust"],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Resolutefemi/kungfu"
+    "url": "https://github.com/Resolutefemi/unique"
   },
   "contributes": {
     "languages": [
       {
-        "id": "kungfu-js",
-        "aliases": ["Kungfu JS", "jsk"],
+        "id": "unique-js",
+        "aliases": ["Unique JS", "jsk"],
         "extensions": [".jsk"],
         "icon": {
           "light": "images/logo-light.svg",
@@ -25,8 +25,8 @@
         "configuration": "./language-configuration.json"
       },
       {
-        "id": "kungfu-ts",
-        "aliases": ["Kungfu TS", "tsk"],
+        "id": "unique-ts",
+        "aliases": ["Unique TS", "tsk"],
         "extensions": [".tsk"],
         "icon": {
           "light": "images/logo-light.svg",
@@ -35,8 +35,8 @@
         "configuration": "./language-configuration.json"
       },
       {
-        "id": "kungfu-page",
-        "aliases": ["Kungfu Page", "kng"],
+        "id": "unique-page",
+        "aliases": ["Unique Page", "kng"],
         "extensions": [".kng", ".jsk", ".tsk"],
         "icon": {
           "light": "images/logo-light.svg",
@@ -46,29 +46,29 @@
     ],
     "grammars": [
       {
-        "language": "kungfu-js",
+        "language": "unique-js",
         "scopeName": "source.kng-js",
-        "path": "./syntaxes/kungfu-js.tmLanguage.json"
+        "path": "./syntaxes/unique-js.tmLanguage.json"
       },
       {
-        "language": "kungfu-ts",
+        "language": "unique-ts",
         "scopeName": "source.kng-ts",
-        "path": "./syntaxes/kungfu-ts.tmLanguage.json"
+        "path": "./syntaxes/unique-ts.tmLanguage.json"
       }
     ],
     "snippets": [
       {
-        "language": "kungfu-js",
-        "path": "./snippets/kungfu.json"
+        "language": "unique-js",
+        "path": "./snippets/unique.json"
       },
       {
-        "language": "kungfu-ts",
-        "path": "./snippets/kungfu.json"
+        "language": "unique-ts",
+        "path": "./snippets/unique.json"
       }
     ],
     "icons": {
-      "kungfu-logo": {
-        "description": "Kungfu.js logo",
+      "unique-logo": {
+        "description": "Unique.js logo",
         "default": {
           "fontPath": "images/logo.svg",
           "fontCharacter": "🥋"
