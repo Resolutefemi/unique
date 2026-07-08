@@ -1,20 +1,20 @@
-defmodule Kungfu.MixProject do
+defmodule Unique.MixProject do
   use Mix.Project
 
   @version "1.0.0"
-  @source_url "https://github.com/Resolutefemi/kungfu"
-  @homepage_url "https://kungfu.js.org"
+  @source_url "https://github.com/Resolutefemi/unique"
+  @homepage_url "https://unique.js.org"
 
   def project do
     [
-      app: :kungfu,
+      app: :unique,
       version: @version,
       elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package(),
       docs: docs(),
-      name: "Kungfu.js",
+      name: "Unique.js",
       source_url: @source_url,
       homepage_url: @homepage_url,
       description: description()
@@ -34,12 +34,12 @@ defmodule Kungfu.MixProject do
   end
 
   defp description do
-    "Elixir binding for the Kungfu.js polyglot web framework — Rust core, polyglot bindings. Uses a NIF to call libkungfu_core."
+    "Elixir binding for the Unique.js polyglot web framework — Rust core, polyglot bindings. Uses a NIF to call libunique_core."
   end
 
   defp package do
     [
-      name: "kungfu",
+      name: "unique",
       files: ~w(lib mix.exs README.md LICENSE-MIT LICENSE-APACHE),
       licenses: ["MIT", "Apache-2.0"],
       links: %{
@@ -48,13 +48,13 @@ defmodule Kungfu.MixProject do
         "Changelog" => "#{@source_url}/blob/main/CHANGELOG.md",
         "Issues" => "#{@source_url}/issues"
       },
-      maintainers: ["Kungfu.js Contributors"]
+      maintainers: ["Unique.js Contributors"]
     ]
   end
 
   defp docs do
     [
-      main: "Kungfu",
+      main: "Unique",
       source_url: @source_url,
       extras: ["README.md"]
     ]

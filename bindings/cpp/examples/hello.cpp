@@ -1,29 +1,29 @@
-// Hello-world example using the Kungfu C++ binding.
+// Hello-world example using the Unique C++ binding.
 //
 // Build:
-//   clang++ -std=c++17 -I../../core -L../../target/release -lkungfu_core \
+//   clang++ -std=c++17 -I../../core -L../../target/release -lunique_core \
 //     -o hello examples/hello.cpp
-// (Make sure `kungfu_core` is built as a cdylib with `--features ffi`.)
+// (Make sure `unique_core` is built as a cdylib with `--features ffi`.)
 
-#include "kungfu.hpp"
+#include "unique.hpp"
 #include <iostream>
 
 int main() {
-    kungfu::KungfuRouter router;
+    unique::UniqueRouter router;
 
-    router.get("/hello", [](kungfu::Request& req, kungfu::Response& res) {
+    router.get("/hello", [](unique::Request& req, unique::Response& res) {
         res.status(200).json(R"({"message":"world","lang":"c++"})");
     });
 
-    router.get("/", [](kungfu::Request& req, kungfu::Response& res) {
+    router.get("/", [](unique::Request& req, unique::Response& res) {
         res.status(200).html(
-            "<h1>Hello from Kungfu (C++)!</h1>"
+            "<h1>Hello from Unique (C++)!</h1>"
             "<p>Try <a href=\"/hello\">/hello</a></p>"
         );
     });
 
-    std::cout << "🥋 Kungfu (C++) listening on http://localhost:3000" << std::endl;
-    kungfu::KungfuServer server(std::move(router));
+    std::cout << "🥋 Unique (C++) listening on http://localhost:3000" << std::endl;
+    unique::UniqueServer server(std::move(router));
     server.listen(3000);
     return 0;
 }

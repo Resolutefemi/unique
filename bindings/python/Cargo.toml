@@ -1,19 +1,19 @@
 [package]
-name = "kungfu-python"
+name = "unique-python"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
-description = "Python binding for the Kungfu.js polyglot web framework (via pyo3)"
+description = "Python binding for the Unique.js polyglot web framework (via pyo3)"
 publish = false
 
 [lib]
-name = "kungfu_python"
+name = "unique_python"
 crate-type = ["cdylib"]
 
 [dependencies]
-kungfu-core = { path = "../../core" }
-kungfu-css = { path = "../../css" }
+unique-core = { path = "../../core" }
+unique-css = { path = "../../css" }
 pyo3 = { version = "0.22", features = ["extension-module", "abi3-py38"] }
 tokio = { workspace = true }
 serde = { workspace = true }

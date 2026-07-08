@@ -1,13 +1,13 @@
-//! Python binding for Kungfu.js with FULL handler bridging.
+//! Python binding for Unique.js with FULL handler bridging.
 //!
 //! Uses the same continuation-passing style as the JS binding:
 //! - Rust serializes request as JSON → calls Python callback
 //! - Python handler calls app.respond(request_id, response) → sends back to Rust
 //!
 //! ```python
-//! from kungfu import KungfuApp
+//! from unique import UniqueApp
 //!
-//! app = KungfuApp()
+//! app = UniqueApp()
 //!
 //! app.get('/hello', lambda req: app.respond(
 //!     req['request_id'],
@@ -27,16 +27,16 @@ use pyo3::types::PyDict;
 use parking_lot::Mutex;
 use tokio::sync::oneshot;
 
-use kungfu_core::{
+use unique_core::{
     Method, Request as CoreRequest, Response as CoreResponse, Router as CoreRouter,
     Server as CoreServer, RouteMeta,
 };
 
 type PendingMap = Arc<Mutex<HashMap<u64, oneshot::Sender<(u16, String)>>>>;
 
-/// A Kungfu application with Python handler support.
+/// A Unique application with Python handler support.
 #[pyclass]
-pub struct KungfuApp {
+pub struct UniqueApp {
     router: Arc<Mutex<Option<CoreRouter>>>,
     pending: PendingMap,
     next_id: Arc<Mutex<u64>>,
@@ -45,7 +45,7 @@ pub struct KungfuApp {
 }
 
 #[pymethods]
-impl KungfuApp {
+impl UniqueApp {
     #[new]
     fn new() -> Self {
         Self {
@@ -91,11 +91,11 @@ impl KungfuApp {
         let router = {
             let mut guard = self.router.lock();
             if let Some(mut r) = guard.take() {
-                for mw in kungfu_core::default_middleware_stack().into_iter().rev() {
+                for mw in unique_core::default_middleware_stack().into_iter().rev() {
                     r.prepend_middleware(mw);
                 }
-                let _ = kungfu_core::openapi::register_docs_routes(
-                    &mut r, "Kungfu API", kungfu_core::VERSION,
+                let _ = unique_core::openapi::register_docs_routes(
+                    &mut r, "Unique API", unique_core::VERSION,
                 );
                 r
             } else {
@@ -125,13 +125,13 @@ impl KungfuApp {
     }
 }
 
-impl KungfuApp {
+impl UniqueApp {
     fn register(&self, method: Method, path: &str, handler: PyObject) -> PyResult<()> {
         let pending = self.pending.clone();
         let next_id = self.next_id.clone();
         let handler = Arc::new(handler);
 
-        let core_handler: kungfu_core::Handler = Arc::new(move |req: CoreRequest| {
+        let core_handler: unique_core::Handler = Arc::new(move |req: CoreRequest| {
             let handler = handler.clone();
             let pending = pending.clone();
             let next_id = next_id.clone();
@@ -199,14 +199,14 @@ impl KungfuApp {
                 match tokio::time::timeout(Duration::from_secs(30), rx).await {
                     Ok(Ok((status, body))) => {
                         CoreResponse::new()
-                            .status(kungfu_core::StatusCode::from(status))
+                            .status(unique_core::StatusCode::from(status))
                             .text(body)
                     }
                     _ => {
                         let mut map = pending.lock();
                         map.remove(&id);
                         CoreResponse::new()
-                            .status(kungfu_core::StatusCode::InternalServerError)
+                            .status(unique_core::StatusCode::InternalServerError)
                             .text("handler timeout")
                     }
                 }
@@ -228,27 +228,27 @@ impl KungfuApp {
 
 #[pyfunction]
 fn compile_css(classes: &str) -> String {
-    kungfu_css::compile_classes(classes)
+    unique_css::compile_classes(classes)
 }
 
 #[pyfunction]
 fn compile_css_dir(dir: &str) -> PyResult<String> {
-    kungfu_css::compile_directory(dir)
+    unique_css::compile_directory(dir)
         .map_err(|e| PyRuntimeError::new_err(format!("CSS scan: {e}")))
 }
 
 #[pyfunction]
 fn version() -> &'static str {
-    kungfu_core::VERSION
+    unique_core::VERSION
 }
 
 /// Module entry point.
 #[pymodule]
 fn _native(_py: Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
-    m.add_class::<KungfuApp>()?;
+    m.add_class::<UniqueApp>()?;
     m.add_function(wrap_pyfunction!(compile_css, m)?)?;
     m.add_function(wrap_pyfunction!(compile_css_dir, m)?)?;
     m.add_function(wrap_pyfunction!(version, m)?)?;
-    m.add("__version__", kungfu_core::VERSION)?;
+    m.add("__version__", unique_core::VERSION)?;
     Ok(())
 }

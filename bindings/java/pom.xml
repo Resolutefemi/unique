@@ -5,14 +5,14 @@
                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.kungfu</groupId>
-    <artifactId>kungfu</artifactId>
+    <groupId>com.unique</groupId>
+    <artifactId>unique</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>Kungfu.js Java Binding</name>
-    <description>Java binding for the Kungfu.js polyglot web framework — Rust core, polyglot bindings. Uses JNI via the C ABI.</description>
-    <url>https://kungfu.js.org</url>
+    <name>Unique.js Java Binding</name>
+    <description>Java binding for the Unique.js polyglot web framework — Rust core, polyglot bindings. Uses JNI via the C ABI.</description>
+    <url>https://unique.js.org</url>
 
     <licenses>
         <license>
@@ -27,17 +27,17 @@
 
     <developers>
         <developer>
-            <name>Kungfu.js Contributors</name>
-            <email>noreply@kungfu.js.org</email>
-            <organization>Kungfu.js</organization>
-            <organizationUrl>https://kungfu.js.org</organizationUrl>
+            <name>Unique.js Contributors</name>
+            <email>noreply@unique.js.org</email>
+            <organization>Unique.js</organization>
+            <organizationUrl>https://unique.js.org</organizationUrl>
         </developer>
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/Resolutefemi/kungfu.git</connection>
-        <developerConnection>scm:git:ssh://github.com:Resolutefemi/kungfu.git</developerConnection>
-        <url>https://github.com/Resolutefemi/kungfu/tree/main/bindings/java</url>
+        <connection>scm:git:git://github.com/Resolutefemi/unique.git</connection>
+        <developerConnection>scm:git:ssh://github.com:Resolutefemi/unique.git</developerConnection>
+        <url>https://github.com/Resolutefemi/unique/tree/main/bindings/java</url>
     </scm>
 
     <properties>
@@ -47,7 +47,7 @@
     </properties>
 
     <dependencies>
-        <!-- No runtime dependencies. The native libkungfu_core.{so,dylib,dll}
+        <!-- No runtime dependencies. The native libunique_core.{so,dylib,dll}
              is loaded via System.loadLibrary() at runtime. -->
     </dependencies>
 

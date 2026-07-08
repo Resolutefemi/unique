@@ -3,14 +3,14 @@ requires = ["maturin>=1.0,<2.0"]
 build-backend = "maturin"
 
 [project]
-name = "kungfu"
+name = "unique"
 version = "1.0.0"
-description = "Python binding for the Kungfu.js polyglot web framework — Rust core, polyglot bindings"
+description = "Python binding for the Unique.js polyglot web framework — Rust core, polyglot bindings"
 readme = "README.md"
 requires-python = ">=3.8"
 license = "MIT OR Apache-2.0"
 authors = [
-  { name = "Kungfu.js Contributors", email = "noreply@kungfu.js.org" }
+  { name = "Unique.js Contributors", email = "noreply@unique.js.org" }
 ]
 keywords = ["web", "framework", "http", "server", "rust", "pyo3", "asyncio", "polyglot"]
 classifiers = [
@@ -29,13 +29,13 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://kungfu.js.org"
-Repository = "https://github.com/Resolutefemi/kungfu"
-Documentation = "https://github.com/Resolutefemi/kungfu/tree/main/bindings/python#readme"
-Issues = "https://github.com/Resolutefemi/kungfu/issues"
-Changelog = "https://github.com/Resolutefemi/kungfu/blob/main/CHANGELOG.md"
+Homepage = "https://unique.js.org"
+Repository = "https://github.com/Resolutefemi/unique"
+Documentation = "https://github.com/Resolutefemi/unique/tree/main/bindings/python#readme"
+Issues = "https://github.com/Resolutefemi/unique/issues"
+Changelog = "https://github.com/Resolutefemi/unique/blob/main/CHANGELOG.md"
 
 [tool.maturin]
 features = ["pyo3/extension-module"]
 python-source = "python"
-module-name = "kungfu._native"
+module-name = "unique._native"

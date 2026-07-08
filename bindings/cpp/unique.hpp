@@ -1,22 +1,22 @@
-// kungfu.hpp — C++ wrapper around the Kungfu.js C ABI.
+// unique.hpp — C++ wrapper around the Unique.js C ABI.
 //
-// Provides RAII types (`KungfuRouter`, `KungfuServer`) and std::function-based
+// Provides RAII types (`UniqueRouter`, `UniqueServer`) and std::function-based
 // handler registration so C++ developers get an idiomatic API without manual
 // pointer management.
 //
 // ## Quickstart
 //
 // ```cpp
-// #include "kungfu.hpp"
+// #include "unique.hpp"
 // #include <iostream>
 //
 // int main() {
-//     kungfu::KungfuRouter router;
-//     router.get("/hello", [](kungfu::Request& req, kungfu::Response& res) {
+//     unique::UniqueRouter router;
+//     router.get("/hello", [](unique::Request& req, unique::Response& res) {
 //         res.status(200).json(R"({"message":"world"})");
 //     });
 //
-//     kungfu::KungfuServer server(std::move(router));
+//     unique::UniqueServer server(std::move(router));
 //     server.listen(3000);
 // }
 // ```
@@ -29,80 +29,80 @@
 #include <utility>
 
 extern "C" {
-#include "kungfu.h"
+#include "unique.h"
 }
 
-namespace kungfu {
+namespace unique {
 
 // ─── Request ──────────────────────────────────────────────────────────────────
 
-/// RAII wrapper around `KungfuRequest*`.
+/// RAII wrapper around `UniqueRequest*`.
 class Request {
 public:
-    explicit Request(KungfuRequest* req) : req_(req) {}
+    explicit Request(UniqueRequest* req) : req_(req) {}
 
     /// Get a route parameter by name.
     std::string param(const std::string& key) const {
-        const char* v = kungfu_request_param(req_, key.c_str());
+        const char* v = unique_request_param(req_, key.c_str());
         return v ? std::string(v) : std::string();
     }
 
     /// Get a header by name.
     std::string header(const std::string& key) const {
-        const char* v = kungfu_request_header(req_, key.c_str());
+        const char* v = unique_request_header(req_, key.c_str());
         return v ? std::string(v) : std::string();
     }
 
     /// Get the request body as a std::string.
     std::string body() const {
         unsigned int len = 0;
-        const uint8_t* data = kungfu_request_body(req_, &len);
+        const uint8_t* data = unique_request_body(req_, &len);
         return std::string(reinterpret_cast<const char*>(data), len);
     }
 
 private:
-    KungfuRequest* req_;
+    UniqueRequest* req_;
 };
 
 // ─── Response ─────────────────────────────────────────────────────────────────
 
-/// RAII wrapper around `KungfuResponse*`.
+/// RAII wrapper around `UniqueResponse*`.
 class Response {
 public:
-    explicit Response(KungfuResponse* res) : res_(res) {}
+    explicit Response(UniqueResponse* res) : res_(res) {}
 
     Response& status(int code) {
-        kungfu_response_status(res_, code);
+        unique_response_status(res_, code);
         return *this;
     }
 
     Response& header(const std::string& key, const std::string& value) {
-        kungfu_response_header(res_, key.c_str(), value.c_str());
+        unique_response_header(res_, key.c_str(), value.c_str());
         return *this;
     }
 
     void json(const std::string& json_str) {
-        kungfu_response_json(res_, json_str.c_str());
+        unique_response_json(res_, json_str.c_str());
     }
 
     void text(const std::string& text) {
-        kungfu_response_header(res_, "content-type", "text/plain; charset=utf-8");
-        kungfu_response_body(res_, reinterpret_cast<const uint8_t*>(text.data()),
+        unique_response_header(res_, "content-type", "text/plain; charset=utf-8");
+        unique_response_body(res_, reinterpret_cast<const uint8_t*>(text.data()),
                              static_cast<unsigned int>(text.size()));
     }
 
     void html(const std::string& html) {
-        kungfu_response_header(res_, "content-type", "text/html; charset=utf-8");
-        kungfu_response_body(res_, reinterpret_cast<const uint8_t*>(html.data()),
+        unique_response_header(res_, "content-type", "text/html; charset=utf-8");
+        unique_response_body(res_, reinterpret_cast<const uint8_t*>(html.data()),
                              static_cast<unsigned int>(html.size()));
     }
 
     void error(int code, const std::string& message) {
-        kungfu_response_error(res_, code, message.c_str());
+        unique_response_error(res_, code, message.c_str());
     }
 
 private:
-    KungfuResponse* res_;
+    UniqueResponse* res_;
 };
 
 // ─── Router ───────────────────────────────────────────────────────────────────
@@ -110,21 +110,21 @@ private:
 /// Handler function signature: `void(Request&, Response&)`.
 using Handler = std::function<void(Request&, Response&)>;
 
-/// RAII wrapper around `KungfuRouter*`.
-class KungfuRouter {
+/// RAII wrapper around `UniqueRouter*`.
+class UniqueRouter {
 public:
-    KungfuRouter() : router_(kungfu_router_new()) {}
-    ~KungfuRouter() {
-        if (router_) kungfu_router_free(router_);
+    UniqueRouter() : router_(unique_router_new()) {}
+    ~UniqueRouter() {
+        if (router_) unique_router_free(router_);
     }
-    KungfuRouter(const KungfuRouter&) = delete;
-    KungfuRouter& operator=(const KungfuRouter&) = delete;
-    KungfuRouter(KungfuRouter&& other) noexcept : router_(other.router_) {
+    UniqueRouter(const UniqueRouter&) = delete;
+    UniqueRouter& operator=(const UniqueRouter&) = delete;
+    UniqueRouter(UniqueRouter&& other) noexcept : router_(other.router_) {
         other.router_ = nullptr;
     }
-    KungfuRouter& operator=(KungfuRouter&& other) noexcept {
+    UniqueRouter& operator=(UniqueRouter&& other) noexcept {
         if (this != &other) {
-            if (router_) kungfu_router_free(router_);
+            if (router_) unique_router_free(router_);
             router_ = other.router_;
             other.router_ = nullptr;
         }
@@ -148,13 +148,13 @@ public:
         register_handler(Method::Delete, path, std::move(handler));
     }
 
-    /// Internal: get the raw C pointer (for `KungfuServer`).
-    KungfuRouter* raw() && = delete;
-    KungfuRouter* raw() & { return router_; }
+    /// Internal: get the raw C pointer (for `UniqueServer`).
+    UniqueRouter* raw() && = delete;
+    UniqueRouter* raw() & { return router_; }
 
-    /// Release ownership — caller must free with `kungfu_router_free`.
-    KungfuRouter* release() {
-        KungfuRouter* r = router_;
+    /// Release ownership — caller must free with `unique_router_free`.
+    UniqueRouter* release() {
+        UniqueRouter* r = router_;
         router_ = nullptr;
         return r;
     }
@@ -167,7 +167,7 @@ private:
         // can't capture state directly, so we use a static lookup.
         // (V1 limitation: handlers must be stateless beyond captured path.)
         auto* heap_handler = new Handler(std::move(handler));
-        auto callback = [](KungfuRequest* req, KungfuResponse* res) {
+        auto callback = [](UniqueRequest* req, UniqueResponse* res) {
             // The handler pointer is passed via the path's handler slot.
             // For V1 simplicity, we use a thread-local "current handler" pointer.
             // This is not thread-safe across concurrent requests — for
@@ -180,14 +180,14 @@ private:
         };
         current_handler_ = heap_handler;
         switch (method) {
-            case Method::Get:    kungfu_router_get(router_, path.c_str(), callback); break;
-            case Method::Post:   kungfu_router_post(router_, path.c_str(), callback); break;
-            case Method::Put:    kungfu_router_put(router_, path.c_str(), callback); break;
-            case Method::Delete: kungfu_router_delete(router_, path.c_str(), callback); break;
+            case Method::Get:    unique_router_get(router_, path.c_str(), callback); break;
+            case Method::Post:   unique_router_post(router_, path.c_str(), callback); break;
+            case Method::Put:    unique_router_put(router_, path.c_str(), callback); break;
+            case Method::Delete: unique_router_delete(router_, path.c_str(), callback); break;
         }
     }
 
-    KungfuRouter* router_;
+    UniqueRouter* router_;
 
     // V1: thread-local handler pointer. Limitation noted above.
     static inline Handler* current_handler_ = nullptr;
@@ -195,25 +195,25 @@ private:
 
 // ─── Server ───────────────────────────────────────────────────────────────────
 
-/// RAII wrapper around `KungfuServer*`.
-class KungfuServer {
+/// RAII wrapper around `UniqueServer*`.
+class UniqueServer {
 public:
-    explicit KungfuServer(KungfuRouter router) : server_(kungfu_server_new(router.release())) {}
-    ~KungfuServer() {
-        if (server_) kungfu_server_free(server_);
+    explicit UniqueServer(UniqueRouter router) : server_(unique_server_new(router.release())) {}
+    ~UniqueServer() {
+        if (server_) unique_server_free(server_);
     }
-    KungfuServer(const KungfuServer&) = delete;
-    KungfuServer& operator=(const KungfuServer&) = delete;
-    KungfuServer(KungfuServer&&) noexcept = default;
-    KungfuServer& operator=(KungfuServer&&) noexcept = default;
+    UniqueServer(const UniqueServer&) = delete;
+    UniqueServer& operator=(const UniqueServer&) = delete;
+    UniqueServer(UniqueServer&&) noexcept = default;
+    UniqueServer& operator=(UniqueServer&&) noexcept = default;
 
     /// Start listening on the given port. Blocks forever.
     void listen(int port) {
-        kungfu_server_listen(server_, port);
+        unique_server_listen(server_, port);
     }
 
 private:
-    KungfuServer* server_;
+    UniqueServer* server_;
 };
 
-}  // namespace kungfu
+}  // namespace unique

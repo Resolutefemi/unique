@@ -1,4 +1,4 @@
-"""Hello-world example using the Kungfu Python binding with handlers.
+"""Hello-world example using the Unique Python binding with handlers.
 
 Run with:
     pip install maturin
@@ -7,9 +7,9 @@ Run with:
 """
 
 import json
-from kungfu import KungfuApp
+from unique import UniqueApp
 
-app = KungfuApp()
+app = UniqueApp()
 
 
 @app.get  # type: ignore  # This is a simplified decorator pattern
@@ -25,7 +25,7 @@ def hello_handler(req_json):
     app.respond(
         req["request_id"],
         200,
-        json.dumps({"message": "world", "lang": "python", "framework": "kungfu"})
+        json.dumps({"message": "world", "lang": "python", "framework": "unique"})
     )
 
 
@@ -64,7 +64,7 @@ app.get("/error", error_handler)
 app.get("/health", health_handler)
 
 if __name__ == "__main__":
-    print("🥋 Kungfu (Python) listening on http://localhost:3000")
+    print("🥋 Unique (Python) listening on http://localhost:3000")
     print("   Try:  curl http://localhost:3000/hello")
     print("   Try:  curl -X POST http://localhost:3000/echo/bruce -H 'Content-Type: application/json' -d '{\"kick\":\"roundhouse\"}'")
     print("   Try:  curl http://localhost:3000/health")

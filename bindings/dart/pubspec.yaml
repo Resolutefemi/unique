@@ -1,10 +1,10 @@
-name: kungfu
+name: unique
 version: 1.0.0
-description: "Dart binding for the Kungfu.js polyglot web framework — Rust core, polyglot bindings. FFI to libkungfu_core."
-homepage: https://kungfu.js.org
-repository: https://github.com/Resolutefemi/kungfu
-issue_tracker: https://github.com/Resolutefemi/kungfu/issues
-documentation: https://github.com/Resolutefemi/kungfu/tree/main/bindings/dart#readme
+description: "Dart binding for the Unique.js polyglot web framework — Rust core, polyglot bindings. FFI to libunique_core."
+homepage: https://unique.js.org
+repository: https://github.com/Resolutefemi/unique
+issue_tracker: https://github.com/Resolutefemi/unique/issues
+documentation: https://github.com/Resolutefemi/unique/tree/main/bindings/dart#readme
 
 environment:
   sdk: '>=3.0.0 <4.0.0'

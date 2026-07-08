@@ -1,8 +1,8 @@
-// Build script for the Kotlin binding of Kungfu.js
-// Publishes to Maven Central as com.kungfu:kungfu
+// Build script for the Kotlin binding of Unique.js
+// Publishes to Maven Central as com.unique:unique
 // (Same artifact coordinates as the Java binding — Kotlin is ABI-compatible.)
 
-group = "com.kungfu"
+group = "com.unique"
 version = "1.0.0"
 
 plugins {
@@ -18,7 +18,7 @@ repositories {
 dependencies {
     // The Kotlin binding reuses the Java JAR at runtime — Kotlin is fully
     // interoperable with the JVM-based binding.
-    implementation("com.kungfu:kungfu:1.0.0")
+    implementation("com.unique:unique:1.0.0")
 }
 
 java {
@@ -33,9 +33,9 @@ publishing {
         create<MavenPublication>("maven") {
             from(components["java"])
             pom {
-                name.set("Kungfu.js Kotlin Binding")
-                description.set("Kotlin binding for the Kungfu.js polyglot web framework — Rust core, polyglot bindings. Uses JNI via the C ABI.")
-                url.set("https://kungfu.js.org")
+                name.set("Unique.js Kotlin Binding")
+                description.set("Kotlin binding for the Unique.js polyglot web framework — Rust core, polyglot bindings. Uses JNI via the C ABI.")
+                url.set("https://unique.js.org")
                 licenses {
                     license {
                         name.set("MIT License")
@@ -48,16 +48,16 @@ publishing {
                 }
                 developers {
                     developer {
-                        name.set("Kungfu.js Contributors")
-                        email.set("noreply@kungfu.js.org")
-                        organization.set("Kungfu.js")
-                        organizationUrl.set("https://kungfu.js.org")
+                        name.set("Unique.js Contributors")
+                        email.set("noreply@unique.js.org")
+                        organization.set("Unique.js")
+                        organizationUrl.set("https://unique.js.org")
                     }
                 }
                 scm {
-                    connection.set("scm:git:git://github.com/Resolutefemi/kungfu.git")
-                    developerConnection.set("scm:git:ssh://github.com:Resolutefemi/kungfu.git")
-                    url.set("https://github.com/Resolutefemi/kungfu/tree/main/bindings/kotlin")
+                    connection.set("scm:git:git://github.com/Resolutefemi/unique.git")
+                    developerConnection.set("scm:git:ssh://github.com:Resolutefemi/unique.git")
+                    url.set("https://github.com/Resolutefemi/unique/tree/main/bindings/kotlin")
                 }
             }
         }

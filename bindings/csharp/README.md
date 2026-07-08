@@ -1,18 +1,18 @@
-# C# binding for Kungfu.js via P/Invoke
+# C# binding for Unique.js via P/Invoke
 
 ## Install
 
 ```bash
-dotnet add package Kungfu.Core
+dotnet add package Unique.Core
 ```
 
 ## Quickstart
 
 ```csharp
-using Kungfu;
+using Unique;
 using System;
 
-var app = new KungfuApp();
+var app = new UniqueApp();
 
 app.Get("/hello", (req, res) => {
     res.Text(200, "world");
@@ -23,8 +23,8 @@ app.Listen(3000);
 
 ## Requirements
 - .NET 8+
-- libkungfu_core.so / .dll / .dylib
+- libunique_core.so / .dll / .dylib
 
 ## Package
-- **NuGet:** `Kungfu.Core`
+- **NuGet:** `Unique.Core`
 - **Extension:** `.cs`

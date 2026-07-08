@@ -1,25 +1,25 @@
--- LuaRocks rockspec for the Kungfu.js Lua binding.
--- Built and uploaded with:  luarocks upload kungfu-1.0.0-1.rockspec --api-key=<KEY>
+-- LuaRocks rockspec for the Unique.js Lua binding.
+-- Built and uploaded with:  luarocks upload unique-1.0.0-1.rockspec --api-key=<KEY>
 
-package = "kungfu"
+package = "unique"
 version = "1.0.0-1"
 
 source = {
-    url = "git+https://github.com/Resolutefemi/kungfu.git",
+    url = "git+https://github.com/Resolutefemi/unique.git",
     tag = "v1.0.0",
     dir = "bindings/lua",
 }
 
 description = {
-    summary = "Lua binding for the Kungfu.js polyglot web framework",
+    summary = "Lua binding for the Unique.js polyglot web framework",
     detailed = [[
-        Lua binding for the Kungfu.js polyglot web framework — Rust core,
-        polyglot bindings. Uses LuaJIT FFI to call into libkungfu_core
+        Lua binding for the Unique.js polyglot web framework — Rust core,
+        polyglot bindings. Uses LuaJIT FFI to call into libunique_core
         (the C ABI exposed by the Rust engine).
     ]],
-    homepage = "https://kungfu.js.org",
+    homepage = "https://unique.js.org",
     license = "MIT OR Apache-2.0",
-    maintainer = "Kungfu.js Contributors <noreply@kungfu.js.org>",
+    maintainer = "Unique.js Contributors <noreply@unique.js.org>",
     labels = { "web", "framework", "http", "server", "rust", "ffi" },
 }
 
@@ -35,10 +35,10 @@ supported_platforms = {
 build = {
     type = "builtin",
     modules = {
-        kungfu = "src/kungfu.lua",
+        unique = "src/unique.lua",
     },
     copy_directories = { "examples" },
     install = {
-        lua = { "src/kungfu.lua" },
+        lua = { "src/unique.lua" },
     },
 }

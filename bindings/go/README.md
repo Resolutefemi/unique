@@ -1,11 +1,11 @@
-# kungfu (Go)
+# unique (Go)
 
-> One API surface, infinite languages. The Go binding for the Kungfu.js framework.
+> One API surface, infinite languages. The Go binding for the Unique.js framework.
 
 ## Install
 
 ```bash
-go get github.com/Resolutefemi/kungfu/bindings/go
+go get github.com/Resolutefemi/unique/bindings/go
 ```
 
 ## Quickstart
@@ -13,16 +13,16 @@ go get github.com/Resolutefemi/kungfu/bindings/go
 ```go
 package main
 
-import "github.com/Resolutefemi/kungfu/bindings/go/kungfu"
+import "github.com/Resolutefemi/unique/bindings/go/unique"
 
 func main() {
-    app := kungfu.New()
+    app := unique.New()
 
-    app.Get("/hello", func(w kungfu.ResponseWriter, r *kungfu.Request) {
+    app.Get("/hello", func(w unique.ResponseWriter, r *unique.Request) {
         w.JSON(200, map[string]string{"message": "world"})
     })
 
-    app.Post("/echo/:name", func(w kungfu.ResponseWriter, r *kungfu.Request) {
+    app.Post("/echo/:name", func(w unique.ResponseWriter, r *unique.Request) {
         w.JSON(200, map[string]interface{}{
             "hello":    r.Params["name"],
             "you_sent": string(r.Body),
@@ -36,15 +36,15 @@ func main() {
 ## Status
 
 V1.0 of this Go binding uses Go's `net/http` as the underlying transport
-while keeping the Kungfu API surface (Router / Request / Response /
+while keeping the Unique API surface (Router / Request / Response /
 Middleware). When the C ABI lands in V1.1, this package will swap to
 calling the Rust core for full performance parity with the Rust/Python
 bindings.
 
-## Why use Kungfu from Go?
+## Why use Unique from Go?
 
 - **Same API as the Rust/Python/JS bindings.** A Go developer can write
-  a Kungfu backend without learning JavaScript.
+  a Unique backend without learning JavaScript.
 - **Secure by default.** The framework ships secure-by-default middleware
   (security headers, CORS, rate limiter) — the Go binding inherits these
   via the shared API design.
@@ -62,7 +62,7 @@ go run ./examples/hello
 
 ## API reference
 
-### `kungfu.New()`
+### `unique.New()`
 
 Construct a new application.
 

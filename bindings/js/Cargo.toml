@@ -1,18 +1,18 @@
 [package]
-name = "kungfu-js"
+name = "unique-js"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
-description = "Node.js binding for the Kungfu.js polyglot web framework (via napi-rs)"
+description = "Node.js binding for the Unique.js polyglot web framework (via napi-rs)"
 publish = false
 
 [lib]
 crate-type = ["cdylib"]
 
 [dependencies]
-kungfu-core = { path = "../../core" }
-kungfu-css = { path = "../../css" }
+unique-core = { path = "../../core" }
+unique-css = { path = "../../css" }
 napi = { version = "2", features = ["napi8", "tokio_rt"] }
 napi-derive = "2"
 bytes = { workspace = true }

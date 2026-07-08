@@ -10,7 +10,7 @@ export declare function compileCssDir(dir: string): string
 /** Get the framework version. */
 export declare function version(): string
 /**
- * Start the Kungfu HTTP server on the given port. Returns a Promise that
+ * Start the Unique HTTP server on the given port. Returns a Promise that
  * resolves when the server stops.
  *
  * The server comes with built-in routes:

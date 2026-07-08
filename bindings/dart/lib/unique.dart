@@ -1,8 +1,8 @@
-// kungfu.dart — Dart binding for the Kungfu.js framework.
+// unique.dart — Dart binding for the Unique.js framework.
 //
-// Uses dart:ffi to call the C ABI. The native library is `libkungfu_core.so`
-// (Linux), `libkungfu_core.dylib` (macOS), or `kungfu_core.dll` (Windows),
-// built with `cargo build -p kungfu-core --features ffi`.
+// Uses dart:ffi to call the C ABI. The native library is `libunique_core.so`
+// (Linux), `libunique_core.dylib` (macOS), or `unique_core.dll` (Windows),
+// built with `cargo build -p unique-core --features ffi`.
 
 import 'dart:ffi';
 import 'dart:io';
@@ -38,40 +38,40 @@ typedef _DartResponseJson = void Function(Pointer<NativeResponse>, Pointer<Utf8>
 class NativeRequest extends Opaque {}
 class NativeResponse extends Opaque {}
 
-/// Loads the native Kungfu library.
+/// Loads the native Unique library.
 final DynamicLibrary _lib = _loadLib();
 
 DynamicLibrary _loadLib() {
-  if (Platform.isLinux) return DynamicLibrary.open('libkungfu_core.so');
-  if (Platform.isMacOS) return DynamicLibrary.open('libkungfu_core.dylib');
-  if (Platform.isWindows) return DynamicLibrary.open('kungfu_core.dll');
+  if (Platform.isLinux) return DynamicLibrary.open('libunique_core.so');
+  if (Platform.isMacOS) return DynamicLibrary.open('libunique_core.dylib');
+  if (Platform.isWindows) return DynamicLibrary.open('unique_core.dll');
   throw UnsupportedError('Unsupported platform');
 }
 
 // ─── Dart API ─────────────────────────────────────────────────────────────────
 
-class Kungfu {
+class Unique {
   late final Pointer<Void> _router;
 
-  Kungfu() {
-    final newFn = _lib.lookupFunction<_NativeRouterNew, _DartRouterNew>('kungfu_router_new');
+  Unique() {
+    final newFn = _lib.lookupFunction<_NativeRouterNew, _DartRouterNew>('unique_router_new');
     _router = newFn();
   }
 
   void get(String path, void Function(Request, Response) handler) =>
-      _register('kungfu_router_get', path, handler);
+      _register('unique_router_get', path, handler);
 
   void post(String path, void Function(Request, Response) handler) =>
-      _register('kungfu_router_post', path, handler);
+      _register('unique_router_post', path, handler);
 
   void put(String path, void Function(Request, Response) handler) =>
-      _register('kungfu_router_put', path, handler);
+      _register('unique_router_put', path, handler);
 
   void delete(String path, void Function(Request, Response) handler) =>
-      _register('kungfu_router_delete', path, handler);
+      _register('unique_router_delete', path, handler);
 
   void listen(int port) {
-    final listenFn = _lib.lookupFunction<_NativeServerListen, _DartServerListen>('kungfu_server_listen');
+    final listenFn = _lib.lookupFunction<_NativeServerListen, _DartServerListen>('unique_server_listen');
     listenFn(_router, port);
   }
 
@@ -97,7 +97,7 @@ class Request {
   Request(this._ptr);
 
   String param(String key) {
-    final fn = _lib.lookupFunction<_NativeRequestParam, _DartRequestParam>('kungfu_request_param');
+    final fn = _lib.lookupFunction<_NativeRequestParam, _DartRequestParam>('unique_request_param');
     final keyPtr = key.toNativeUtf8();
     final resultPtr = fn(_ptr, keyPtr);
     calloc.free(keyPtr);
@@ -111,13 +111,13 @@ class Response {
   Response(this._ptr);
 
   Response status(int code) {
-    final fn = _lib.lookupFunction<_NativeResponseStatus, _DartResponseStatus>('kungfu_response_status');
+    final fn = _lib.lookupFunction<_NativeResponseStatus, _DartResponseStatus>('unique_response_status');
     fn(_ptr, code);
     return this;
   }
 
   void json(String jsonStr) {
-    final fn = _lib.lookupFunction<_NativeResponseJson, _DartResponseJson>('kungfu_response_json');
+    final fn = _lib.lookupFunction<_NativeResponseJson, _DartResponseJson>('unique_response_json');
     final ptr = jsonStr.toNativeUtf8();
     fn(_ptr, ptr);
     calloc.free(ptr);

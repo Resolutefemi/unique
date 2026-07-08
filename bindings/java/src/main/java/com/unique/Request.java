@@ -1,10 +1,10 @@
-package com.kungfu;
+package com.unique;
 
 import java.util.Map;
 import java.util.HashMap;
 
 /**
- * HTTP request received by a Kungfu handler.
+ * HTTP request received by a Unique handler.
  */
 public class Request {
     private final Map<String, String> params = new HashMap<>();

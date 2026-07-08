@@ -1,4 +1,4 @@
-package kungfu
+package unique
 
 import (
 	"encoding/json"
@@ -7,16 +7,16 @@ import (
 	"sync"
 )
 
-// Kungfu is the main application type. Construct with New().
-type Kungfu struct {
+// Unique is the main application type. Construct with New().
+type Unique struct {
 	mu       sync.Mutex
 	routes   map[string]map[string]HandlerFunc // method → pattern → handler
 	middleware []MiddlewareFunc
 }
 
-// New creates a new Kungfu application.
-func New() *Kungfu {
-	return &Kungfu{
+// New creates a new Unique application.
+func New() *Unique {
+	return &Unique{
 		routes: make(map[string]map[string]HandlerFunc),
 	}
 }
@@ -73,13 +73,13 @@ func (w *rw) HTML(code int, s string) {
 }
 
 // Get registers a GET handler.
-func (k *Kungfu) Get(pattern string, h HandlerFunc)    { k.add("GET", pattern, h) }
-func (k *Kungfu) Post(pattern string, h HandlerFunc)   { k.add("POST", pattern, h) }
-func (k *Kungfu) Put(pattern string, h HandlerFunc)    { k.add("PUT", pattern, h) }
-func (k *Kungfu) Delete(pattern string, h HandlerFunc) { k.add("DELETE", pattern, h) }
-func (k *Kungfu) Patch(pattern string, h HandlerFunc)  { k.add("PATCH", pattern, h) }
+func (k *Unique) Get(pattern string, h HandlerFunc)    { k.add("GET", pattern, h) }
+func (k *Unique) Post(pattern string, h HandlerFunc)   { k.add("POST", pattern, h) }
+func (k *Unique) Put(pattern string, h HandlerFunc)    { k.add("PUT", pattern, h) }
+func (k *Unique) Delete(pattern string, h HandlerFunc) { k.add("DELETE", pattern, h) }
+func (k *Unique) Patch(pattern string, h HandlerFunc)  { k.add("PATCH", pattern, h) }
 
-func (k *Kungfu) add(method, pattern string, h HandlerFunc) {
+func (k *Unique) add(method, pattern string, h HandlerFunc) {
 	k.mu.Lock()
 	defer k.mu.Unlock()
 	if _, ok := k.routes[method]; !ok {
@@ -89,7 +89,7 @@ func (k *Kungfu) add(method, pattern string, h HandlerFunc) {
 }
 
 // Use registers a middleware.
-func (k *Kungfu) Use(m MiddlewareFunc) {
+func (k *Unique) Use(m MiddlewareFunc) {
 	k.mu.Lock()
 	defer k.mu.Unlock()
 	k.middleware = append(k.middleware, m)
@@ -101,14 +101,14 @@ func (k *Kungfu) Use(m MiddlewareFunc) {
 // Note: V1.0 of this Go binding uses net/http as the transport. In V1.1
 // when the C ABI lands, this will swap to calling the Rust core for
 // full performance parity with the Rust/Python bindings.
-func (k *Kungfu) Run(addr string) error {
+func (k *Unique) Run(addr string) error {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", k.handle)
 	srv := &http.Server{Addr: addr, Handler: mux}
 	return srv.ListenAndServe()
 }
 
-func (k *Kungfu) handle(w http.ResponseWriter, r *http.Request) {
+func (k *Unique) handle(w http.ResponseWriter, r *http.Request) {
 	// Build the Request.
 	req := &Request{
 		Method:  r.Method,

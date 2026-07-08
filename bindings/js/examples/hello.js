@@ -4,12 +4,12 @@
 //   npm run build
 //   node examples/hello.js
 
-const { Kungfu } = require('..');
+const { Unique } = require('..');
 
-const app = new Kungfu();
+const app = new Unique();
 
 app.get('/hello', (req, res) => {
-  res.json({ message: 'world', framework: 'kungfu', lang: 'javascript' });
+  res.json({ message: 'world', framework: 'unique', lang: 'javascript' });
 });
 
 app.post('/echo/:name', async (req, res) => {
@@ -19,4 +19,4 @@ app.post('/echo/:name', async (req, res) => {
   });
 });
 
-app.listen(3000).then(() => console.log('🥋 kungfu listening on http://localhost:3000'));
+app.listen(3000).then(() => console.log('🥋 unique listening on http://localhost:3000'));

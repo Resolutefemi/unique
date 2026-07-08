@@ -1,21 +1,21 @@
 {
-    "name": "kungfu/kungfu",
-    "description": "PHP binding for the Kungfu.js polyglot web framework — Rust core, polyglot bindings. Uses PHP FFI to call libkungfu_core.",
+    "name": "unique/unique",
+    "description": "PHP binding for the Unique.js polyglot web framework — Rust core, polyglot bindings. Uses PHP FFI to call libunique_core.",
     "type": "library",
     "license": "MIT OR Apache-2.0",
     "version": "1.0.0",
     "keywords": ["web", "framework", "http", "server", "rust", "ffi", "polyglot"],
-    "homepage": "https://kungfu.js.org",
+    "homepage": "https://unique.js.org",
     "authors": [
         {
-            "name": "Kungfu.js Contributors",
-            "email": "noreply@kungfu.js.org",
-            "homepage": "https://kungfu.js.org"
+            "name": "Unique.js Contributors",
+            "email": "noreply@unique.js.org",
+            "homepage": "https://unique.js.org"
         }
     ],
     "support": {
-        "issues": "https://github.com/Resolutefemi/kungfu/issues",
-        "source": "https://github.com/Resolutefemi/kungfu/tree/main/bindings/php"
+        "issues": "https://github.com/Resolutefemi/unique/issues",
+        "source": "https://github.com/Resolutefemi/unique/tree/main/bindings/php"
     },
     "require": {
         "php": ">=8.0",
@@ -23,7 +23,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Kungfu\\": "src/"
+            "Unique\\": "src/"
         }
     },
     "extra": {

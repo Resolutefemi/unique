@@ -1,51 +1,51 @@
--- Kungfu.js — Lua binding
+-- Unique.js — Lua binding
 --
 -- A polyglot web framework with a Rust core. This Lua binding uses LuaJIT
--- FFI to call into libkungfu_core (the C ABI exposed by the Rust engine).
+-- FFI to call into libunique_core (the C ABI exposed by the Rust engine).
 --
 -- Status: scaffold. V1 ships the FFI cdef declarations and the Lua-side
 -- API surface. Per-route handler registration requires the C bridge
 -- planned for V1.1.
 
-local kungfu = {}
-kungfu._VERSION = "1.0.0"
+local unique = {}
+unique._VERSION = "1.0.0"
 
 -- Try to load LuaJIT FFI; if not available, fall back to a stub.
 local has_ffi, ffi = pcall(require, "ffi")
 if has_ffi then
     ffi.cdef[[
-        typedef struct KungfuRouter KungfuRouter;
-        typedef struct KungfuServer KungfuServer;
-        typedef struct KungfuRequest KungfuRequest;
-        typedef struct KungfuResponse KungfuResponse;
+        typedef struct UniqueRouter UniqueRouter;
+        typedef struct UniqueServer UniqueServer;
+        typedef struct UniqueRequest UniqueRequest;
+        typedef struct UniqueResponse UniqueResponse;
 
-        KungfuRouter *kungfu_router_new(void);
-        void          kungfu_router_free(KungfuRouter *router);
-        KungfuServer *kungfu_server_new(KungfuRouter *router);
-        void          kungfu_server_free(KungfuServer *server);
-        int           kungfu_server_listen(KungfuServer *server,
+        UniqueRouter *unique_router_new(void);
+        void          unique_router_free(UniqueRouter *router);
+        UniqueServer *unique_server_new(UniqueRouter *router);
+        void          unique_server_free(UniqueServer *server);
+        int           unique_server_listen(UniqueServer *server,
                                            const char *host,
                                            uint16_t port);
     ]]
-    -- Users must set KUNGFU_LIB_PATH or have libkungfu_core installed
+    -- Users must set UNIQUE_LIB_PATH or have libunique_core installed
     -- system-wide.
-    local lib_path = os.getenv("KUNGFU_LIB_PATH") or "kungfu_core"
-    kungfu._lib = ffi.load(lib_path)
+    local lib_path = os.getenv("UNIQUE_LIB_PATH") or "unique_core"
+    unique._lib = ffi.load(lib_path)
 end
 
---- Construct a new Kungfu application.
+--- Construct a new Unique application.
 -- @return table app  A new app handle.
-function kungfu.new()
+function unique.new()
     local app = {}
     app._router = nil
-    if kungfu._lib then
-        app._router = kungfu._lib.kungfu_router_new()
+    if unique._lib then
+        app._router = unique._lib.unique_router_new()
     end
 
     --- Register a GET route.
     -- V1 scaffold: route registration is a no-op; see README for status.
     function app:get(path, handler)
-        -- TODO: wire through to libkungfu_core once the C bridge is in.
+        -- TODO: wire through to libunique_core once the C bridge is in.
         return self
     end
 
@@ -57,14 +57,14 @@ function kungfu.new()
     --- Start the server on the given port.
     function app:listen(port)
         port = port or 3000
-        if not kungfu._lib or not self._router then
-            error("libkungfu_core not loaded — set KUNGFU_LIB_PATH", 2)
+        if not unique._lib or not self._router then
+            error("libunique_core not loaded — set UNIQUE_LIB_PATH", 2)
         end
-        local server = kungfu._lib.kungfu_server_new(self._router)
-        return kungfu._lib.kungfu_server_listen(server, "0.0.0.0", port)
+        local server = unique._lib.unique_server_new(self._router)
+        return unique._lib.unique_server_listen(server, "0.0.0.0", port)
     end
 
     return app
 end
 
-return kungfu
+return unique

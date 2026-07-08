@@ -1,37 +1,37 @@
-// Kungfu.java — Java binding entry point (JNI scaffold).
+// Unique.java — Java binding entry point (JNI scaffold).
 //
 // In V1 this is a scaffold. The actual JNI native methods live in
-// `KungfuNative.cpp` (to be implemented when the C ABI is stable).
+// `UniqueNative.cpp` (to be implemented when the C ABI is stable).
 // For now, Java users can call into the C ABI directly via JNA.
 
-package com.kungfu;
+package com.unique;
 
 import java.util.Map;
 import java.util.HashMap;
 import java.util.function.BiConsumer;
 
 /**
- * Kungfu.js — Java binding.
+ * Unique.js — Java binding.
  *
  * <p>Quickstart:
  * <pre>{@code
- * Kungfu app = new Kungfu();
+ * Unique app = new Unique();
  * app.get("/hello", (req, res) -> {
  *     res.status(200).json("{\"message\":\"world\"}");
  * });
  * app.listen(3000);
  * }</pre>
  */
-public class Kungfu {
+public class Unique {
     static {
-        // Load the native library. The library is `libkungfu_core.so` on Linux,
-        // `libkungfu_core.dylib` on macOS, `kungfu_core.dll` on Windows.
-        System.loadLibrary("kungfu_core");
+        // Load the native library. The library is `libunique_core.so` on Linux,
+        // `libunique_core.dylib` on macOS, `unique_core.dll` on Windows.
+        System.loadLibrary("unique_core");
     }
 
-    private long routerPtr;  // opaque pointer to KungfuRouter
+    private long routerPtr;  // opaque pointer to UniqueRouter
 
-    public Kungfu() {
+    public Unique() {
         this.routerPtr = nativeRouterNew();
     }
 

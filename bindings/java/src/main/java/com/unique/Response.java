@@ -1,4 +1,4 @@
-package com.kungfu;
+package com.unique;
 
 /**
  * HTTP response builder.

@@ -1,9 +1,9 @@
-defmodule Kungfu do
+defmodule Unique do
   @moduledoc """
-  Elixir binding for the Kungfu.js polyglot web framework.
+  Elixir binding for the Unique.js polyglot web framework.
 
   A polyglot web framework with a Rust core. This Elixir binding uses a
-  NIF (Native Implemented Function) to call into `libkungfu_core` — the
+  NIF (Native Implemented Function) to call into `libunique_core` — the
   C ABI exposed by the Rust engine.
 
   ## Status
@@ -14,26 +14,26 @@ defmodule Kungfu do
 
   ## Example (target API)
 
-      iex> app = Kungfu.new()
-      iex> app = Kungfu.get(app, "/hello", fn _req ->
+      iex> app = Unique.new()
+      iex> app = Unique.get(app, "/hello", fn _req ->
       ...>   %{status: 200, body: ~s({"message":"world"})}
       ...> end)
-      iex> Kungfu.listen(app, 3000)
+      iex> Unique.listen(app, 3000)
       :ok
 
   """
 
   @version "1.0.0"
 
-  @doc "Returns the current Kungfu.js binding version."
+  @doc "Returns the current Unique.js binding version."
   def version, do: @version
 
   @doc """
-  Construct a new Kungfu application.
+  Construct a new Unique application.
 
   ## Status: scaffold
 
-  The NIF bridge to libkungfu_core is not yet wired in. This function
+  The NIF bridge to libunique_core is not yet wired in. This function
   currently returns `{:error, :not_implemented}`.
   """
   def new do

@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "Kungfu",
+    name: "Unique",
     platforms: [
         .macOS(.v12),
         .iOS(.v15),
@@ -10,22 +10,22 @@ let package = Package(
         .watchOS(.v8),
     ],
     products: [
-        .library(name: "Kungfu", targets: ["Kungfu"]),
+        .library(name: "Unique", targets: ["Unique"]),
     ],
     targets: [
         .systemLibrary(
-            name: "CKungfu",
-            path: "Sources/CKungfu",
-            pkgConfig: "kungfu_core",
+            name: "CUnique",
+            path: "Sources/CUnique",
+            pkgConfig: "unique_core",
             providers: [
-                .brew(["kungfu-core"]),
-                .apt(["libkungfu-core-dev"]),
+                .brew(["unique-core"]),
+                .apt(["libunique-core-dev"]),
             ]
         ),
         .target(
-            name: "Kungfu",
-            dependencies: ["CKungfu"],
-            path: "Sources/Kungfu"
+            name: "Unique",
+            dependencies: ["CUnique"],
+            path: "Sources/Unique"
         ),
     ]
 )

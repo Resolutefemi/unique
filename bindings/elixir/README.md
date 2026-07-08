@@ -1,10 +1,10 @@
-# Elixir binding for Kungfu.js via NIF
+# Elixir binding for Unique.js via NIF
 
 ## Install
 
 ```elixir
 defp deps do
-  [{:kungfu, "~> 1.0"}]
+  [{:unique, "~> 1.0"}]
 end
 ```
 
@@ -12,7 +12,7 @@ end
 
 ```elixir
 defmodule MyApp do
-  use Kungfu
+  use Unique
 
   get "/hello" do
     "world"
@@ -25,8 +25,8 @@ MyApp.start(port: 3000)
 ## Requirements
 - Elixir 1.15+
 - Erlang/OTP 26+
-- libkungfu_core.so
+- libunique_core.so
 
 ## Package
-- **hex.pm:** `kungfu`
+- **hex.pm:** `unique`
 - **Extension:** `.ex`

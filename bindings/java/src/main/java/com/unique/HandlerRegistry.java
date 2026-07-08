@@ -1,4 +1,4 @@
-package com.kungfu;
+package com.unique;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

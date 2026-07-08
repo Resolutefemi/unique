@@ -4,12 +4,12 @@
 //   npm run build
 //   npx ts-node examples/hello.ts
 
-import { Kungfu } from '..';
+import { Unique } from '..';
 
-const app = new Kungfu();
+const app = new Unique();
 
 app.get('/hello', (_req, res) => {
-  res.json({ message: 'world', framework: 'kungfu', lang: 'typescript' });
+  res.json({ message: 'world', framework: 'unique', lang: 'typescript' });
 });
 
 app.post('/echo/:name', async (req, res) => {
@@ -19,4 +19,4 @@ app.post('/echo/:name', async (req, res) => {
   });
 });
 
-app.listen(3000).then(() => console.log('🥋 kungfu listening on http://localhost:3000'));
+app.listen(3000).then(() => console.log('🥋 unique listening on http://localhost:3000'));

@@ -1,21 +1,21 @@
-# Kotlin binding for Kungfu.js (JVM)
+# Kotlin binding for Unique.js (JVM)
 
 ## Install
 
 ```kotlin
 // build.gradle.kts
 dependencies {
-    implementation("com.kng:kungfu:1.0.0")
+    implementation("com.kng:unique:1.0.0")
 }
 ```
 
 ## Quickstart
 
 ```kotlin
-import com.kng.Kungfu
+import com.kng.Unique
 
 fun main() {
-    val app = Kungfu()
+    val app = Unique()
 
     app.get("/hello") { req, res ->
         res.status(200).text("world")
@@ -28,8 +28,8 @@ fun main() {
 ## Requirements
 - Kotlin 1.9+
 - JVM 17+
-- libkungfu_core.so / .dll / .dylib
+- libunique_core.so / .dll / .dylib
 
 ## Package
-- **Maven Central:** `com.kng:kungfu`
+- **Maven Central:** `com.kng:unique`
 - **Extension:** `.kt`

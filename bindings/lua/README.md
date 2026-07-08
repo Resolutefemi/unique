@@ -1,16 +1,16 @@
-# Lua binding for Kungfu.js via LuaJIT FFI
+# Lua binding for Unique.js via LuaJIT FFI
 
 ## Install
 
 ```bash
-luarocks install kungfu
+luarocks install unique
 ```
 
 ## Quickstart
 
 ```lua
-local kungfu = require("kungfu")
-local app = kungfu.new()
+local unique = require("unique")
+local app = unique.new()
 
 app:get("/hello", function(req, res)
     res:text("world")
@@ -21,8 +21,8 @@ app:listen(3000)
 
 ## Requirements
 - Lua 5.4+ or LuaJIT
-- libkungfu_core.so
+- libunique_core.so
 
 ## Package
-- **LuaRocks:** `kungfu`
+- **LuaRocks:** `unique`
 - **Extension:** `.lua`

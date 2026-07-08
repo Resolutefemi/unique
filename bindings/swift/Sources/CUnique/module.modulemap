@@ -1,5 +1,5 @@
-module CKungfu [system] {
-    header "../../core/kungfu.h"
-    link "kungfu_core"
+module CUnique [system] {
+    header "../../core/unique.h"
+    link "unique_core"
     export *
 }

@@ -1,3 +1,3 @@
-module github.com/Resolutefemi/kungfu/bindings/go
+module github.com/Resolutefemi/unique/bindings/go
 
 go 1.21

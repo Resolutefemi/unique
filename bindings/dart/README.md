@@ -1,6 +1,6 @@
-# kungfu (Dart)
+# unique (Dart)
 
-> Dart binding for the Kungfu.js framework.
+> Dart binding for the Unique.js framework.
 
 ## Status: Scaffold
 
@@ -14,18 +14,18 @@ workaround planned for V1.1.
 ```yaml
 # pubspec.yaml
 dependencies:
-  kungfu:
-    path: /path/to/kungfu/bindings/dart
+  unique:
+    path: /path/to/unique/bindings/dart
   ffi: ^2.0.0
 ```
 
 ## Quickstart (planned API)
 
 ```dart
-import 'package:kungfu/kungfu.dart';
+import 'package:unique/unique.dart';
 
 void main() {
-  final app = Kungfu();
+  final app = Unique();
   app.get('/hello', (req, res) {
     res.status(200).json('{"message":"world"}');
   });

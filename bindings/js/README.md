@@ -1,11 +1,11 @@
-# kungfu (Node.js / TypeScript)
+# unique (Node.js / TypeScript)
 
-> One API surface, infinite languages. The JS/TS binding for the Kungfu.js framework.
+> One API surface, infinite languages. The JS/TS binding for the Unique.js framework.
 
 ## Install
 
 ```bash
-npm install kungfu
+npm install unique
 ```
 
 Pre-built binaries are shipped for Linux (x64 + arm64), macOS (x64 + arm64), and Windows (x64).
@@ -13,9 +13,9 @@ Pre-built binaries are shipped for Linux (x64 + arm64), macOS (x64 + arm64), and
 ## Quickstart (JavaScript)
 
 ```js
-const { Kungfu } = require('kungfu');
+const { Unique } = require('unique');
 
-const app = new Kungfu();
+const app = new Unique();
 
 app.get('/hello', (req, res) => {
   res.json({ message: 'world' });
@@ -31,9 +31,9 @@ app.listen(3000).then(() => console.log('🥋 on http://localhost:3000'));
 ## Quickstart (TypeScript)
 
 ```ts
-import { Kungfu } from 'kungfu';
+import { Unique } from 'unique';
 
-const app = new Kungfu();
+const app = new Unique();
 
 app.get('/hello', (_req, res) => {
   res.json({ message: 'world' });
@@ -42,7 +42,7 @@ app.get('/hello', (_req, res) => {
 app.listen(3000).then(() => console.log('🥋 on http://localhost:3000'));
 ```
 
-## Why use Kungfu from JavaScript?
+## Why use Unique from JavaScript?
 
 - **Faster than Express.** The HTTP server, router, middleware pipeline, and
   JSON serialisation all run in Rust. JS handlers are only invoked for the
@@ -70,12 +70,12 @@ node examples/hello.js
 ```
 
 The `npm run build` step invokes `napi build` which compiles the Rust
-crate in `src/` and produces `kungfu.linux-x64-gnu.node` (or the equivalent
+crate in `src/` and produces `unique.linux-x64-gnu.node` (or the equivalent
 for your platform).
 
 ## API reference
 
-### `new Kungfu()`
+### `new Unique()`
 
 Construct a new application.
 
@@ -95,10 +95,10 @@ Start the server. Returns a Promise that resolves when the server stops.
 ### Handler signature
 
 ```ts
-type Handler = (req: KungfuRequest, res: ResponseBuilder) => void | Promise<void>;
+type Handler = (req: UniqueRequest, res: ResponseBuilder) => void | Promise<void>;
 ```
 
-Where `KungfuRequest` is:
+Where `UniqueRequest` is:
 
 ```ts
 {

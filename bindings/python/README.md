@@ -1,19 +1,19 @@
-# kungfu (Python)
+# unique (Python)
 
-> One API surface, infinite languages. The Python binding for the Kungfu.js framework.
+> One API surface, infinite languages. The Python binding for the Unique.js framework.
 
 ## Install
 
 ```bash
-pip install kungfu
+pip install unique
 ```
 
 ## Quickstart
 
 ```python
-from kungfu import Kungfu
+from unique import Unique
 
-app = Kungfu()
+app = Unique()
 
 @app.get('/hello')
 def hello(req):
@@ -30,7 +30,7 @@ async def echo(req):
 app.run(port=3000)
 ```
 
-## Why use Kungfu from Python?
+## Why use Unique from Python?
 
 - **Faster than FastAPI.** The HTTP server, router, middleware pipeline, and
   JSON serialisation all run in Rust. Python handlers are only invoked for
@@ -56,7 +56,7 @@ python examples/hello.py
 
 ## API reference
 
-### `Kungfu()`
+### `Unique()`
 
 Construct a new application.
 

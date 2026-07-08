@@ -1,32 +1,32 @@
-# kungfu (Swift)
+# unique (Swift)
 
-> Swift binding for the Kungfu.js framework.
+> Swift binding for the Unique.js framework.
 
 ## Status: Scaffold
 
 V1 ships a scaffold of the Swift binding using Swift's C interop to call
 the C ABI. The Swift Package Manager target uses a `module.modulemap` to
-wrap `core/kungfu.h`.
+wrap `core/unique.h`.
 
 ## Install
 
 ```swift
 // Package.swift
-.package(path: "/path/to/kungfu/bindings/swift")
+.package(path: "/path/to/unique/bindings/swift")
 ```
 
 Build the native library first:
 
 ```bash
-cargo build -p kungfu-core --release --features ffi
+cargo build -p unique-core --release --features ffi
 ```
 
 ## Quickstart (planned API)
 
 ```swift
-import Kungfu
+import Unique
 
-let app = Kungfu()
+let app = Unique()
 app.get("/hello") { req, res in
     res.status(200).json("{\"message\":\"world\"}")
 }

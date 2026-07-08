@@ -1,7 +1,7 @@
 {
-  "name": "kungfu-java",
+  "name": "unique-java",
   "version": "1.0.0",
-  "description": "Java binding for the Kungfu.js polyglot web framework",
-  "main": "src/main/java/com/kungfu/Kungfu.java",
+  "description": "Java binding for the Unique.js polyglot web framework",
+  "main": "src/main/java/com/unique/Unique.java",
   "license": "MIT OR Apache-2.0"
 }
