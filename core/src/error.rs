@@ -1,4 +1,4 @@
-//! Unified error model for the Kungfu core.
+//! Unified error model for the Unique core.
 //!
 //! Every error carries the four-tuple the framework promises in its public contract:
 //! `code`, `message`, `detail`, `suggestion`. The same shape is serialised to JSON
@@ -79,17 +79,17 @@ impl From<u16> for StatusCode {
     }
 }
 
-/// The Kungfu error contract. Every error that crosses a handler boundary
+/// The Unique error contract. Every error that crosses a handler boundary
 /// must be representable as this shape.
 #[derive(Debug, Clone)]
-pub struct KungfuError {
+pub struct UniqueError {
     pub code: StatusCode,
     pub message: String,
     pub detail: Option<String>,
     pub suggestion: Option<String>,
 }
 
-impl KungfuError {
+impl UniqueError {
     pub fn new(code: StatusCode, message: impl Into<String>) -> Self {
         Self {
             code,
@@ -142,7 +142,7 @@ impl KungfuError {
     }
 }
 
-impl fmt::Display for KungfuError {
+impl fmt::Display for UniqueError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}: {}", self.code.as_u16(), self.message)?;
         if let Some(d) = &self.detail {
@@ -152,15 +152,15 @@ impl fmt::Display for KungfuError {
     }
 }
 
-impl std::error::Error for KungfuError {}
+impl std::error::Error for UniqueError {}
 
-impl From<std::io::Error> for KungfuError {
+impl From<std::io::Error> for UniqueError {
     fn from(e: std::io::Error) -> Self {
         Self::new(StatusCode::InternalServerError, e.to_string())
     }
 }
 
-impl From<serde_json::Error> for KungfuError {
+impl From<serde_json::Error> for UniqueError {
     fn from(e: serde_json::Error) -> Self {
         Self::new(StatusCode::BadRequest, "Invalid JSON body")
             .with_detail(e.to_string())
@@ -169,7 +169,7 @@ impl From<serde_json::Error> for KungfuError {
 }
 
 #[cfg(feature = "simd")]
-impl From<simd_json::Error> for KungfuError {
+impl From<simd_json::Error> for UniqueError {
     fn from(e: simd_json::Error) -> Self {
         Self::new(StatusCode::BadRequest, "Invalid JSON body")
             .with_detail(e.to_string())
@@ -191,8 +191,8 @@ pub enum CoreError {
     #[error("Router error: {0}")]
     Router(String),
 
-    #[error("Kungfu error: {0}")]
-    Kungfu(#[from] KungfuError),
+    #[error("Unique error: {0}")]
+    Unique(#[from] UniqueError),
 }
 
-pub type Result<T> = std::result::Result<T, KungfuError>;
+pub type Result<T> = std::result::Result<T, UniqueError>;

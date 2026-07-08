@@ -179,7 +179,7 @@ pub fn session_auth(store: Arc<SessionStore>) -> Middleware {
 /// the JWT middleware) or the `x-session-user` header (set by session auth).
 ///
 /// ```ignore
-/// Kungfu::new()
+/// Unique::new()
 ///     .use_middleware(auth_jwt(JwtConfig::new("secret")))
 ///     .use_middleware(require_role("admin"))
 ///     .handle_get("/admin", |_req, res| res.text("admin panel"))

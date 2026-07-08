@@ -6,9 +6,9 @@
 //! ## Example
 //!
 //! ```ignore
-//! use kungfu::cookies::CookieJar;
+//! use unique::cookies::CookieJar;
 //!
-//! Kungfu::new()
+//! Unique::new()
 //!     .handle_get("/login", |_req, res| {
 //!         let mut jar = CookieJar::new();
 //!         jar.set(Cookie::new("session_id", "abc123").path("/").http_only(true).max_age(3600));

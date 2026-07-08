@@ -10,12 +10,12 @@
 //!
 //! Enable the `http3` feature:
 //! ```toml
-//! kungfu-core = { features = ["http3"] }
+//! unique-core = { features = ["http3"] }
 //! ```
 //!
 //! ```ignore
-//! use kungfu_core::http3::Http3Server;
-//! use kungfu_core::tls::TlsConfig;
+//! use unique_core::http3::Http3Server;
+//! use unique_core::tls::TlsConfig;
 //!
 //! let tls = TlsConfig::from_files("cert.pem", "key.pem")?;
 //! let server = Http3Server::new(router, addr, tls)?;
@@ -30,7 +30,7 @@
 use std::net::SocketAddr;
 use std::sync::Arc;
 
-use crate::error::{KungfuError, Result};
+use crate::error::{UniqueError, Result};
 use crate::router::Router;
 use crate::tls::TlsConfig;
 
@@ -47,7 +47,7 @@ impl Http3Server {
     /// HTTP/3 requires TLS — pass a `TlsConfig` with your cert + key.
     pub fn new(router: Router, addr: SocketAddr, tls: TlsConfig) -> Result<Self> {
         let tls_config = tls.to_rustls_config().map_err(|e| {
-            KungfuError::internal(format!("TLS config error: {e}"))
+            UniqueError::internal(format!("TLS config error: {e}"))
         })?;
 
         Ok(Self {
@@ -62,12 +62,12 @@ impl Http3Server {
     /// Listens on UDP (QUIC uses UDP, not TCP). Make sure your firewall
     /// allows UDP traffic on the configured port.
     pub async fn serve(&self) -> Result<()> {
-        tracing::info!("kungfu (HTTP/3) listening on https://{}", self.addr);
+        tracing::info!("unique (HTTP/3) listening on https://{}", self.addr);
 
         // Create a QUIC endpoint.
         let server_config = quinn::ServerConfig::with_crypto(self.tls_config.clone());
         let endpoint = quinn::Endpoint::server(server_config, self.addr)
-            .map_err(|e| KungfuError::internal(format!("QUIC bind: {e}")))?;
+            .map_err(|e| UniqueError::internal(format!("QUIC bind: {e}")))?;
 
         // Accept connections.
         while let Some(incoming) = endpoint.accept().await {
@@ -101,7 +101,7 @@ async fn handle_h3_connection(
     // Create an h3 connection driver.
     let mut h3_conn = h3::server::Connection::new(h3_quinn::Connection::new(conn))
         .await
-        .map_err(|e| KungfuError::internal(format!("h3 connection: {e}")))?;
+        .map_err(|e| UniqueError::internal(format!("h3 connection: {e}")))?;
 
     // Accept requests on this connection.
     while let Ok((req_stream, req)) = h3_conn.accept().await {
@@ -175,21 +175,21 @@ async fn send_h3_response(
     stream
         .send_headers(headers)
         .await
-        .map_err(|e| KungfuError::internal(format!("h3 send headers: {e}")))?;
+        .map_err(|e| UniqueError::internal(format!("h3 send headers: {e}")))?;
 
     // Send body.
     if !resp.body.is_empty() {
         stream
             .send_data(bytes::Bytes::copy_from_slice(&resp.body))
             .await
-            .map_err(|e| KungfuError::internal(format!("h3 send data: {e}")))?;
+            .map_err(|e| UniqueError::internal(format!("h3 send data: {e}")))?;
     }
 
     // Finish the stream.
     stream
         .finish()
         .await
-        .map_err(|e| KungfuError::internal(format!("h3 finish: {e}")))?;
+        .map_err(|e| UniqueError::internal(format!("h3 finish: {e}")))?;
 
     Ok(())
 }

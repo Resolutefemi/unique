@@ -4,7 +4,7 @@
 //!   cargo fuzz run http_parser
 //!
 //! Or use the built-in property tests:
-//!   cargo test -p kungfu-core --lib fuzz
+//!   cargo test -p unique-core --lib fuzz
 
 /// Property-based test: random byte sequences should never panic the parser.
 /// They should either parse successfully or return an error.

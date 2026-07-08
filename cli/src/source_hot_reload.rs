@@ -9,7 +9,7 @@
 //! ## Usage
 //!
 //! ```ignore
-//! use kungfu_cli::source_hot_reload::watch_and_rebuild;
+//! use unique_cli::source_hot_reload::watch_and_rebuild;
 //!
 //! // Run the current binary, rebuild on file change, and re-exec when ready.
 //! watch_and_rebuild(&["src"]).await?;
@@ -45,7 +45,7 @@ impl Default for SourceReloadConfig {
 /// build command. After a successful build, re-exec the current binary
 /// (replacing the process).
 ///
-/// This is the dev-mode entry point. The user runs `kungfu start` which
+/// This is the dev-mode entry point. The user runs `unique start` which
 /// calls this function with the current process's args.
 pub fn watch_and_rebuild(config: &SourceReloadConfig) -> std::io::Result<()> {
     let (tx, rx) = std::sync::mpsc::channel::<()>();

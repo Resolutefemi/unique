@@ -8,7 +8,7 @@
 //! ## Example
 //!
 //! ```ignore
-//! use kungfu::auth::{JwtService, JwtConfig, auth_jwt};
+//! use unique::auth::{JwtService, JwtConfig, auth_jwt};
 //!
 //! let jwt = JwtService::new("my-secret-key");
 //!
@@ -16,7 +16,7 @@
 //! let token = jwt.sign(&serde_json::json!({"sub":"user123","exp":1700000000})).unwrap();
 //!
 //! // Protect routes:
-//! Kungfu::new()
+//! Unique::new()
 //!     .use_middleware(auth_jwt(JwtConfig::new("my-secret-key")))
 //!     .handle_get("/protected", |_req, res| res.text("secret data"))
 //! ```

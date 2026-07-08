@@ -13,7 +13,7 @@
 
 use std::collections::HashMap;
 
-use crate::error::{KungfuError, Result, StatusCode};
+use crate::error::{UniqueError, Result, StatusCode};
 use crate::request::{Method, Request};
 use crate::response::Response;
 
@@ -79,7 +79,7 @@ impl Node {
     ) -> Result<()> {
         if segments.is_empty() {
             if self.handlers.insert(method, handler).is_some() {
-                return Err(KungfuError::new(
+                return Err(UniqueError::new(
                     StatusCode::InternalServerError,
                     format!("Duplicate route: {} {}", method.as_str(), meta.path),
                 ));

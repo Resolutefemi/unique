@@ -8,7 +8,7 @@
 //! ## Example
 //!
 //! ```ignore
-//! use kungfu_orm::password::{hash_password, verify_password};
+//! use unique_orm::password::{hash_password, verify_password};
 //!
 //! let hash = hash_password("hunter222")?;
 //! assert!(verify_password("hunter222", &hash)?);

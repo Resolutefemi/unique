@@ -1,16 +1,16 @@
-//! Example: kungfu-frontend — parse a .kng file and render an SSR page.
+//! Example: unique-frontend — parse a .kng file and render an SSR page.
 //!
-//! Run with: `cargo run -p kungfu-frontend --example ssr_demo`
+//! Run with: `cargo run -p unique-frontend --example ssr_demo`
 //!
 //! Demonstrates:
 //! - Parsing a .kng file (data() + template() exports + optional static HTML)
 //! - Deriving a route path from the file path
 //! - Rendering a complete HTML page with livereload script + hydration data
 
-use kungfu_frontend::{parse_kungfu_file, render_page, SsrContext};
+use unique_frontend::{parse_unique_file, render_page, SsrContext};
 use serde_json::json;
 
-const KUNGFU_FILE: &str = r#"
+const UNIQUE_FILE: &str = r#"
 export async function data(req) {
   return { user: { name: 'Bruce', role: 'master' } };
 }
@@ -19,11 +19,11 @@ export function template({ user }) {
   return `<div class="flex p-4 text-xl">Hello, ${user.name}! You are a ${user.role}.</div>`;
 }
 ---
-<footer class="text-center p-4 text-gray-500">© 2026 Kungfu.js</footer>
+<footer class="text-center p-4 text-gray-500">© 2026 Unique.js</footer>
 "#;
 
 fn main() {
-    let file = parse_kungfu_file(KUNGFU_FILE, "src/pages/index.kng").unwrap();
+    let file = parse_unique_file(UNIQUE_FILE, "src/pages/index.kng").unwrap();
     println!("--- Parsed .kng file ---");
     println!("Route path: {}", file.route_path);
     println!("Code length: {} chars", file.code.len());
@@ -56,7 +56,7 @@ fn main() {
     ];
     println!("\n--- Route path derivation ---");
     for path in &paths {
-        let file = parse_kungfu_file(
+        let file = parse_unique_file(
             "export function data() { return {}; }\nexport function template() { return ''; }",
             path,
         )

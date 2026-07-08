@@ -1,8 +1,8 @@
-# kungfu-core
+# unique-core
 
-The core engine of [Kungfu.js](https://github.com/Resolutefemi/kungfu) — a polyglot web framework with a Rust heart.
+The core engine of [Unique.js](https://github.com/Resolutefemi/unique) — a polyglot web framework with a Rust heart.
 
-`kungfu-core` is the foundation under every Kungfu.js binding. It contains the
+`unique-core` is the foundation under every Unique.js binding. It contains the
 hand-rolled HTTP/1.1 server, trie router, onion-model middleware pipeline,
 WebSocket (RFC 6455), HTTP/3, TLS, ORM hooks, and the C ABI that lets the
 framework be driven from any language.
@@ -24,7 +24,7 @@ framework be driven from any language.
   and ping/pong.
 - **HTTP/3** (`quinn` + `h3`).
 - **TLS/HTTPS** via `rustls`.
-- **C ABI** (`ffi` feature) — generates `kungfu.h` via `cbindgen` for use from
+- **C ABI** (`ffi` feature) — generates `unique.h` via `cbindgen` for use from
   C, C++, Dart, Swift, Java, Kotlin, PHP, Ruby, C#, Lua, and Elixir.
 - Buffer pooling, single-syscall response writes, `SO_REUSEPORT` multi-acceptor,
   `TCP_NODELAY`.
@@ -36,7 +36,7 @@ framework be driven from any language.
 | `default` | None — pure-Rust HTTP/1.1 server.                                       |
 | `simd`    | SIMD-accelerated JSON parsing via `simd-json` (x86_64 + AVX2).          |
 | `io_uring`| Linux io_uring zero-copy I/O via `tokio-uring` (no-op on other OSes).   |
-| `ffi`     | Generate `kungfu.h` via `cbindgen` for use from other languages.        |
+| `ffi`     | Generate `unique.h` via `cbindgen` for use from other languages.        |
 
 ## License
 

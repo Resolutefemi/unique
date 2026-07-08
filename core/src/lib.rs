@@ -1,8 +1,8 @@
-//! kungfu-core — the engine behind the Kungfu.js polyglot framework.
+//! unique-core — the engine behind the Unique.js polyglot framework.
 //!
 //! This crate is intentionally framework-only: it has no opinion on how
 //! language bindings wire up to it. The Rust-native idiomatic API lives in
-//! the `kungfu` crate (`kungfu/src/lib.rs`), which re-exports from here and
+//! the `unique` crate (`unique/src/lib.rs`), which re-exports from here and
 //! adds the `#[get]` / `#[post]` proc macros.
 
 // Deny `unsafe` everywhere except the explicitly-allowed `ffi` module.
@@ -51,7 +51,7 @@ pub mod middleware_builtin {
     pub use crate::middleware::builtin::validate::{validate_json, validate_against_schema};
 }
 
-pub use error::{KungfuError, Result, StatusCode};
+pub use error::{UniqueError, Result, StatusCode};
 pub use headers::Headers;
 pub use cookies::{Cookie, CookieJar, SameSite};
 pub use middleware::{build_chain, Middleware, Next, NextFuture};

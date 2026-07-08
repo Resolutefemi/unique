@@ -1,8 +1,8 @@
-# kungfu-css
+# unique-css
 
-Tailwind-like utility CSS engine for [Kungfu.js](https://github.com/Resolutefemi/kungfu).
+Tailwind-like utility CSS engine for [Unique.js](https://github.com/Resolutefemi/unique).
 
-`kungfu-css` parses utility-class strings (`"flex p-4 text-red-500 hover:bg-blue-200 md:text-xl"`)
+`unique-css` parses utility-class strings (`"flex p-4 text-red-500 hover:bg-blue-200 md:text-xl"`)
 and emits real CSS. It scans `.kng` / `.html` files for class usage and produces
 a minimal, tree-shaken stylesheet.
 
@@ -22,7 +22,7 @@ a minimal, tree-shaken stylesheet.
 ## Quick start
 
 ```rust
-use kungfu_css::{compile_classes, compile_directory};
+use unique_css::{compile_classes, compile_directory};
 
 // Compile a class string into CSS:
 let css = compile_classes("flex p-4 text-red-500 hover:bg-blue-200")?;

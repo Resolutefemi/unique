@@ -1,9 +1,9 @@
-# kungfu-frontend
+# unique-frontend
 
-Frontend module for [Kungfu.js](https://github.com/Resolutefemi/kungfu) — SSR,
+Frontend module for [Unique.js](https://github.com/Resolutefemi/unique) — SSR,
 `.kng` files, live reload, type generation.
 
-`kungfu-frontend` powers the JS/TS-only frontend story of Kungfu.js:
+`unique-frontend` powers the JS/TS-only frontend story of Unique.js:
 
 - **`.kng` file format** — a single file with `data()` + `template()` exports
   (plus optional `---` static HTML footer), compiled to SSR HTML.
@@ -22,13 +22,13 @@ Frontend module for [Kungfu.js](https://github.com/Resolutefemi/kungfu) — SSR,
 ## Quick start
 
 ```rust
-use kungfu_frontend::file_routing::register_pages;
-use kungfu::Kungfu;
+use unique_frontend::file_routing::register_pages;
+use unique::Unique;
 use std::path::Path;
 
 #[tokio::main]
 async fn main() {
-    let mut app = Kungfu::new();
+    let mut app = Unique::new();
     register_pages(app.router_mut(), Path::new("src/pages"))
         .expect("failed to register pages");
     app.run("0.0.0.0:3000").await.unwrap();

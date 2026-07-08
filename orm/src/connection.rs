@@ -2,10 +2,10 @@
 //!
 //! V1 ships with a **mock** in-process driver so the ORM can be tested without
 //! a real database. To enable real Postgres/MySQL/SQLite, enable the matching
-//! feature flag on `kungfu-orm`:
+//! feature flag on `unique-orm`:
 //!
 //! ```toml
-//! kungfu-orm = { path = "...", features = ["postgres"] }
+//! unique-orm = { path = "...", features = ["postgres"] }
 //! ```
 
 use std::collections::HashMap;
@@ -218,7 +218,7 @@ mod tests {
     use super::*;
     use serde::{Deserialize, Serialize};
 
-    #[derive(kungfu_macros::Model, Serialize, Deserialize)]
+    #[derive(unique_macros::Model, Serialize, Deserialize)]
     #[table(name = "users")]
     struct User {
         #[field(primary, auto_increment)]
@@ -260,7 +260,7 @@ mod tests {
         assert!(crate::password::verify_password("plaintext_password", &inserted.password).unwrap());
     }
 
-    #[derive(kungfu_macros::Model, Serialize, Deserialize)]
+    #[derive(unique_macros::Model, Serialize, Deserialize)]
     #[table(name = "users_with_password")]
     struct UserWithPassword {
         #[field(primary, auto_increment)]

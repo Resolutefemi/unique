@@ -1459,161 +1459,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "kungfu"
-version = "1.0.0"
-dependencies = [
- "bytes",
- "kungfu-core",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
- "tracing-subscriber",
-]
-
-[[package]]
-name = "kungfu-bench-actix"
-version = "1.0.0"
-dependencies = [
- "actix-web",
- "serde",
- "serde_json",
- "tokio",
-]
-
-[[package]]
-name = "kungfu-cli"
-version = "1.0.0"
-dependencies = [
- "bytes",
- "kungfu",
- "kungfu-core",
- "notify",
- "serde_json",
- "tokio",
- "tracing",
- "tracing-subscriber",
-]
-
-[[package]]
-name = "kungfu-core"
-version = "1.0.0"
-dependencies = [
- "async-trait",
- "base64",
- "bytes",
- "cbindgen",
- "crossbeam",
- "dashmap",
- "flate2",
- "httparse",
- "jsonwebtoken",
- "notify",
- "once_cell",
- "parking_lot",
- "regex",
- "ring",
- "rustls",
- "rustls-pemfile",
- "serde",
- "serde_json",
- "simd-json",
- "smallvec",
- "socket2 0.5.10",
- "thiserror 1.0.69",
- "tokio",
- "tokio-uring",
- "tracing",
- "tracing-subscriber",
- "walkdir",
-]
-
-[[package]]
-name = "kungfu-css"
-version = "1.0.0"
-dependencies = [
- "once_cell",
- "regex",
- "serde",
- "serde_json",
- "tracing",
- "walkdir",
-]
-
-[[package]]
-name = "kungfu-frontend"
-version = "1.0.0"
-dependencies = [
- "kungfu-core",
- "kungfu-css",
- "once_cell",
- "parking_lot",
- "regex",
- "serde",
- "serde_json",
- "thiserror 1.0.69",
- "tokio",
- "tracing",
- "walkdir",
- "which",
-]
-
-[[package]]
-name = "kungfu-js"
-version = "1.0.0"
-dependencies = [
- "bytes",
- "kungfu-core",
- "kungfu-css",
- "napi",
- "napi-build",
- "napi-derive",
- "serde_json",
-]
-
-[[package]]
-name = "kungfu-macros"
-version = "1.0.0"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
-]
-
-[[package]]
-name = "kungfu-orm"
-version = "1.0.0"
-dependencies = [
- "argon2",
- "async-trait",
- "kungfu-core",
- "kungfu-macros",
- "once_cell",
- "parking_lot",
- "rand 0.8.6",
- "serde",
- "serde_json",
- "sqlx",
- "thiserror 1.0.69",
- "tokio",
- "tracing",
-]
-
-[[package]]
-name = "kungfu-python"
-version = "1.0.0"
-dependencies = [
- "bytes",
- "kungfu-core",
- "kungfu-css",
- "parking_lot",
- "pyo3",
- "serde",
- "serde_json",
- "tokio",
-]
-
-[[package]]
 name = "language-tags"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3325,6 +3170,161 @@ name = "unindent"
 version = "0.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7264e107f553ccae879d21fbea1d6724ac785e8c3bfc762137959b5802826ef3"
+
+[[package]]
+name = "unique"
+version = "1.0.0"
+dependencies = [
+ "bytes",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "unique-core",
+]
+
+[[package]]
+name = "unique-bench-actix"
+version = "1.0.0"
+dependencies = [
+ "actix-web",
+ "serde",
+ "serde_json",
+ "tokio",
+]
+
+[[package]]
+name = "unique-cli"
+version = "1.0.0"
+dependencies = [
+ "bytes",
+ "notify",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "unique",
+ "unique-core",
+]
+
+[[package]]
+name = "unique-core"
+version = "1.0.0"
+dependencies = [
+ "async-trait",
+ "base64",
+ "bytes",
+ "cbindgen",
+ "crossbeam",
+ "dashmap",
+ "flate2",
+ "httparse",
+ "jsonwebtoken",
+ "notify",
+ "once_cell",
+ "parking_lot",
+ "regex",
+ "ring",
+ "rustls",
+ "rustls-pemfile",
+ "serde",
+ "serde_json",
+ "simd-json",
+ "smallvec",
+ "socket2 0.5.10",
+ "thiserror 1.0.69",
+ "tokio",
+ "tokio-uring",
+ "tracing",
+ "tracing-subscriber",
+ "walkdir",
+]
+
+[[package]]
+name = "unique-css"
+version = "1.0.0"
+dependencies = [
+ "once_cell",
+ "regex",
+ "serde",
+ "serde_json",
+ "tracing",
+ "walkdir",
+]
+
+[[package]]
+name = "unique-frontend"
+version = "1.0.0"
+dependencies = [
+ "once_cell",
+ "parking_lot",
+ "regex",
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
+ "tokio",
+ "tracing",
+ "unique-core",
+ "unique-css",
+ "walkdir",
+ "which",
+]
+
+[[package]]
+name = "unique-js"
+version = "1.0.0"
+dependencies = [
+ "bytes",
+ "napi",
+ "napi-build",
+ "napi-derive",
+ "serde_json",
+ "unique-core",
+ "unique-css",
+]
+
+[[package]]
+name = "unique-macros"
+version = "1.0.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "unique-orm"
+version = "1.0.0"
+dependencies = [
+ "argon2",
+ "async-trait",
+ "once_cell",
+ "parking_lot",
+ "rand 0.8.6",
+ "serde",
+ "serde_json",
+ "sqlx",
+ "thiserror 1.0.69",
+ "tokio",
+ "tracing",
+ "unique-core",
+ "unique-macros",
+]
+
+[[package]]
+name = "unique-python"
+version = "1.0.0"
+dependencies = [
+ "bytes",
+ "parking_lot",
+ "pyo3",
+ "serde",
+ "serde_json",
+ "tokio",
+ "unique-core",
+ "unique-css",
+]
 
 [[package]]
 name = "untrusted"

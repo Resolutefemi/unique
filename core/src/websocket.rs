@@ -5,10 +5,10 @@
 //! ## Example
 //!
 //! ```ignore
-//! use kungfu::websocket::{WebSocket, WebSocketMessage};
-//! use kungfu::prelude::*;
+//! use unique::websocket::{WebSocket, WebSocketMessage};
+//! use unique::prelude::*;
 //!
-//! Kungfu::new()
+//! Unique::new()
 //!     .ws("/chat", |mut ws: WebSocket| async move {
 //!         while let Some(msg) = ws.recv().await {
 //!             match msg {

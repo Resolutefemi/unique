@@ -33,7 +33,7 @@ pub fn scan_file<P: AsRef<Path>>(path: P) -> std::io::Result<HashSet<String>> {
 pub fn scan_directory<P: AsRef<Path>>(root: P) -> std::io::Result<HashSet<String>> {
     let mut all_classes = HashSet::new();
     let valid_exts = [
-        "html", "htm", "kungfu", "tsx", "jsx", "ts", "js", "vue", "svelte",
+        "html", "htm", "unique", "tsx", "jsx", "ts", "js", "vue", "svelte",
     ];
 
     for entry in WalkDir::new(root).into_iter().filter_map(|e| e.ok()) {
@@ -57,7 +57,7 @@ pub fn scan_directory<P: AsRef<Path>>(root: P) -> std::io::Result<HashSet<String
 pub fn list_scanned_files<P: AsRef<Path>>(root: P) -> std::io::Result<Vec<PathBuf>> {
     let mut files = Vec::new();
     let valid_exts = [
-        "html", "htm", "kungfu", "tsx", "jsx", "ts", "js", "vue", "svelte",
+        "html", "htm", "unique", "tsx", "jsx", "ts", "js", "vue", "svelte",
     ];
     for entry in WalkDir::new(root).into_iter().filter_map(|e| e.ok()) {
         if !entry.file_type().is_file() {
@@ -79,7 +79,7 @@ mod tests {
 
     #[test]
     fn scans_html_class_attribute() {
-        let tmp = std::env::temp_dir().join(format!("kungfu-css-test-{}", std::process::id()));
+        let tmp = std::env::temp_dir().join(format!("unique-css-test-{}", std::process::id()));
         std::fs::create_dir_all(&tmp).unwrap();
         let file = tmp.join("test.html");
         let mut f = std::fs::File::create(&file).unwrap();
@@ -99,7 +99,7 @@ mod tests {
 
     #[test]
     fn scans_directory_recursively() {
-        let tmp = std::env::temp_dir().join(format!("kungfu-css-test2-{}", std::process::id()));
+        let tmp = std::env::temp_dir().join(format!("unique-css-test2-{}", std::process::id()));
         std::fs::create_dir_all(tmp.join("subdir")).unwrap();
         std::fs::write(
             tmp.join("index.html"),

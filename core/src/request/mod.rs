@@ -11,7 +11,7 @@ use std::collections::HashMap;
 
 use bytes::Bytes;
 
-use crate::error::{KungfuError, Result, StatusCode};
+use crate::error::{UniqueError, Result, StatusCode};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
 #[repr(u8)]
@@ -115,10 +115,10 @@ impl Request {
         {
             // simd-json requires a mutable copy of the input.
             let mut bytes = self.body.to_vec();
-            return simd_json::from_slice(&mut bytes).map_err(KungfuError::from);
+            return simd_json::from_slice(&mut bytes).map_err(UniqueError::from);
         }
         #[cfg(not(feature = "simd"))]
-        serde_json::from_slice(&self.body).map_err(KungfuError::from)
+        serde_json::from_slice(&self.body).map_err(UniqueError::from)
     }
 
     /// Parse the body as JSON, returning a `serde_json::Value` for handlers
@@ -130,7 +130,7 @@ impl Request {
     /// Parse the body as `application/x-www-form-urlencoded`.
     pub fn form(&self) -> Result<HashMap<String, String>> {
         let s = std::str::from_utf8(&self.body).map_err(|_| {
-            KungfuError::new(StatusCode::BadRequest, "Form body is not valid UTF-8")
+            UniqueError::new(StatusCode::BadRequest, "Form body is not valid UTF-8")
         })?;
         let mut map = HashMap::new();
         for pair in s.split('&') {

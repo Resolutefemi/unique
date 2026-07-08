@@ -3,9 +3,9 @@
 //! We can't use a real proc-macro crate here (it would have to be a separate
 //! crate in the workspace), so for V1 we use a declarative `macro_rules!`
 //! approach. Each `#[get("/path")]` expands to a function that returns a
-//! `(RouteMeta, Handler)` pair, which `Kungfu::route` then registers.
+//! `(RouteMeta, Handler)` pair, which `Unique::route` then registers.
 //!
-//! For Phase 2 we'll move these into a `kungfu-macros` proc-macro crate so
+//! For Phase 2 we'll move these into a `unique-macros` proc-macro crate so
 //! they look exactly like the spec (no `register!` wrapper needed).
 
 /// Registers a handler for `GET /path`.

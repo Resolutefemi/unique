@@ -6,9 +6,9 @@
 //! ## Example
 //!
 //! ```ignore
-//! use kungfu::middleware_builtin::serve_static;
+//! use unique::middleware_builtin::serve_static;
 //!
-//! Kungfu::new()
+//! Unique::new()
 //!     .use_middleware(serve_static("./public"))
 //!     .handle_get("/api/health", |_req, res| res.text("ok"))
 //!     .run("0.0.0.0:3000")
@@ -38,7 +38,7 @@ pub fn serve_static(root: impl Into<PathBuf>) -> Middleware {
             // Sanitize the path — reject any `..` to prevent path traversal.
             let path = &req.path;
             if path.contains("..") {
-                return Response::new().error(crate::KungfuError::bad_request(
+                return Response::new().error(crate::UniqueError::bad_request(
                     "Path traversal not allowed",
                 ));
             }

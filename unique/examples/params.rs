@@ -1,31 +1,31 @@
 //! Example: route parameters + query strings.
 //!
-//! Run with: `cargo run -p kungfu --example params`
+//! Run with: `cargo run -p unique --example params`
 //!
 //! Demonstrates:
 //! - `:id` path parameters
 //! - `*path` wildcard parameters
 //! - Query string parsing
 
-use kungfu::prelude::*;
+use unique::prelude::*;
 
 fn main() {
     tracing_subscriber::fmt().with_env_filter("info").init();
 
     // /users/:id → req.param("id")
-    let get_user = get!("/users/:id", |req: kungfu::Request| {
+    let get_user = get!("/users/:id", |req: unique::Request| {
         let id = req.param("id").unwrap_or("unknown").to_string();
-        kungfu::Response::new().json(&serde_json::json!({
+        unique::Response::new().json(&serde_json::json!({
             "user_id": id,
             "name": format!("User {}", id),
         }))
     });
 
     // /search?q=rust&limit=10 → req.query("q"), req.query("limit")
-    let search = get!("/search", |req: kungfu::Request| {
+    let search = get!("/search", |req: unique::Request| {
         let q = req.query("q").unwrap_or("").to_string();
         let limit: usize = req.query("limit").and_then(|s| s.parse().ok()).unwrap_or(10);
-        kungfu::Response::new().json(&serde_json::json!({
+        unique::Response::new().json(&serde_json::json!({
             "query": q,
             "limit": limit,
             "results": [],
@@ -33,9 +33,9 @@ fn main() {
     });
 
     // /assets/*path → req.param("path") captures everything after /assets/
-    let asset = get!("/assets/*path", |req: kungfu::Request| {
+    let asset = get!("/assets/*path", |req: unique::Request| {
         let path = req.param("path").unwrap_or("").to_string();
-        kungfu::Response::new().json(&serde_json::json!({
+        unique::Response::new().json(&serde_json::json!({
             "asset_path": path,
             "would_serve": format!("/var/www/{}", path),
         }))
@@ -47,7 +47,7 @@ fn main() {
         .unwrap();
 
     rt.block_on(
-        Kungfu::new()
+        Unique::new()
             .title("Params Example")
             .route(get_user)
             .route(search)

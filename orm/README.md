@@ -1,8 +1,8 @@
-# kungfu-orm
+# unique-orm
 
-The built-in ORM for [Kungfu.js](https://github.com/Resolutefemi/kungfu).
+The built-in ORM for [Unique.js](https://github.com/Resolutefemi/unique).
 
-`kungfu-orm` provides CRUD, JOINs, transactions, query builder, Argon2id
+`unique-orm` provides CRUD, JOINs, transactions, query builder, Argon2id
 password hashing, and migration generation. It works with SQLite, PostgreSQL,
 and MySQL behind a single async API.
 
@@ -18,15 +18,15 @@ and MySQL behind a single async API.
 
 ```toml
 [dependencies]
-kungfu-orm = { version = "1", features = ["sqlite"] }
-kungfu-macros = "1"
+unique-orm = { version = "1", features = ["sqlite"] }
+unique-macros = "1"
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1", features = ["derive"] }
 ```
 
 ```rust
-use kungfu_orm::{Db, DbConfig, Model};
-use kungfu_macros::Model;
+use unique_orm::{Db, DbConfig, Model};
+use unique_macros::Model;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Model)]

@@ -25,7 +25,7 @@ pub enum ParseError {
 }
 
 #[derive(Debug, Clone)]
-pub struct KungfuFile {
+pub struct UniqueFile {
     /// The TypeScript code body (everything before `---`).
     pub code: String,
     /// Static HTML appended to the rendered template (everything after `---`).
@@ -36,7 +36,7 @@ pub struct KungfuFile {
 }
 
 /// Parse a `.kng` file's content.
-pub fn parse_kungfu_file(content: &str, source_path: &str) -> Result<KungfuFile, ParseError> {
+pub fn parse_unique_file(content: &str, source_path: &str) -> Result<UniqueFile, ParseError> {
     let (code, static_html) = match content.find("\n---\n") {
         Some(idx) => {
             let code = content[..idx].trim().to_string();
@@ -63,7 +63,7 @@ pub fn parse_kungfu_file(content: &str, source_path: &str) -> Result<KungfuFile,
 
     let route_path = derive_route_path(source_path);
 
-    Ok(KungfuFile {
+    Ok(UniqueFile {
         code,
         static_html,
         route_path,
@@ -116,7 +116,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn parses_simple_kungfu_file() {
+    fn parses_simple_unique_file() {
         let content = r#"
 export async function data(req) {
   return { user: { name: 'Bruce' } };
@@ -126,7 +126,7 @@ export function template({ user }) {
   return `<div>Hello, ${user.name}!</div>`;
 }
 "#;
-        let file = parse_kungfu_file(content, "src/pages/index.kng").unwrap();
+        let file = parse_unique_file(content, "src/pages/index.kng").unwrap();
         assert!(file.code.contains("export async function data"));
         assert!(file.code.contains("export function template"));
         assert!(file.static_html.is_none());
@@ -134,21 +134,21 @@ export function template({ user }) {
     }
 
     #[test]
-    fn parses_kungfu_file_with_static_html() {
+    fn parses_unique_file_with_static_html() {
         let content = r#"
 export async function data() { return {}; }
 export function template() { return '<main>hi</main>'; }
 ---
 <footer>© 2026</footer>
 "#;
-        let file = parse_kungfu_file(content, "src/pages/index.kng").unwrap();
+        let file = parse_unique_file(content, "src/pages/index.kng").unwrap();
         assert!(file.static_html.is_some());
         assert!(file.static_html.as_ref().unwrap().contains("footer"));
     }
 
     #[test]
     fn derives_route_path_with_params() {
-        let file = parse_kungfu_file(
+        let file = parse_unique_file(
             "export function data() { return {}; }\nexport function template() { return ''; }",
             "src/pages/users/[id].kng",
         )
@@ -159,7 +159,7 @@ export function template() { return '<main>hi</main>'; }
     #[test]
     fn errors_on_missing_data_export() {
         let content = "export function template() { return ''; }";
-        let result = parse_kungfu_file(content, "src/pages/index.kng");
+        let result = parse_unique_file(content, "src/pages/index.kng");
         assert!(matches!(result, Err(ParseError::MissingDataExport)));
     }
 }

@@ -1,7 +1,7 @@
-//! Proc macros for the Kungfu.js framework.
+//! Proc macros for the Unique.js framework.
 //!
 //! Currently exposes:
-//!   - `#[derive(Model)]` — generates a `kungfu_orm::Model` impl for a struct.
+//!   - `#[derive(Model)]` — generates a `unique_orm::Model` impl for a struct.
 //!
 //! Future macros (planned for V2):
 //!   - `#[route(GET, "/path")]` — replacement for the macro_rules! `get!` macro
@@ -119,7 +119,7 @@ pub fn derive_model(input: TokenStream) -> TokenStream {
         };
 
         field_defs.push(quote! {
-            kungfu_orm::FieldDef {
+            unique_orm::FieldDef {
                 rust_name: stringify!(#ident),
                 column_name: #col_name,
                 is_primary: #is_primary,
@@ -133,10 +133,10 @@ pub fn derive_model(input: TokenStream) -> TokenStream {
     }
 
     let expanded = quote! {
-        impl kungfu_orm::Model for #struct_name {
+        impl unique_orm::Model for #struct_name {
             fn table_name() -> &'static str { #table_name }
-            fn fields() -> &'static [kungfu_orm::FieldDef] {
-                static FIELDS: &[kungfu_orm::FieldDef] = &[#(#field_defs),*];
+            fn fields() -> &'static [unique_orm::FieldDef] {
+                static FIELDS: &[unique_orm::FieldDef] = &[#(#field_defs),*];
                 FIELDS
             }
         }

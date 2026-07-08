@@ -1,13 +1,13 @@
-//! Complete Kungfu.js Todo App — demonstrates every feature.
+//! Complete Unique.js Todo App — demonstrates every feature.
 //!
 //! Run: cargo run --example todo-app
 //! Visit: http://localhost:3000
 
-use kungfu::prelude::*;
-use kungfu_core::auth::{JwtService, JwtConfig, auth_jwt};
-use kungfu_core::websocket::{WebSocket, WebSocketMessage};
-use kungfu_macros::Model;
-use kungfu_orm::{Db, DbConfig, Model as ModelTrait};
+use unique::prelude::*;
+use unique_core::auth::{JwtService, JwtConfig, auth_jwt};
+use unique_core::websocket::{WebSocket, WebSocketMessage};
+use unique_macros::Model;
+use unique_orm::{Db, DbConfig, Model as ModelTrait};
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
@@ -35,25 +35,25 @@ async fn async_main() {
         min_connections: 1,
     }).await.expect("DB connect");
 
-    for stmt in &kungfu_orm::generate_migration::<Todo>().up_sql {
+    for stmt in &unique_orm::generate_migration::<Todo>().up_sql {
         let _ = db.execute(stmt, &[]).await;
     }
-    let _ = Todo { id: 0, title: "Learn Kungfu.js".into(), done: 0 }.insert(&db).await;
+    let _ = Todo { id: 0, title: "Learn Unique.js".into(), done: 0 }.insert(&db).await;
     let _ = Todo { id: 0, title: "Build something amazing".into(), done: 0 }.insert(&db).await;
 
     let db = Arc::new(db);
     let jwt = Arc::new(JwtService::new("todo-app-secret-key"));
 
-    let css = kungfu_css::compile_classes("flex p-4 bg-blue-500 text-white rounded-lg text-xl font-bold w-full");
+    let css = unique_css::compile_classes("flex p-4 bg-blue-500 text-white rounded-lg text-xl font-bold w-full");
     let css_bytes = bytes::Bytes::from(css.into_bytes());
 
-    Kungfu::new()
-        .title("Kungfu Todo App")
-        .handle_get("/kungfu.css", move |_req, _res| {
-            kungfu_core::Response::new().header("content-type", "text/css").send_bytes(css_bytes.clone())
+    Unique::new()
+        .title("Unique Todo App")
+        .handle_get("/unique.css", move |_req, _res| {
+            unique_core::Response::new().header("content-type", "text/css").send_bytes(css_bytes.clone())
         })
         .handle_get("/", |_req, res| {
-            res.html(r#"<!doctype html><html><head><meta charset="utf-8"><title>Kungfu Todo</title><link rel="stylesheet" href="/kungfu.css"></head><body style="margin:0;padding:2rem;font-family:sans-serif;background:#f3f4f6;"><div style="max-width:500px;margin:0 auto;background:white;padding:2rem;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.1);"><h1>🥋 Kungfu Todo App</h1><p>Complete example: ORM + JWT + WebSocket + CSS</p><ul><li><a href="/docs">Swagger UI</a></li><li><code>POST /login</code> → get JWT</li><li><code>GET /todos</code> → list (needs JWT)</li><li><code>ws://localhost:3000/ws</code> → WebSocket echo</li></ul></div></body></html>"#)
+            res.html(r#"<!doctype html><html><head><meta charset="utf-8"><title>Unique Todo</title><link rel="stylesheet" href="/unique.css"></head><body style="margin:0;padding:2rem;font-family:sans-serif;background:#f3f4f6;"><div style="max-width:500px;margin:0 auto;background:white;padding:2rem;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.1);"><h1>🥋 Unique Todo App</h1><p>Complete example: ORM + JWT + WebSocket + CSS</p><ul><li><a href="/docs">Swagger UI</a></li><li><code>POST /login</code> → get JWT</li><li><code>GET /todos</code> → list (needs JWT)</li><li><code>ws://localhost:3000/ws</code> → WebSocket echo</li></ul></div></body></html>"#)
         })
         .handle_post("/login", {
             let jwt = jwt.clone();
@@ -69,7 +69,7 @@ async fn async_main() {
         })
         .use_middleware(auth_jwt(
             JwtConfig::new("todo-app-secret-key")
-                .public_path("/login").public_path("/").public_path("/kungfu.css")
+                .public_path("/login").public_path("/").public_path("/unique.css")
                 .public_path("/docs").public_path("/openapi.json"),
         ))
         .handle_get_async("/todos", {
@@ -159,7 +159,7 @@ async fn async_main() {
             }
         })
         .ws("/ws", |mut ws: WebSocket| async move {
-            ws.send_text("🥋 Kungfu WebSocket connected!").await;
+            ws.send_text("🥋 Unique WebSocket connected!").await;
             while let Some(msg) = ws.recv().await {
                 match msg {
                     WebSocketMessage::Text(t) => { ws.send_text(format!("echo: {t}")).await; }

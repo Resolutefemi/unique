@@ -1,4 +1,4 @@
-//! `kungfu generate admin` — generate a full CRUD admin dashboard.
+//! `unique generate admin` — generate a full CRUD admin dashboard.
 //!
 //! Produces a self-contained HTML file at `public/admin/index.html` that:
 //! - Lists all routes from the OpenAPI spec

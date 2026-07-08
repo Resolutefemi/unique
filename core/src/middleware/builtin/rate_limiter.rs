@@ -95,7 +95,7 @@ pub fn rate_limiter_with(config: RateLimiterConfig) -> Middleware {
             };
 
             if !allowed {
-                let mut resp = Response::new().error(crate::error::KungfuError::too_many_requests(
+                let mut resp = Response::new().error(crate::error::UniqueError::too_many_requests(
                     "Rate limit exceeded. Slow down and retry shortly.",
                 ));
                 resp.set_header("retry-after", "1");

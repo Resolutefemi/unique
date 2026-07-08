@@ -15,9 +15,9 @@
 //! ## Example
 //!
 //! ```ignore
-//! use kungfu_frontend::ssr_executor::render_kungfu_file;
+//! use unique_frontend::ssr_executor::render_unique_file;
 //!
-//! let html = render_kungfu_file("src/pages/index.kng", r#"{"url":"/"}"#).await?;
+//! let html = render_unique_file("src/pages/index.kng", r#"{"url":"/"}"#).await?;
 //! ```
 
 use std::path::Path;
@@ -32,7 +32,7 @@ use crate::ssr::SsrContext;
 /// It loads the `.kng` file, calls `data()` then `template(data)`, and
 /// prints the rendered HTML to stdout.
 const LOADER_SCRIPT: &str = r#"
-// Kungfu .kng loader. Receives the path + request JSON on argv.
+// Unique .kng loader. Receives the path + request JSON on argv.
 // Prints the rendered HTML to stdout.
 const path = require('path');
 const fs = require('fs');
@@ -79,14 +79,14 @@ main().catch(e => { console.error(e); process.exit(1); });
 ///
 /// Returns the rendered HTML string. If Node isn't installed or the file
 /// fails to execute, returns an error.
-pub async fn render_kungfu_file(
+pub async fn render_unique_file(
     file_path: &Path,
     request_json: &str,
     _ctx: &SsrContext,
 ) -> Result<String, SsrError> {
     // Write the loader script to a temp file.
     let loader_path = std::env::temp_dir().join(format!(
-        "kungfu-loader-{}.js",
+        "unique-loader-{}.js",
         std::process::id()
     ));
     tokio::fs::write(&loader_path, LOADER_SCRIPT)
@@ -170,7 +170,7 @@ mod tests {
     use crate::ssr::SsrContext;
 
     #[tokio::test]
-    async fn renders_simple_kungfu_file_if_node_available() {
+    async fn renders_simple_unique_file_if_node_available() {
         // Skip if node isn't installed.
         if which::which("node").is_err() {
             eprintln!("skipping: node not installed");
@@ -178,14 +178,14 @@ mod tests {
         }
 
         // Write a test .kng file.
-        let tmp = std::env::temp_dir().join(format!("kungfu-ssr-test-{}.kng", std::process::id()));
+        let tmp = std::env::temp_dir().join(format!("unique-ssr-test-{}.kng", std::process::id()));
         std::fs::write(&tmp, r#"
 export async function data(req) { return { name: 'Bruce' }; }
 export function template({ name }) { return `<h1>Hello, ${name}!</h1>`; }
 "#).unwrap();
 
         let ctx = SsrContext::default();
-        let result = render_kungfu_file(&tmp, r#"{"url":"/"}"#, &ctx).await;
+        let result = render_unique_file(&tmp, r#"{"url":"/"}"#, &ctx).await;
         std::fs::remove_file(&tmp).ok();
 
         match result {

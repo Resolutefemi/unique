@@ -28,7 +28,7 @@ pub fn emit_css(tokens: &[ClassToken]) -> String {
     }
 
     let mut out = String::with_capacity(2048);
-    out.push_str("/* kungfu-css bundle — auto-generated */\n");
+    out.push_str("/* unique-css bundle — auto-generated */\n");
 
     for (responsive, state_groups) in &groups {
         if let Some(r) = responsive {

@@ -7,7 +7,7 @@
 //! ## Example
 //!
 //! ```ignore
-//! use kungfu::middleware_builtin::validate_json;
+//! use unique::middleware_builtin::validate_json;
 //! use serde_json::json;
 //!
 //! let user_schema = json!({
@@ -19,8 +19,8 @@
 //!     "required": ["email", "password"]
 //! });
 //!
-//! Kungfu::new()
-//!     .use_middleware(validate_json("/users", kungfu::Method::Post, user_schema))
+//! Unique::new()
+//!     .use_middleware(validate_json("/users", unique::Method::Post, user_schema))
 //!     .handle_post("/users", |_req, res| res.text("created"))
 //! ```
 

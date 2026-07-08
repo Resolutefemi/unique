@@ -1,10 +1,10 @@
 [package]
-name = "kungfu-bench-actix"
+name = "unique-bench-actix"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
-description = "Actix-web equivalent of the kungfu bench, for apples-to-apples comparison"
+description = "Actix-web equivalent of the unique bench, for apples-to-apples comparison"
 publish = false
 
 [[bin]]

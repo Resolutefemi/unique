@@ -1,5 +1,5 @@
 [package]
-name = "kungfu-css"
+name = "unique-css"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
@@ -8,13 +8,13 @@ repository.workspace = true
 homepage.workspace = true
 documentation.workspace = true
 readme.workspace = true
-keywords = ["web", "framework", "css", "tailwind", "kungfu"]
+keywords = ["web", "framework", "css", "tailwind", "unique"]
 categories = ["web-programming", "parsing"]
 rust-version.workspace = true
-description = "Tailwind-like utility CSS engine for the Kungfu.js framework — 100+ utility classes, responsive prefixes, state variants"
+description = "Tailwind-like utility CSS engine for the Unique.js framework — 100+ utility classes, responsive prefixes, state variants"
 
 [lib]
-name = "kungfu_css"
+name = "unique_css"
 path = "src/lib.rs"
 
 [dependencies]

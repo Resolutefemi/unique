@@ -1,13 +1,13 @@
-//! Example: the simplest possible Kungfu app (no macros).
+//! Example: the simplest possible Unique app (no macros).
 //!
-//! Run with: `cargo run -p kungfu --example simple`
+//! Run with: `cargo run -p unique --example simple`
 //!
 //! Demonstrates:
 //! - `handle_get` / `handle_post` — closure-based handlers (no macros)
 //! - `json_get` / `json_post` — even less boilerplate for JSON endpoints
 //! - Chainable `ResponseBuilder` (status, header, text, html, json, send)
 
-use kungfu::prelude::*;
+use unique::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
@@ -30,7 +30,7 @@ fn main() {
         .unwrap();
 
     rt.block_on(
-        Kungfu::new()
+        Unique::new()
             .title("Simple API Example")
             // Simplest possible: closure with ResponseBuilder.
             .handle_get("/hello", |_req, res| res.text("world"))
@@ -43,7 +43,7 @@ fn main() {
             })
             // HTML response.
             .handle_get("/", |_req, res| {
-                res.html("<h1>Hello from Kungfu!</h1><p>Visit /hello or /health</p>")
+                res.html("<h1>Hello from Unique!</h1><p>Visit /hello or /health</p>")
             })
             // Custom status + headers.
             .handle_get("/teapot", |_req, res| {

@@ -1,7 +1,7 @@
-//! Actix-web hello-world server, for direct comparison with kungfu's bench.
+//! Actix-web hello-world server, for direct comparison with unique's bench.
 //!
 //! Run with:
-//!   cargo run -p kungfu-bench-actix --release
+//!   cargo run -p unique-bench-actix --release
 //! Then drive it with `wrk` or `oha`:
 //!   oha -z 5s -c 64 http://localhost:3001/hello
 

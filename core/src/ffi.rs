@@ -1,35 +1,35 @@
-//! C ABI for the Kungfu.js framework.
+//! C ABI for the Unique.js framework.
 //!
-//! Exposes opaque pointers (`KungfuRouter*`, `KungfuServer*`) and C function
+//! Exposes opaque pointers (`UniqueRouter*`, `UniqueServer*`) and C function
 //! signatures so other languages can call into the Rust core via their
 //! native FFI (C++ dlopen, Dart dart:ffi, Swift C interop, Java JNI).
 //!
 //! ## Header generation
 //!
-//! The `kungfu.h` header is generated automatically by `cbindgen` when you
+//! The `unique.h` header is generated automatically by `cbindgen` when you
 //! build with the `ffi` feature:
 //!
 //! ```bash
-//! cargo build -p kungfu-core --features ffi
-//! # → generates kungfu.h in the crate root
+//! cargo build -p unique-core --features ffi
+//! # → generates unique.h in the crate root
 //! ```
 //!
 //! ## Quickstart (C)
 //!
 //! ```c
-//! #include "kungfu.h"
+//! #include "unique.h"
 //!
-//! void hello_handler(KungfuRequest* req, KungfuResponse* res) {
-//!     kungfu_response_status(res, 200);
-//!     kungfu_response_json(res, "{\"message\":\"world\"}");
+//! void hello_handler(UniqueRequest* req, UniqueResponse* res) {
+//!     unique_response_status(res, 200);
+//!     unique_response_json(res, "{\"message\":\"world\"}");
 //! }
 //!
 //! int main() {
-//!     KungfuRouter* router = kungfu_router_new();
-//!     kungfu_router_get(router, "/hello", hello_handler);
+//!     UniqueRouter* router = unique_router_new();
+//!     unique_router_get(router, "/hello", hello_handler);
 //!
-//!     KungfuServer* server = kungfu_server_new(router);
-//!     kungfu_server_listen(server, 3000);
+//!     UniqueServer* server = unique_server_new(router);
+//!     unique_server_listen(server, 3000);
 //!     return 0;
 //! }
 //! ```
@@ -52,37 +52,37 @@ use crate::server::Server;
 use crate::{Method, Request, Response};
 
 /// Opaque router handle.
-pub type KungfuRouter = Router;
+pub type UniqueRouter = Router;
 
 /// Opaque server handle.
-pub type KungfuServer = Server;
+pub type UniqueServer = Server;
 
 /// C function pointer for a request handler.
-pub type KungfuHandlerFn = extern "C" fn(*mut KungfuRequest, *mut KungfuResponse);
+pub type UniqueHandlerFn = extern "C" fn(*mut UniqueRequest, *mut UniqueResponse);
 
 /// Opaque request handle. The C side receives this as a pointer and passes
-/// it to the helper functions (`kungfu_request_param`, etc.) to extract data.
-pub type KungfuRequest = Request;
+/// it to the helper functions (`unique_request_param`, etc.) to extract data.
+pub type UniqueRequest = Request;
 
 /// Opaque response handle.
-pub type KungfuResponse = Response;
+pub type UniqueResponse = Response;
 
 /// Create a new router. Returns an opaque pointer that the caller owns.
-/// Free with `kungfu_router_free`.
+/// Free with `unique_router_free`.
 #[no_mangle]
 #[allow(unsafe_code)]
-pub extern "C" fn kungfu_router_new() -> *mut KungfuRouter {
+pub extern "C" fn unique_router_new() -> *mut UniqueRouter {
     Box::into_raw(Box::new(Router::new()))
 }
 
-/// Free a router created by `kungfu_router_new`.
+/// Free a router created by `unique_router_new`.
 ///
 /// # Safety
-/// The pointer must have been returned by `kungfu_router_new` and not
+/// The pointer must have been returned by `unique_router_new` and not
 /// already freed.
 #[no_mangle]
 #[allow(unsafe_code)]
-pub unsafe extern "C" fn kungfu_router_free(router: *mut KungfuRouter) {
+pub unsafe extern "C" fn unique_router_free(router: *mut UniqueRouter) {
     if !router.is_null() {
         drop(Box::from_raw(router));
     }
@@ -93,9 +93,9 @@ macro_rules! c_route_method {
         #[no_mangle]
         #[allow(unsafe_code)]
         pub unsafe extern "C" fn $fn_name(
-            router: *mut KungfuRouter,
+            router: *mut UniqueRouter,
             path: *const c_char,
-            handler: KungfuHandlerFn,
+            handler: UniqueHandlerFn,
         ) {
             if router.is_null() || path.is_null() {
                 return;
@@ -112,17 +112,17 @@ macro_rules! c_route_method {
     };
 }
 
-c_route_method!(kungfu_router_get, Method::Get);
-c_route_method!(kungfu_router_post, Method::Post);
-c_route_method!(kungfu_router_put, Method::Put);
-c_route_method!(kungfu_router_delete, Method::Delete);
-c_route_method!(kungfu_router_patch, Method::Patch);
+c_route_method!(unique_router_get, Method::Get);
+c_route_method!(unique_router_post, Method::Post);
+c_route_method!(unique_router_put, Method::Put);
+c_route_method!(unique_router_delete, Method::Delete);
+c_route_method!(unique_router_patch, Method::Patch);
 
 /// Create a new server bound to a router. Returns an opaque pointer.
 /// The server takes ownership of the router.
 #[no_mangle]
 #[allow(unsafe_code)]
-pub extern "C" fn kungfu_server_new(router: *mut KungfuRouter) -> *mut KungfuServer {
+pub extern "C" fn unique_server_new(router: *mut UniqueRouter) -> *mut UniqueServer {
     if router.is_null() {
         return std::ptr::null_mut();
     }
@@ -132,10 +132,10 @@ pub extern "C" fn kungfu_server_new(router: *mut KungfuRouter) -> *mut KungfuSer
     Box::into_raw(Box::new(server))
 }
 
-/// Free a server created by `kungfu_server_new`.
+/// Free a server created by `unique_server_new`.
 #[no_mangle]
 #[allow(unsafe_code)]
-pub unsafe extern "C" fn kungfu_server_free(server: *mut KungfuServer) {
+pub unsafe extern "C" fn unique_server_free(server: *mut UniqueServer) {
     if !server.is_null() {
         drop(Box::from_raw(server));
     }
@@ -147,7 +147,7 @@ pub unsafe extern "C" fn kungfu_server_free(server: *mut KungfuServer) {
 /// dedicated thread if it needs to do other work.
 #[no_mangle]
 #[allow(unsafe_code)]
-pub extern "C" fn kungfu_server_listen(server: *mut KungfuServer, port: c_int) {
+pub extern "C" fn unique_server_listen(server: *mut UniqueServer, port: c_int) {
     if server.is_null() {
         return;
     }
@@ -164,14 +164,14 @@ pub extern "C" fn kungfu_server_listen(server: *mut KungfuServer, port: c_int) {
     }
     // Note: routes can't be cloned because the handlers are closures.
     // For the C ABI, callers typically register routes fresh via the
-    // kungfu_router_* functions before calling kungfu_server_new. The
+    // unique_router_* functions before calling unique_server_new. The
     // server already has those routes — we just install middleware.
     // We need to use the router that's already in the server.
     drop(router);
     let n_cpus = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(4);
 
     // Take ownership of the server, rebuild with correct addr + acceptor count.
-    let server_ptr = server as *const KungfuServer as *mut KungfuServer;
+    let server_ptr = server as *const UniqueServer as *mut UniqueServer;
     let old_server = unsafe { Box::from_raw(server_ptr) };
     // Old server's router has all the registered routes — clone the inner Arc.
     let router = old_server.router.read().clone();
@@ -183,7 +183,7 @@ pub extern "C" fn kungfu_server_listen(server: *mut KungfuServer, port: c_int) {
     for mw in crate::default_middleware_stack().into_iter().rev() {
         fresh_router.prepend_middleware(mw);
     }
-    let _ = crate::openapi::register_docs_routes(&mut fresh_router, "Kungfu API", crate::VERSION);
+    let _ = crate::openapi::register_docs_routes(&mut fresh_router, "Unique API", crate::VERSION);
     let new_server = Server::new(fresh_router, addr).with_acceptor_threads(n_cpus);
     let rt = tokio::runtime::Builder::new_multi_thread()
         .enable_all()
@@ -200,8 +200,8 @@ pub extern "C" fn kungfu_server_listen(server: *mut KungfuServer, port: c_int) {
 /// if the parameter doesn't exist.
 #[no_mangle]
 #[allow(unsafe_code)]
-pub unsafe extern "C" fn kungfu_request_param(
-    req: *const KungfuRequest,
+pub unsafe extern "C" fn unique_request_param(
+    req: *const UniqueRequest,
     key: *const c_char,
 ) -> *const c_char {
     if req.is_null() || key.is_null() {
@@ -221,8 +221,8 @@ pub unsafe extern "C" fn kungfu_request_param(
 /// Get a request header by name. Returns NULL if not present.
 #[no_mangle]
 #[allow(unsafe_code)]
-pub unsafe extern "C" fn kungfu_request_header(
-    req: *const KungfuRequest,
+pub unsafe extern "C" fn unique_request_header(
+    req: *const UniqueRequest,
     key: *const c_char,
 ) -> *const c_char {
     if req.is_null() || key.is_null() {
@@ -242,8 +242,8 @@ pub unsafe extern "C" fn kungfu_request_header(
 /// Get the request body as a pointer + length.
 #[no_mangle]
 #[allow(unsafe_code)]
-pub unsafe extern "C" fn kungfu_request_body(
-    req: *const KungfuRequest,
+pub unsafe extern "C" fn unique_request_body(
+    req: *const UniqueRequest,
     len: *mut c_uint,
 ) -> *const u8 {
     if req.is_null() || len.is_null() {
@@ -259,7 +259,7 @@ pub unsafe extern "C" fn kungfu_request_body(
 /// Set the response status code.
 #[no_mangle]
 #[allow(unsafe_code)]
-pub unsafe extern "C" fn kungfu_response_status(res: *mut KungfuResponse, code: c_int) {
+pub unsafe extern "C" fn unique_response_status(res: *mut UniqueResponse, code: c_int) {
     if res.is_null() {
         return;
     }
@@ -269,8 +269,8 @@ pub unsafe extern "C" fn kungfu_response_status(res: *mut KungfuResponse, code: 
 /// Set a response header.
 #[no_mangle]
 #[allow(unsafe_code)]
-pub unsafe extern "C" fn kungfu_response_header(
-    res: *mut KungfuResponse,
+pub unsafe extern "C" fn unique_response_header(
+    res: *mut UniqueResponse,
     key: *const c_char,
     value: *const c_char,
 ) {
@@ -291,8 +291,8 @@ pub unsafe extern "C" fn kungfu_response_header(
 /// Set the response body from raw bytes.
 #[no_mangle]
 #[allow(unsafe_code)]
-pub unsafe extern "C" fn kungfu_response_body(
-    res: *mut KungfuResponse,
+pub unsafe extern "C" fn unique_response_body(
+    res: *mut UniqueResponse,
     data: *const u8,
     len: c_uint,
 ) {
@@ -307,7 +307,7 @@ pub unsafe extern "C" fn kungfu_response_body(
 /// Set the response body from a JSON string. Also sets content-type.
 #[no_mangle]
 #[allow(unsafe_code)]
-pub unsafe extern "C" fn kungfu_response_json(res: *mut KungfuResponse, json: *const c_char) {
+pub unsafe extern "C" fn unique_response_json(res: *mut UniqueResponse, json: *const c_char) {
     if res.is_null() || json.is_null() {
         return;
     }
@@ -323,8 +323,8 @@ pub unsafe extern "C" fn kungfu_response_json(res: *mut KungfuResponse, json: *c
 /// Set an error response.
 #[no_mangle]
 #[allow(unsafe_code)]
-pub unsafe extern "C" fn kungfu_response_error(
-    res: *mut KungfuResponse,
+pub unsafe extern "C" fn unique_response_error(
+    res: *mut UniqueResponse,
     code: c_int,
     message: *const c_char,
 ) {
@@ -335,7 +335,7 @@ pub unsafe extern "C" fn kungfu_response_error(
         Ok(s) => s.to_string(),
         Err(_) => "Unknown error".to_string(),
     };
-    let err = crate::KungfuError::new(
+    let err = crate::UniqueError::new(
         crate::StatusCode::from(code.max(0).min(65535) as u16),
         message,
     );
@@ -346,7 +346,7 @@ pub unsafe extern "C" fn kungfu_response_error(
 
 /// Wrap a C handler function into a Rust async Handler.
 #[allow(unsafe_code)]
-fn wrap_handler(handler: KungfuHandlerFn) -> Handler {
+fn wrap_handler(handler: UniqueHandlerFn) -> Handler {
     Arc::new(move |req: Request| {
         let h = handler;
         Box::pin(async move {
@@ -356,7 +356,7 @@ fn wrap_handler(handler: KungfuHandlerFn) -> Handler {
             let req_ptr = Box::into_raw(req_box);
             // Allocate a fresh response.
             let mut resp = Response::new();
-            let resp_ptr: *mut KungfuResponse = &mut resp;
+            let resp_ptr: *mut UniqueResponse = &mut resp;
             // Call the C handler.
             h(req_ptr, resp_ptr);
             // Reclaim the request box.

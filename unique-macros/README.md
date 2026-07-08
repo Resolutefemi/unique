@@ -1,6 +1,6 @@
-# kungfu-macros
+# unique-macros
 
-Proc macros for [Kungfu.js](https://github.com/Resolutefemi/kungfu) — the ORM
+Proc macros for [Unique.js](https://github.com/Resolutefemi/unique) — the ORM
 derive macros.
 
 Provides:
@@ -10,13 +10,13 @@ Provides:
 - `#[field(...)]` attributes — `primary_key`, `auto_increment`, `unique`,
   `sensitive` (auto-Argon2id-hash on insert/update), `default`, `indexed`.
 
-Used by [`kungfu-orm`](https://crates.io/crates/kungfu-orm). You normally do
-not depend on this crate directly; it is re-exported by `kungfu-orm`.
+Used by [`unique-orm`](https://crates.io/crates/unique-orm). You normally do
+not depend on this crate directly; it is re-exported by `unique-orm`.
 
 ## Example
 
 ```rust
-use kungfu_macros::Model;
+use unique_macros::Model;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Model)]

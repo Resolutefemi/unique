@@ -17,7 +17,7 @@
 //! the io_uring server path happens in `server/io_uring.rs`.
 //!
 //! ```ignore
-//! use kungfu_core::perf::BufferRing;
+//! use unique_core::perf::BufferRing;
 //!
 //! let ring = BufferRing::new(256, 8192); // 256 buffers × 8KB each
 //! let buf_id = ring.acquire();           // get a buffer ID

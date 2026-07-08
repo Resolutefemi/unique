@@ -29,7 +29,7 @@ use bytes::Bytes;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::TcpListener;
 
-use crate::error::{KungfuError, Result, StatusCode};
+use crate::error::{UniqueError, Result, StatusCode};
 use crate::middleware::build_chain;
 use crate::request::{Method, Request};
 use crate::response::Response;
@@ -117,7 +117,7 @@ impl Server {
             self.serve_multi_acceptor().await
         } else {
             let listener = TcpListener::bind(&self.addr).await?;
-            tracing::info!("kungfu listening on http://{} (single-acceptor)", self.addr);
+            tracing::info!("unique listening on http://{} (single-acceptor)", self.addr);
             self.serve_on(listener).await
         }
     }
@@ -130,7 +130,7 @@ impl Server {
 
         let n = self.acceptor_threads;
         tracing::info!(
-            "kungfu listening on http://{} ({} SO_REUSEPORT acceptors)",
+            "unique listening on http://{} ({} SO_REUSEPORT acceptors)",
             self.addr,
             n
         );
@@ -138,19 +138,19 @@ impl Server {
         let mut handles = Vec::new();
         for worker_id in 0..n {
             let socket = Socket::new(Domain::IPV4, Type::STREAM, Some(Protocol::TCP))
-                .map_err(|e| KungfuError::internal(format!("socket: {e}")))?;
+                .map_err(|e| UniqueError::internal(format!("socket: {e}")))?;
             socket
                 .set_reuse_port(true)
-                .map_err(|e| KungfuError::internal(format!("set_reuse_port: {e}")))?;
+                .map_err(|e| UniqueError::internal(format!("set_reuse_port: {e}")))?;
             socket
                 .set_nonblocking(true)
-                .map_err(|e| KungfuError::internal(format!("set_nonblocking: {e}")))?;
+                .map_err(|e| UniqueError::internal(format!("set_nonblocking: {e}")))?;
             socket
                 .bind(&socket2::SockAddr::from(self.addr))
-                .map_err(|e| KungfuError::internal(format!("bind: {e}")))?;
+                .map_err(|e| UniqueError::internal(format!("bind: {e}")))?;
             socket
                 .listen(1024)
-                .map_err(|e| KungfuError::internal(format!("listen: {e}")))?;
+                .map_err(|e| UniqueError::internal(format!("listen: {e}")))?;
 
             let listener = TcpListener::from_std(socket.into())?;
             let router_slot = self.router.clone();
@@ -172,7 +172,7 @@ impl Server {
     async fn serve_multi_acceptor(&self) -> Result<()> {
         let listener = TcpListener::bind(&self.addr).await?;
         tracing::info!(
-            "kungfu listening on http://{} (SO_REUSEPORT not supported — single-acceptor)",
+            "unique listening on http://{} (SO_REUSEPORT not supported — single-acceptor)",
             self.addr
         );
         self.serve_on(listener).await
@@ -287,7 +287,7 @@ async fn handle_connection(
     Ok(())
 }
 
-fn underlying_io_eof(e: &KungfuError) -> Option<()> {
+fn underlying_io_eof(e: &UniqueError) -> Option<()> {
     if let Some(detail) = &e.detail {
         if detail.contains("UnexpectedEof") || detail.contains("ConnectionReset") {
             return Some(());
@@ -309,13 +309,13 @@ async fn read_request(
         let n = stream
             .read(&mut read_buf)
             .await
-            .map_err(|e| KungfuError::internal(format!("read: {e}")))?;
+            .map_err(|e| UniqueError::internal(format!("read: {e}")))?;
         if n == 0 {
-            return Err(KungfuError::internal("UnexpectedEof"));
+            return Err(UniqueError::internal("UnexpectedEof"));
         }
         buf.extend_from_slice(&read_buf[..n]);
         if buf.len() > MAX_HEADER_BYTES {
-            return Err(KungfuError::new(
+            return Err(UniqueError::new(
                 StatusCode::BadRequest,
                 "Request headers too large",
             ));
@@ -330,11 +330,11 @@ async fn read_request(
     let mut req_parser = httparse::Request::new(&mut headers);
     let parsed = req_parser
         .parse(&buf)
-        .map_err(|e| KungfuError::new(StatusCode::BadRequest, format!("HTTP parse: {e}")))?;
+        .map_err(|e| UniqueError::new(StatusCode::BadRequest, format!("HTTP parse: {e}")))?;
     let header_bytes_consumed = match parsed {
         httparse::Status::Complete(n) => n,
         httparse::Status::Partial => {
-            return Err(KungfuError::new(
+            return Err(UniqueError::new(
                 StatusCode::BadRequest,
                 "Incomplete HTTP request",
             ));
@@ -344,11 +344,11 @@ async fn read_request(
     let method = req_parser
         .method
         .and_then(|m| Method::from_bytes(m.as_bytes()))
-        .ok_or_else(|| KungfuError::new(StatusCode::BadRequest, "Unsupported method"))?;
+        .ok_or_else(|| UniqueError::new(StatusCode::BadRequest, "Unsupported method"))?;
 
     let raw_path = req_parser
         .path
-        .ok_or_else(|| KungfuError::new(StatusCode::BadRequest, "Missing path"))?;
+        .ok_or_else(|| UniqueError::new(StatusCode::BadRequest, "Missing path"))?;
 
     let (path_string, query_string_string) = match raw_path.find('?') {
         Some(idx) => (
@@ -390,7 +390,7 @@ async fn read_request(
 
     let body: Bytes = if let Some(cl) = content_length {
         if cl > MAX_BODY_BYTES {
-            return Err(KungfuError::new(StatusCode::BadRequest, "Body too large"));
+            return Err(UniqueError::new(StatusCode::BadRequest, "Body too large"));
         }
         if partial_body.len() >= cl {
             partial_body.slice(..cl)
@@ -401,9 +401,9 @@ async fn read_request(
                 let n = stream
                     .read(&mut read_buf)
                     .await
-                    .map_err(|e| KungfuError::internal(format!("body read: {e}")))?;
+                    .map_err(|e| UniqueError::internal(format!("body read: {e}")))?;
                 if n == 0 {
-                    return Err(KungfuError::internal("UnexpectedEof while reading body"));
+                    return Err(UniqueError::internal("UnexpectedEof while reading body"));
                 }
                 full.extend_from_slice(&read_buf[..n]);
             }
@@ -451,7 +451,7 @@ async fn dispatch(mut req: Request, router: &Router) -> Response {
                 let path = path.clone();
                 let method = method;
                 Box::pin(async move {
-                    Response::new().error(KungfuError::method_not_allowed(format!(
+                    Response::new().error(UniqueError::method_not_allowed(format!(
                         "Method {} not allowed on {}",
                         method.as_str(),
                         path
@@ -469,7 +469,7 @@ async fn dispatch(mut req: Request, router: &Router) -> Response {
                     let path = path.clone();
                     let method = method;
                     Box::pin(async move {
-                        Response::new().error(KungfuError::not_found(format!(
+                        Response::new().error(UniqueError::not_found(format!(
                             "No route for {} {}",
                             method.as_str(),
                             path

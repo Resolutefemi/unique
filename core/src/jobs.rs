@@ -8,7 +8,7 @@
 //! ## Example
 //!
 //! ```ignore
-//! use kungfu::jobs::{Queue, Job};
+//! use unique::jobs::{Queue, Job};
 //!
 //! let queue = Queue::new(4);  // 4 worker threads
 //! queue.spawn(async move {

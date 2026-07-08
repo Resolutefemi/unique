@@ -22,14 +22,14 @@ pub enum Error {
     #[error("serialisation error: {0}")]
     Serde(#[from] serde_json::Error),
 
-    #[error("no driver configured — enable one of the `postgres`, `mysql`, or `sqlite` features on kungfu-orm")]
+    #[error("no driver configured — enable one of the `postgres`, `mysql`, or `sqlite` features on unique-orm")]
     NoDriver,
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
 
-impl From<kungfu_core::KungfuError> for Error {
-    fn from(e: kungfu_core::KungfuError) -> Self {
+impl From<unique_core::UniqueError> for Error {
+    fn from(e: unique_core::UniqueError) -> Self {
         Error::Database(e.to_string())
     }
 }

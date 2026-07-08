@@ -1,5 +1,5 @@
 [package]
-name = "kungfu-macros"
+name = "unique-macros"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
@@ -8,10 +8,10 @@ repository.workspace = true
 homepage.workspace = true
 documentation.workspace = true
 readme.workspace = true
-keywords = ["web", "framework", "orm", "macro", "kungfu"]
+keywords = ["web", "framework", "orm", "macro", "unique"]
 categories = ["web-programming", "development-tools::procedural-macro-helpers"]
 rust-version.workspace = true
-description = "Proc macros for the Kungfu.js framework (#[derive(Model)], #[field(...)], etc.)"
+description = "Proc macros for the Unique.js framework (#[derive(Model)], #[field(...)], etc.)"
 
 [lib]
 proc-macro = true

@@ -1,9 +1,9 @@
 //! Re-exports the most commonly used items.
 
-pub use crate::builder::{Kungfu, KungfuBuilder};
+pub use crate::builder::{Unique, UniqueBuilder};
 pub use crate::{delete, get, patch, post, put};
-pub use kungfu_core::{
-    error::{KungfuError, Result, StatusCode},
+pub use unique_core::{
+    error::{UniqueError, Result, StatusCode},
     middleware::{Middleware, Next},
     middleware_builtin,
     request::{Method, Request},

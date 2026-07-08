@@ -7,9 +7,9 @@
 //! ## Example
 //!
 //! ```ignore
-//! use kungfu::middleware_builtin::etag;
+//! use unique::middleware_builtin::etag;
 //!
-//! Kungfu::new()
+//! Unique::new()
 //!     .use_middleware(etag())
 //!     .handle_get("/large.json", |_req, res| res.json(&big_data()))
 //! ```

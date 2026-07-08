@@ -1,20 +1,20 @@
 //! Example: custom middleware.
 //!
-//! Run with: `cargo run -p kungfu --example middleware`
+//! Run with: `cargo run -p unique --example middleware`
 //!
 //! Demonstrates:
 //! - Writing a custom middleware that adds a response header
 //! - Short-circuiting the chain (return a Response without calling next)
-//! - Installing the middleware on the KungfuBuilder
+//! - Installing the middleware on the UniqueBuilder
 
-use kungfu::prelude::*;
+use unique::prelude::*;
 use std::sync::Arc;
 
 fn main() {
     tracing_subscriber::fmt().with_env_filter("info").init();
 
     // A middleware that adds a custom header to every response.
-    let add_request_id: kungfu::Middleware = Arc::new(|req, next| {
+    let add_request_id: unique::Middleware = Arc::new(|req, next| {
         Box::pin(async move {
             let request_id = req
                 .header("x-request-id")
@@ -27,11 +27,11 @@ fn main() {
     });
 
     // A middleware that blocks requests without an API key.
-    let auth_required: kungfu::Middleware = Arc::new(|req, next| {
+    let auth_required: unique::Middleware = Arc::new(|req, next| {
         Box::pin(async move {
             if req.header("x-api-key").is_none() {
-                return kungfu::Response::new()
-                    .status(kungfu::StatusCode::Unauthorized)
+                return unique::Response::new()
+                    .status(unique::StatusCode::Unauthorized)
                     .json(&serde_json::json!({
                         "error": "Missing X-API-Key header"
                     }));
@@ -40,12 +40,12 @@ fn main() {
         })
     });
 
-    let hello = get!("/hello", |_req: kungfu::Request| {
-        kungfu::Response::new().json(&serde_json::json!({"message":"world"}))
+    let hello = get!("/hello", |_req: unique::Request| {
+        unique::Response::new().json(&serde_json::json!({"message":"world"}))
     });
 
-    let protected = get!("/protected", |_req: kungfu::Request| {
-        kungfu::Response::new().json(&serde_json::json!({"secret":"data"}))
+    let protected = get!("/protected", |_req: unique::Request| {
+        unique::Response::new().json(&serde_json::json!({"secret":"data"}))
     });
 
     let rt = tokio::runtime::Builder::new_multi_thread()
@@ -54,7 +54,7 @@ fn main() {
         .unwrap();
 
     rt.block_on(
-        Kungfu::new()
+        Unique::new()
             .title("Middleware Example")
             .use_middleware(add_request_id)
             .route(hello)

@@ -3,7 +3,7 @@
 pub mod pool;
 
 use bytes::Bytes;
-use crate::error::{KungfuError, StatusCode};
+use crate::error::{UniqueError, StatusCode};
 use once_cell::sync::Lazy;
 use serde::Serialize;
 use std::collections::BTreeMap;
@@ -145,7 +145,7 @@ impl Response {
         self
     }
 
-    pub fn error(mut self, err: KungfuError) -> Self {
+    pub fn error(mut self, err: UniqueError) -> Self {
         // Fast paths for the most common errors — use pre-serialised bodies.
         let cached: Option<Bytes> = match err.code {
             StatusCode::NotFound => Some(ERROR_404_BODY.clone()),
@@ -235,7 +235,7 @@ mod tests {
 
     #[test]
     fn error_404_uses_pre_serialised_body() {
-        let resp = Response::new().error(KungfuError::not_found("anything"));
+        let resp = Response::new().error(UniqueError::not_found("anything"));
         // The cached 404 body doesn't include the dynamic message — that's
         // the trade-off for speed. Status code is still 404.
         assert_eq!(resp.status, StatusCode::NotFound);

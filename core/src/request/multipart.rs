@@ -6,7 +6,7 @@
 //! ## Example
 //!
 //! ```ignore
-//! Kungfu::new()
+//! Unique::new()
 //!     .handle_post("/upload", |req, res| {
 //!         let multipart = match req.multipart() {
 //!             Ok(m) => m,
@@ -23,7 +23,7 @@
 
 use std::collections::HashMap;
 
-use crate::error::{KungfuError, Result, StatusCode};
+use crate::error::{UniqueError, Result, StatusCode};
 use crate::request::Request;
 
 /// A parsed multipart form.
@@ -51,10 +51,10 @@ impl Request {
     pub fn multipart(&self) -> Result<Multipart> {
         let ct = self
             .header("content-type")
-            .ok_or_else(|| KungfuError::new(StatusCode::BadRequest, "Missing Content-Type"))?;
+            .ok_or_else(|| UniqueError::new(StatusCode::BadRequest, "Missing Content-Type"))?;
 
         if !ct.starts_with("multipart/form-data") {
-            return Err(KungfuError::new(
+            return Err(UniqueError::new(
                 StatusCode::BadRequest,
                 "Content-Type must be multipart/form-data",
             ));
@@ -67,7 +67,7 @@ impl Request {
             .find_map(|s| s.strip_prefix("boundary="))
             .map(|s| s.trim_matches('"'))
             .ok_or_else(|| {
-                KungfuError::new(StatusCode::BadRequest, "Missing multipart boundary")
+                UniqueError::new(StatusCode::BadRequest, "Missing multipart boundary")
             })?;
 
         parse_multipart(&self.body, boundary)
@@ -84,7 +84,7 @@ pub fn parse_multipart(body: &[u8], boundary: &str) -> Result<Multipart> {
 
     // Find the first boundary.
     let first_boundary = find_subslice(body, boundary_bytes.as_bytes())
-        .ok_or_else(|| KungfuError::new(StatusCode::BadRequest, "Missing initial boundary"))?;
+        .ok_or_else(|| UniqueError::new(StatusCode::BadRequest, "Missing initial boundary"))?;
     cursor = first_boundary + boundary_bytes.len();
 
     loop {
@@ -113,9 +113,9 @@ pub fn parse_multipart(body: &[u8], boundary: &str) -> Result<Multipart> {
 
         // Parse the part: headers + blank line + body.
         let header_end = find_subslice(part_bytes, b"\r\n\r\n")
-            .ok_or_else(|| KungfuError::new(StatusCode::BadRequest, "Malformed multipart part"))?;
+            .ok_or_else(|| UniqueError::new(StatusCode::BadRequest, "Malformed multipart part"))?;
         let header_str = std::str::from_utf8(&part_bytes[..header_end])
-            .map_err(|_| KungfuError::new(StatusCode::BadRequest, "Invalid UTF-8 in headers"))?;
+            .map_err(|_| UniqueError::new(StatusCode::BadRequest, "Invalid UTF-8 in headers"))?;
         let part_body = bytes::Bytes::copy_from_slice(&part_bytes[header_end + 4..]);
 
         // Parse headers.

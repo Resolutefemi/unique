@@ -2,7 +2,7 @@
 //!
 //! The macro API (`get!`, `post!`, etc.) is powerful but verbose. Many users
 //! want to write the simplest possible "hello world" without learning macros.
-//! This module provides `KungfuBuilder::handle_get`, `handle_post`, etc.
+//! This module provides `UniqueBuilder::handle_get`, `handle_post`, etc.
 //! that take plain Rust closures, automatically wrap them in async, and
 //! register the route.
 //!
@@ -13,12 +13,12 @@
 //! let hello = get!("/hello", |_req: Request| {
 //!     Response::new().json(&serde_json::json!({"message":"world"}))
 //! });
-//! Kungfu::new().route(hello).run("0.0.0.0:3000")
+//! Unique::new().route(hello).run("0.0.0.0:3000")
 //! ```
 //!
 //! After (closures, this module):
 //! ```ignore
-//! Kungfu::new()
+//! Unique::new()
 //!     .handle_get("/hello", |_req, res| res.json(&serde_json::json!({"message":"world"})))
 //!     .run("0.0.0.0:3000")
 //! ```
@@ -27,9 +27,9 @@
 
 use std::sync::Arc;
 
-use crate::{Handler, KungfuBuilder, Method, Request, Response, RouteMeta};
+use crate::{Handler, UniqueBuilder, Method, Request, Response, RouteMeta};
 
-impl KungfuBuilder {
+impl UniqueBuilder {
     /// Register a GET handler using a simple closure.
     ///
     /// The closure receives `Request` and `ResponseBuilder` and returns a `Response`.
@@ -37,7 +37,7 @@ impl KungfuBuilder {
     ///
     /// # Example
     /// ```ignore
-    /// Kungfu::new()
+    /// Unique::new()
     ///     .handle_get("/hello", |_req, res| res.text("world"))
     ///     .run("0.0.0.0:3000")
     /// ```
@@ -100,7 +100,7 @@ impl KungfuBuilder {
     ///
     /// # Example
     /// ```ignore
-    /// Kungfu::new()
+    /// Unique::new()
     ///     .json_get("/hello", || serde_json::json!({"message":"world"}))
     ///     .run("0.0.0.0:3000")
     /// ```
@@ -170,7 +170,7 @@ impl KungfuBuilder {
 ///
 /// Usage:
 /// ```ignore
-/// Kungfu::new()
+/// Unique::new()
 ///     .handle_get("/hello", |_req, res| res.status(200).text("world"))
 /// ```
 #[derive(Debug)]

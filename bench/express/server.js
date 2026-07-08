@@ -1,4 +1,4 @@
-// Express.js hello-world server, for direct comparison with kungfu's bench.
+// Express.js hello-world server, for direct comparison with unique's bench.
 //
 //   npm install
 //   npm start

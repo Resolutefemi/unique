@@ -4,7 +4,7 @@
 //! JS runtime) and produces a complete HTML page with the live-reload
 //! script injected.
 
-use crate::parser::KungfuFile;
+use crate::parser::UniqueFile;
 
 /// Context for a single SSR render.
 #[derive(Debug, Clone)]
@@ -32,14 +32,14 @@ impl Default for SsrContext {
 /// `rendered_template` is the HTML string returned by the file's
 /// `template()` function (the JS runtime executes this — we don't do it
 /// from Rust). `data_json` is the JSON-serialised result of `data()`,
-/// embedded into the page as `__KUNGFU_DATA__` for client-side hydration.
-pub fn render_page(file: &KungfuFile, ctx: &SsrContext, rendered_template: &str, data_json: &serde_json::Value) -> String {
+/// embedded into the page as `__UNIQUE_DATA__` for client-side hydration.
+pub fn render_page(file: &UniqueFile, ctx: &SsrContext, rendered_template: &str, data_json: &serde_json::Value) -> String {
     let mut html = String::with_capacity(2048);
     html.push_str("<!doctype html>\n<html lang=\"en\">\n<head>\n");
     html.push_str("  <meta charset=\"utf-8\">\n");
     html.push_str("  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n");
-    html.push_str(&format!("  <title>Kungfu — {}</title>\n", file.route_path));
-    html.push_str("  <link rel=\"stylesheet\" href=\"/kungfu.css\">\n");
+    html.push_str(&format!("  <title>Unique — {}</title>\n", file.route_path));
+    html.push_str("  <link rel=\"stylesheet\" href=\"/unique.css\">\n");
     html.push_str("</head>\n<body>\n");
     html.push_str("  <div id=\"app\">\n");
     html.push_str("    ");
@@ -53,12 +53,12 @@ pub fn render_page(file: &KungfuFile, ctx: &SsrContext, rendered_template: &str,
     }
 
     // Embed the SSR data for client-side hydration.
-    html.push_str("  <script>window.__KUNGFU_DATA__ = ");
+    html.push_str("  <script>window.__UNIQUE_DATA__ = ");
     html.push_str(&serde_json::to_string(data_json).unwrap_or_else(|_| "{}".into()));
     html.push_str(";</script>\n");
 
     if ctx.inject_livereload {
-        html.push_str("  <script src=\"/__kungfu_livereload.js\"></script>\n");
+        html.push_str("  <script src=\"/__unique_livereload.js\"></script>\n");
     }
 
     html.push_str("</body>\n</html>\n");
@@ -71,7 +71,7 @@ mod tests {
 
     #[test]
     fn renders_page_with_data_and_template() {
-        let file = crate::parser::parse_kungfu_file(
+        let file = crate::parser::parse_unique_file(
             "export function data() { return {}; }\nexport function template() { return '<h1>hi</h1>'; }",
             "src/pages/index.kng",
         )
@@ -80,14 +80,14 @@ mod tests {
         let html = render_page(&file, &ctx, "<h1>hi</h1>", &serde_json::json!({"user":"Bruce"}));
         assert!(html.contains("<!doctype html>"));
         assert!(html.contains("<h1>hi</h1>"));
-        assert!(html.contains("window.__KUNGFU_DATA__"));
+        assert!(html.contains("window.__UNIQUE_DATA__"));
         assert!(html.contains("\"user\":\"Bruce\""));
-        assert!(html.contains("/__kungfu_livereload.js"));
+        assert!(html.contains("/__unique_livereload.js"));
     }
 
     #[test]
     fn render_omits_livereload_when_disabled() {
-        let file = crate::parser::parse_kungfu_file(
+        let file = crate::parser::parse_unique_file(
             "export function data() { return {}; }\nexport function template() { return ''; }",
             "src/pages/index.kng",
         )

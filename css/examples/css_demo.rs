@@ -1,13 +1,13 @@
-//! Example: kungfu-css — compile a class string to CSS.
+//! Example: unique-css — compile a class string to CSS.
 //!
-//! Run with: `cargo run -p kungfu-css --example css_demo`
+//! Run with: `cargo run -p unique-css --example css_demo`
 //!
 //! Demonstrates:
 //! - Parsing a class string with responsive + state prefixes
 //! - Emitting CSS for the parsed tokens
 //! - Scanning a directory for class= / className= usage
 
-use kungfu_css::{compile_classes, parse_class_string, emit_css};
+use unique_css::{compile_classes, parse_class_string, emit_css};
 
 fn main() {
     // 1. Compile a single class string to CSS.

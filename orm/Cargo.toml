@@ -1,5 +1,5 @@
 [package]
-name = "kungfu-orm"
+name = "unique-orm"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
@@ -8,18 +8,18 @@ repository.workspace = true
 homepage.workspace = true
 documentation.workspace = true
 readme.workspace = true
-keywords = ["web", "framework", "orm", "database", "kungfu"]
+keywords = ["web", "framework", "orm", "database", "unique"]
 categories = ["web-programming", "database"]
 rust-version.workspace = true
-description = "Built-in ORM for the Kungfu.js framework — CRUD, JOINs, transactions, Argon2id password hashing, migrations"
+description = "Built-in ORM for the Unique.js framework — CRUD, JOINs, transactions, Argon2id password hashing, migrations"
 
 [lib]
-name = "kungfu_orm"
+name = "unique_orm"
 path = "src/lib.rs"
 
 [dependencies]
-kungfu-core = { path = "../core" }
-kungfu-macros = { path = "../kungfu-macros" }
+unique-core = { path = "../core" }
+unique-macros = { path = "../unique-macros" }
 tokio = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
@@ -42,4 +42,4 @@ sqlite = ["dep:sqlx", "sqlx/sqlite"]
 
 [dev-dependencies]
 tokio = { workspace = true }
-kungfu-macros = { path = "../kungfu-macros" }
+unique-macros = { path = "../unique-macros" }

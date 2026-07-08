@@ -1,4 +1,4 @@
-//! Plugin system for Kungfu.
+//! Plugin system for Unique.
 //!
 //! A plugin is a boxed trait object that can register middleware, routes,
 //! and startup hooks. Plugins are loaded at server startup and run before
@@ -7,7 +7,7 @@
 //! ## Example
 //!
 //! ```ignore
-//! use kungfu::plugin::{Plugin, PluginContext};
+//! use unique::plugin::{Plugin, PluginContext};
 //!
 //! struct RequestIdPlugin;
 //!
@@ -46,8 +46,8 @@ impl PluginContext {
     }
 }
 
-/// A Kungfu plugin. Implement this trait and register your plugin via
-/// `KungfuBuilder::plugin`.
+/// A Unique plugin. Implement this trait and register your plugin via
+/// `UniqueBuilder::plugin`.
 #[async_trait::async_trait]
 pub trait Plugin: Send + Sync {
     /// The plugin's name (used for logging + diagnostics).

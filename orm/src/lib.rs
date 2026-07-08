@@ -1,4 +1,4 @@
-//! Built-in ORM for the Kungfu.js framework.
+//! Built-in ORM for the Unique.js framework.
 //!
 //! The ORM is woven into the framework — there's no separate "ORM crate"
 //! to install. Models are defined with `#[derive(Model)]` and queried via
@@ -8,7 +8,7 @@
 //! ## Example
 //!
 //! ```ignore
-//! use kungfu_orm::{Model, Query};
+//! use unique_orm::{Model, Query};
 //! use serde::{Serialize, Deserialize};
 //!
 //! #[derive(Model, Serialize, Deserialize)]
@@ -22,7 +22,7 @@
 //!     password: String,
 //! }
 //!
-//! async fn example(db: &kungfu_orm::Db) -> Result<(), kungfu_orm::Error> {
+//! async fn example(db: &unique_orm::Db) -> Result<(), unique_orm::Error> {
 //!     // Create
 //!     let user = User { id: 0, email: "a@b.com".into(), password: "hunter22".into() };
 //!     let user = User::insert(&user, db).await?;
@@ -36,10 +36,10 @@
 //! }
 //! ```
 
-// Allow `#[derive(Model)]` to refer to `kungfu_orm` from inside this crate's
+// Allow `#[derive(Model)]` to refer to `unique_orm` from inside this crate's
 // own tests.
 #[cfg(test)]
-extern crate self as kungfu_orm;
+extern crate self as unique_orm;
 
 pub mod query;
 pub mod connection;

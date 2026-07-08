@@ -6,9 +6,9 @@
 //! ## Example
 //!
 //! ```ignore
-//! use kungfu::tls::TlsConfig;
+//! use unique::tls::TlsConfig;
 //!
-//! Kungfu::new()
+//! Unique::new()
 //!     .tls(TlsConfig::from_files("cert.pem", "key.pem"))
 //!     .handle_get("/hello", |_req, res| res.text("world"))
 //!     .run("0.0.0.0:3443")

@@ -1,4 +1,4 @@
-"""FastAPI hello-world server, for direct comparison with kungfu's bench.
+"""FastAPI hello-world server, for direct comparison with unique's bench.
 
 Run with:
     uvicorn server:app --host 127.0.0.1 --port 3003

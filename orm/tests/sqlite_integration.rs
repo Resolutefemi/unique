@@ -1,10 +1,10 @@
 //! Integration test: ORM with real SQLite via sqlx.
 //!
 //! Run with:
-//!   cargo test -p kungfu-orm --features sqlite --test sqlite_integration -- --nocapture
+//!   cargo test -p unique-orm --features sqlite --test sqlite_integration -- --nocapture
 
-use kungfu_macros::Model;
-use kungfu_orm::{Db, DbConfig, Model as ModelTrait};
+use unique_macros::Model;
+use unique_orm::{Db, DbConfig, Model as ModelTrait};
 use serde::{Deserialize, Serialize};
 
 #[derive(Model, Serialize, Deserialize)]
@@ -28,7 +28,7 @@ async fn setup_db() -> Db {
     .expect("connect");
 
     // Create the table.
-    let migration = kungfu_orm::generate_migration::<User>();
+    let migration = unique_orm::generate_migration::<User>();
     for stmt in &migration.up_sql {
         db.execute(stmt, &[]).await.expect("create table");
     }

@@ -1,5 +1,5 @@
 [package]
-name = "kungfu-cli"
+name = "unique-cli"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
@@ -8,18 +8,18 @@ repository.workspace = true
 homepage.workspace = true
 documentation.workspace = true
 readme.workspace = true
-keywords = ["web", "framework", "cli", "server", "kungfu"]
+keywords = ["web", "framework", "cli", "server", "unique"]
 categories = ["web-programming", "command-line-utilities", "development-tools"]
 rust-version.workspace = true
-description = "The `kungfu` command-line tool — new, start --watch, build, migrate, generate admin, deploy"
+description = "The `unique` command-line tool — new, start --watch, build, migrate, generate admin, deploy"
 
 [[bin]]
-name = "kungfu"
+name = "unique"
 path = "src/main.rs"
 
 [dependencies]
-kungfu-core = { path = "../core" }
-kungfu = { path = "../kungfu" }
+unique-core = { path = "../core" }
+unique = { path = "../unique" }
 tokio = { workspace = true }
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true }

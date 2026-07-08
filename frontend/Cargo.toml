@@ -1,5 +1,5 @@
 [package]
-name = "kungfu-frontend"
+name = "unique-frontend"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
@@ -8,18 +8,18 @@ repository.workspace = true
 homepage.workspace = true
 documentation.workspace = true
 readme.workspace = true
-keywords = ["web", "framework", "ssr", "frontend", "kungfu"]
+keywords = ["web", "framework", "ssr", "frontend", "unique"]
 categories = ["web-programming", "template-engine"]
 rust-version.workspace = true
-description = "Frontend module for the Kungfu.js framework — SSR, .kng files, live reload, type generation"
+description = "Frontend module for the Unique.js framework — SSR, .kng files, live reload, type generation"
 
 [lib]
-name = "kungfu_frontend"
+name = "unique_frontend"
 path = "src/lib.rs"
 
 [dependencies]
-kungfu-core = { path = "../core" }
-kungfu-css = { path = "../css" }
+unique-core = { path = "../core" }
+unique-css = { path = "../css" }
 tokio = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }

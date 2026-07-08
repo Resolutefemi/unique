@@ -1,4 +1,4 @@
-//! Top-level `Kungfu` builder.
+//! Top-level `Unique` builder.
 
 use std::net::SocketAddr;
 
@@ -6,8 +6,8 @@ use crate::Result;
 use crate::{Handler, Router, Server};
 use crate::Middleware;
 
-/// Builder for the Kungfu application. Consumes itself on `run`.
-pub struct KungfuBuilder {
+/// Builder for the Unique application. Consumes itself on `run`.
+pub struct UniqueBuilder {
     router: Router,
     /// If true, register `/openapi.json` + `/docs` automatically on `run`.
     auto_docs: bool,
@@ -19,19 +19,19 @@ pub struct KungfuBuilder {
     version: String,
 }
 
-impl Default for KungfuBuilder {
+impl Default for UniqueBuilder {
     fn default() -> Self {
         Self {
             router: Router::new(),
             auto_docs: true,
             insecure: false,
-            title: "Kungfu API".into(),
-            version: kungfu_core::VERSION.to_string(),
+            title: "Unique API".into(),
+            version: unique_core::VERSION.to_string(),
         }
     }
 }
 
-impl KungfuBuilder {
+impl UniqueBuilder {
     pub fn new() -> Self {
         Self::default()
     }
@@ -98,10 +98,10 @@ impl KungfuBuilder {
     ///
     /// # Example
     /// ```ignore
-    /// Kungfu::new()
-    ///     .ws("/chat", |mut ws: kungfu::WebSocket| async move {
+    /// Unique::new()
+    ///     .ws("/chat", |mut ws: unique::WebSocket| async move {
     ///         while let Some(msg) = ws.recv().await {
-    ///             if let kungfu::WebSocketMessage::Text(t) = msg {
+    ///             if let unique::WebSocketMessage::Text(t) = msg {
     ///                 ws.send_text(format!("echo: {t}")).await;
     ///             }
     ///         }
@@ -110,7 +110,7 @@ impl KungfuBuilder {
     /// ```
     pub fn ws<F, Fut>(mut self, path: &str, handler: F) -> Self
     where
-        F: Fn(kungfu_core::websocket::WebSocket) -> Fut + Send + Sync + 'static,
+        F: Fn(unique_core::websocket::WebSocket) -> Fut + Send + Sync + 'static,
         Fut: std::future::Future<Output = ()> + Send + 'static,
     {
         self.router.ws(path, handler);
@@ -121,7 +121,7 @@ impl KungfuBuilder {
     /// emits a `tracing::warn!` per spec.
     pub fn insecure(mut self) -> Self {
         tracing::warn!(
-            "Kungfu: insecure() called — default secure-by-default middleware \
+            "Unique: insecure() called — default secure-by-default middleware \
              (security headers, CORS, rate limiter, logger) will NOT be installed."
         );
         self.insecure = true;
@@ -169,7 +169,7 @@ impl KungfuBuilder {
         let addr: SocketAddr = addr
             .parse()
             .map_err(|e: std::net::AddrParseError| {
-                crate::KungfuError::internal(format!("invalid bind addr: {e}"))
+                crate::UniqueError::internal(format!("invalid bind addr: {e}"))
             })?;
 
         self.apply_defaults();
@@ -184,7 +184,7 @@ impl KungfuBuilder {
     /// Watches the configured directories for source file changes. When a
     /// change is detected, a `reload_callback` is invoked; the callback
     /// receives the current router slot and may swap in a new router via
-    /// `kungfu_core::server::swap_router`.
+    /// `unique_core::server::swap_router`.
     pub async fn run_with_hot_reload<F>(
         mut self,
         addr: &str,
@@ -197,7 +197,7 @@ impl KungfuBuilder {
         let addr: SocketAddr = addr
             .parse()
             .map_err(|e: std::net::AddrParseError| {
-                crate::KungfuError::internal(format!("invalid bind addr: {e}"))
+                crate::UniqueError::internal(format!("invalid bind addr: {e}"))
             })?;
 
         self.apply_defaults();
@@ -206,7 +206,7 @@ impl KungfuBuilder {
 
         // Start the file watcher.
         let mut watcher = crate::server::start_watcher(config)
-            .map_err(|e| crate::KungfuError::internal(format!("watcher: {e}")))?;
+            .map_err(|e| crate::UniqueError::internal(format!("watcher: {e}")))?;
 
         // Spawn the server task.
         let server_task = tokio::spawn(async move {
@@ -223,14 +223,14 @@ impl KungfuBuilder {
     }
 }
 
-/// Entry point — `Kungfu::new()` returns a `KungfuBuilder`.
-pub struct Kungfu;
+/// Entry point — `Unique::new()` returns a `UniqueBuilder`.
+pub struct Unique;
 
-impl Kungfu {
-    pub fn new() -> KungfuBuilder {
-        KungfuBuilder::new()
+impl Unique {
+    pub fn new() -> UniqueBuilder {
+        UniqueBuilder::new()
     }
 }
 
-// `Kungfu` itself has no state, so we don't implement `Default` for it —
-// call `Kungfu::new()` to get a builder.
+// `Unique` itself has no state, so we don't implement `Default` for it —
+// call `Unique::new()` to get a builder.

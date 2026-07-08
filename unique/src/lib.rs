@@ -1,10 +1,10 @@
-//! kungfu — the idiomatic Rust API for the Kungfu.js polyglot framework.
+//! unique — the idiomatic Rust API for the Unique.js polyglot framework.
 //!
 //! ## Quickstart
 //!
 //! ```no_run
-//! use kungfu::prelude::*;
-//! use kungfu::{Request, Response};
+//! use unique::prelude::*;
+//! use unique::{Request, Response};
 //!
 //! fn main() {
 //!     let register_hello = get!("/hello", |_req: Request| {
@@ -14,7 +14,7 @@
 //!     let rt = tokio::runtime::Builder::new_multi_thread()
 //!         .enable_all().build().unwrap();
 //!     rt.block_on(
-//!         Kungfu::new()
+//!         Unique::new()
 //!             .route(register_hello)
 //!             .run("0.0.0.0:3000"),
 //!     ).unwrap();
@@ -30,11 +30,11 @@ pub mod simple;
 // can find it via `$crate::__macro_support`.
 pub use macros::__macro_support;
 
-pub use builder::{Kungfu, KungfuBuilder};
+pub use builder::{Unique, UniqueBuilder};
 pub use simple::ResponseBuilder;
-pub use kungfu_core::{
+pub use unique_core::{
     default_middleware_stack,
-    error::{KungfuError, Result, StatusCode},
+    error::{UniqueError, Result, StatusCode},
     middleware::{build_chain, Middleware, Next, NextFuture},
     middleware_builtin,
     openapi,

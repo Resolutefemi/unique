@@ -1,10 +1,10 @@
-//! Throughput benchmark for the Kungfu core.
+//! Throughput benchmark for the Unique core.
 //!
 //! Starts the server with N SO_REUSEPORT acceptor threads, fires M concurrent
 //! keep-alive requests from K worker tasks, and prints req/s + p99 latency.
 //!
 //! Run with:
-//!   cargo run -p kungfu-cli --bin kungfu_bench --release
+//!   cargo run -p unique-cli --bin unique_bench --release
 //!
 //! For real-world numbers, use an external load generator like `oha`:
 //!   oha -z 5s -c 256 http://localhost:3000/hello
@@ -17,7 +17,7 @@ use bytes::Bytes;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::TcpStream;
 
-use kungfu_core::{Method, Request, Response, RouteMeta, Router, Server};
+use unique_core::{Method, Request, Response, RouteMeta, Router, Server};
 
 const CONCURRENCY: usize = 256;
 const REQUESTS_PER_WORKER: usize = 2_000;
@@ -59,9 +59,9 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await?;
     let addr = listener.local_addr().unwrap();
 
-    println!("kungfu bench: {} acceptor threads (tokio epoll), {} workers, {} req/worker",
+    println!("unique bench: {} acceptor threads (tokio epoll), {} workers, {} req/worker",
         acceptor_threads, CONCURRENCY, REQUESTS_PER_WORKER);
-    println!("   (For io_uring numbers, run `kungfu demo` + external `oha`)");
+    println!("   (For io_uring numbers, run `unique demo` + external `oha`)");
 
     let server = Server::new(router, addr).with_acceptor_threads(acceptor_threads);
     let server_task = tokio::spawn(async move {
@@ -93,7 +93,7 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
         let p99 = latencies[(latencies.len() as f64 * 0.99) as usize];
         let p50 = latencies[latencies.len() / 2];
         let rps = (total_ok as f64 / elapsed.as_secs_f64()).round() as u64;
-        println!("--- kungfu bench ---");
+        println!("--- unique bench ---");
         println!("workers:           {CONCURRENCY}");
         println!("requests/worker:   {REQUESTS_PER_WORKER}");
         println!("total ok:          {total_ok}");

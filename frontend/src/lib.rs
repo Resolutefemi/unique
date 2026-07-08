@@ -1,4 +1,4 @@
-//! Frontend module for the Kungfu.js framework.
+//! Frontend module for the Unique.js framework.
 //!
 //! Brings the framework into full-stack territory:
 //!   - `.kng` files: a Svelte/Astro-like SSR file format that exports
@@ -23,24 +23,24 @@
 //! }
 //! ```
 //!
-//! At build time, Kungfu compiles each `.kng` file into a server-rendered
+//! At build time, Unique compiles each `.kng` file into a server-rendered
 //! route. At request time, `data()` is called, then `template()` is invoked
 //! with the data, and the resulting HTML is sent to the client.
 //!
 //! ## Live reload
 //!
-//! In dev mode, Kungfu injects a `<script>` tag that opens a WebSocket
-//! connection to `/__kungfu_livereload`. When the file watcher fires,
+//! In dev mode, Unique injects a `<script>` tag that opens a WebSocket
+//! connection to `/__unique_livereload`. When the file watcher fires,
 //! every connected client receives a `reload` message and refreshes.
 //!
 //! ## Type generation
 //!
-//! `kungfu generate types` walks the route table and emits a `routes.d.ts`
+//! `unique generate types` walks the route table and emits a `routes.d.ts`
 //! file with typed wrappers for each route:
 //!
 //! ```typescript
 //! // routes.d.ts (generated)
-//! declare namespace KungfuRoutes {
+//! declare namespace UniqueRoutes {
 //!   interface GetUserById {
 //!     path: '/users/:id';
 //!     method: 'GET';
@@ -61,7 +61,7 @@ pub mod file_routing;
 pub use dev_mode::{DevMode, DevModeConfig};
 pub use file_routing::register_pages;
 pub use livereload::LiveReloadServer;
-pub use parser::{KungfuFile, parse_kungfu_file};
+pub use parser::{UniqueFile, parse_unique_file};
 pub use ssr::{render_page, SsrContext};
-pub use ssr_executor::{render_kungfu_file, SsrError};
+pub use ssr_executor::{render_unique_file, SsrError};
 pub use types::{generate_typescript, RouteTypeSpec};

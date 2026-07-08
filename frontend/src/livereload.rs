@@ -1,7 +1,7 @@
 //! WebSocket-based live reload server.
 //!
 //! In dev mode, every SSR page is injected with a `<script>` that opens
-//! a WebSocket to `ws://host/__kungfu_livereload`. When the file watcher
+//! a WebSocket to `ws://host/__unique_livereload`. When the file watcher
 //! detects a change, this server broadcasts a `reload` message to every
 //! connected client.
 //!
@@ -67,15 +67,15 @@ impl Default for LiveReloadServer {
 /// WebSocket and calls `window.location.reload()` on message.
 pub const LIVERELOAD_CLIENT_JS: &str = r#"
 (function() {
-  const ws = new WebSocket(`ws://${location.host}/__kungfu_livereload`);
+  const ws = new WebSocket(`ws://${location.host}/__unique_livereload`);
   ws.onmessage = (ev) => {
     if (ev.data === 'reload') {
-      console.log('[kungfu] file change detected — reloading');
+      console.log('[unique] file change detected — reloading');
       window.location.reload();
     }
   };
   ws.onclose = () => {
-    console.log('[kungfu] live reload disconnected — retrying in 1s');
+    console.log('[unique] live reload disconnected — retrying in 1s');
     setTimeout(() => location.reload(), 1000);
   };
 })();

@@ -1,6 +1,6 @@
 //! Example: ORM usage with the mock database.
 //!
-//! Run with: `cargo run -p kungfu-orm --example orm_mock`
+//! Run with: `cargo run -p unique-orm --example orm_mock`
 //!
 //! Demonstrates:
 //! - Defining a Model with `#[derive(Model)]`
@@ -8,8 +8,8 @@
 //! - Querying with `find().where_eq().one()`
 //! - Generating migrations
 
-use kungfu_macros::Model;
-use kungfu_orm::{Db, Model as ModelTrait, Query};
+use unique_macros::Model;
+use unique_orm::{Db, Model as ModelTrait, Query};
 use serde::{Deserialize, Serialize};
 
 #[derive(Model, Serialize, Deserialize)]
@@ -70,7 +70,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Params: {:?}", params);
 
     // Generate a migration.
-    let migration = kungfu_orm::generate_migration::<User>();
+    let migration = unique_orm::generate_migration::<User>();
     println!("\nMigration '{}' up SQL:", migration.name);
     for stmt in &migration.up_sql {
         for line in stmt.lines() {

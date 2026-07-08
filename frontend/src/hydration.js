@@ -1,23 +1,23 @@
-// Kungfu.js client-side hydration + reactive framework.
+// Unique.js client-side hydration + reactive framework.
 //
 // V1: provides:
-//   - Hydration marker (data-kungfu-hydrated)
+//   - Hydration marker (data-unique-hydrated)
 //   - WebSocket livereload with auto-reconnect
-//   - Reactive data binding via data-kungfu-bind attribute
-//   - Form submission helper (data-kungfu-submit)
-//   - Client-side fetch wrapper (kungfu.fetch)
-//   - Simple state management (kungfu.state)
+//   - Reactive data binding via data-unique-bind attribute
+//   - Form submission helper (data-unique-submit)
+//   - Client-side fetch wrapper (unique.fetch)
+//   - Simple state management (unique.state)
 //
 // Usage in .kng files:
-//   <div data-kungfu-bind="user.name">Loading...</div>
-//   <button data-kungfu-click="refresh">Refresh</button>
-//   <form data-kungfu-submit="/api/users" data-kungfu-method="POST">...</form>
+//   <div data-unique-bind="user.name">Loading...</div>
+//   <button data-unique-click="refresh">Refresh</button>
+//   <form data-unique-submit="/api/users" data-unique-method="POST">...</form>
 
 (function() {
   'use strict';
 
-  const data = window.__KUNGFU_DATA__ || {};
-  const livereload = window.__KUNGFU_LIVERELOAD__ || false;
+  const data = window.__UNIQUE_DATA__ || {};
+  const livereload = window.__UNIQUE_LIVERELOAD__ || false;
 
   // ─── State Management ─────────────────────────────────────────────────────
   const state = typeof Proxy !== 'undefined' ? new Proxy({...data}, {
@@ -30,7 +30,7 @@
 
   // ─── Reactive Data Binding ─────────────────────────────────────────────────
   function updateBindings(key, value) {
-    const elements = document.querySelectorAll(`[data-kungfu-bind="${key}"]`);
+    const elements = document.querySelectorAll(`[data-unique-bind="${key}"]`);
     elements.forEach(el => {
       if (typeof value === 'object') {
         el.textContent = JSON.stringify(value, null, 2);
@@ -46,10 +46,10 @@
 
   // ─── Click Handlers ────────────────────────────────────────────────────────
   function initClickHandlers() {
-    document.querySelectorAll('[data-kungfu-click]').forEach(el => {
+    document.querySelectorAll('[data-unique-click]').forEach(el => {
       el.addEventListener('click', (e) => {
         e.preventDefault();
-        const action = el.getAttribute('data-kungfu-click');
+        const action = el.getAttribute('data-unique-click');
         if (typeof window.kngActions?.[action] === 'function') {
           window.kngActions[action](state);
         }
@@ -61,11 +61,11 @@
   function initForms() {
     document.addEventListener('submit', async (e) => {
       const form = e.target;
-      if (!form.hasAttribute('data-kungfu-submit')) return;
+      if (!form.hasAttribute('data-unique-submit')) return;
       e.preventDefault();
 
-      const action = form.getAttribute('data-kungfu-submit');
-      const method = (form.getAttribute('data-kungfu-method') || 'POST').toUpperCase();
+      const action = form.getAttribute('data-unique-submit');
+      const method = (form.getAttribute('data-unique-method') || 'POST').toUpperCase();
       const formData = new FormData(form);
       const body = JSON.stringify(Object.fromEntries(formData));
 
@@ -76,20 +76,20 @@
           body,
         });
         const result = await resp.json();
-        form.dispatchEvent(new CustomEvent('kungfu:submit', { detail: { result, form } }));
+        form.dispatchEvent(new CustomEvent('unique:submit', { detail: { result, form } }));
         if (result.error) {
-          form.dispatchEvent(new CustomEvent('kungfu:error', { detail: result.error }));
+          form.dispatchEvent(new CustomEvent('unique:error', { detail: result.error }));
         } else {
-          form.dispatchEvent(new CustomEvent('kungfu:success', { detail: result }));
+          form.dispatchEvent(new CustomEvent('unique:success', { detail: result }));
         }
       } catch (err) {
-        form.dispatchEvent(new CustomEvent('kungfu:error', { detail: { message: err.message } }));
+        form.dispatchEvent(new CustomEvent('unique:error', { detail: { message: err.message } }));
       }
     });
   }
 
   // ─── Fetch Wrapper ─────────────────────────────────────────────────────────
-  async function kungfuFetch(url, options = {}) {
+  async function uniqueFetch(url, options = {}) {
     const resp = await fetch(url, {
       ...options,
       headers: { 'Content-Type': 'application/json', ...options.headers },
@@ -107,12 +107,12 @@
 
     function connect() {
       const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-      ws = new WebSocket(`${protocol}//${location.host}/__kungfu_livereload`);
+      ws = new WebSocket(`${protocol}//${location.host}/__unique_livereload`);
 
-      ws.onopen = () => { attempts = 0; console.log('[kungfu] Live reload connected'); };
+      ws.onopen = () => { attempts = 0; console.log('[unique] Live reload connected'); };
       ws.onmessage = (event) => {
         if (event.data === 'reload' || (typeof event.data === 'string' && event.data.includes('reload'))) {
-          console.log('[kungfu] File change — reloading');
+          console.log('[unique] File change — reloading');
           window.location.reload();
         }
       };
@@ -128,18 +128,18 @@
 
   // ─── Init ──────────────────────────────────────────────────────────────────
   function init() {
-    document.documentElement.setAttribute('data-kungfu-hydrated', 'true');
+    document.documentElement.setAttribute('data-unique-hydrated', 'true');
     initBindings();
     initClickHandlers();
     initForms();
     initLiveReload();
-    console.log('[kungfu] Page hydrated with', Object.keys(state).length, 'keys');
+    console.log('[unique] Page hydrated with', Object.keys(state).length, 'keys');
   }
 
-  // Expose the Kungfu client API.
+  // Expose the Unique client API.
   window.kng = {
     state,
-    fetch: kungfuFetch,
+    fetch: uniqueFetch,
     actions: window.kngActions || {},
     updateBindings,
   };

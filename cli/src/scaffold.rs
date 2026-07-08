@@ -1,13 +1,13 @@
-//! `kungfu new` — scaffold a new Kungfu project.
+//! `unique new` — scaffold a new Unique project.
 
 use std::fs;
 use std::io::Write;
 use std::path::Path;
 
-/// Scaffold a new Kungfu project at the given path.
+/// Scaffold a new Unique project at the given path.
 ///
 /// Creates:
-///   - `Cargo.toml` with kungfu + kungfu-core deps
+///   - `Cargo.toml` with unique + unique-core deps
 ///   - `src/main.rs` with a hello-world server
 ///   - `README.md` with a quickstart
 ///   - `.gitignore` for Rust
@@ -31,8 +31,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-kungfu = {{ path = "../kungfu" }}
-kungfu-core = {{ path = "../core" }}
+unique = {{ path = "../unique" }}
+unique-core = {{ path = "../core" }}
 tokio = {{ version = "1", features = ["full"] }}
 serde = {{ version = "1", features = ["derive"] }}
 serde_json = "1"
@@ -48,14 +48,14 @@ path = "src/main.rs"
     fs::write(project_path.join("Cargo.toml"), cargo_toml)?;
 
     // src/main.rs
-    let main_rs = r#"use kungfu::prelude::*;
+    let main_rs = r#"use unique::prelude::*;
 
 fn main() {
     tracing_subscriber::fmt()
         .with_env_filter("info")
         .init();
 
-    println!("🥋 Kungfu app starting on http://localhost:3000");
+    println!("🥋 Unique app starting on http://localhost:3000");
 
     let rt = tokio::runtime::Builder::new_multi_thread()
         .enable_all()
@@ -63,11 +63,11 @@ fn main() {
         .unwrap();
 
     rt.block_on(
-        Kungfu::new()
-            .title("My Kungfu App")
+        Unique::new()
+            .title("My Unique App")
             .handle_get("/hello", |_req, res| res.text("world"))
             .handle_get("/", |_req, res| {
-                res.html("<h1>Hello from Kungfu!</h1><p>Try <a href=\"/hello\">/hello</a></p>")
+                res.html("<h1>Hello from Unique!</h1><p>Try <a href=\"/hello\">/hello</a></p>")
             })
             .run("0.0.0.0:3000"),
     )
@@ -80,7 +80,7 @@ fn main() {
     let readme = format!(
         r#"# {}
 
-A [Kungfu.js](https://github.com/Resolutefemi/kungfu) application.
+A [Unique.js](https://github.com/Resolutefemi/unique) application.
 
 ## Run
 
@@ -104,7 +104,7 @@ Visit http://localhost:3000/docs for Swagger UI.
         "/target\nCargo.lock\n",
     )?;
 
-    println!("✓ Created Kungfu project at {project_name}/");
+    println!("✓ Created Unique project at {project_name}/");
     println!();
     println!("Next steps:");
     println!("  cd {project_name}");

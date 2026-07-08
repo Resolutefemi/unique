@@ -1,16 +1,16 @@
 [workspace]
 resolver = "2"
-members = ["core", "kungfu", "kungfu-macros", "orm", "css", "frontend", "cli", "bench/actix", "bindings/js", "bindings/python"]
+members = ["core", "unique", "unique-macros", "orm", "css", "frontend", "cli", "bench/actix", "bindings/js", "bindings/python"]
 
 [workspace.package]
 version = "1.0.0"
 edition = "2021"
-authors = ["Kungfu.js Contributors"]
+authors = ["Unique.js Contributors"]
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/Resolutefemi/kungfu"
+repository = "https://github.com/Resolutefemi/unique"
 description = "One API surface, infinite languages. A polyglot web framework with a Rust core."
-homepage = "https://kungfu.js.org"
-documentation = "https://docs.rs/kungfu"
+homepage = "https://unique.js.org"
+documentation = "https://docs.rs/unique"
 readme = "README.md"
 keywords = ["web", "framework", "http", "server", "rust"]
 categories = ["web-programming", "web-programming::http-server", "network-programming"]

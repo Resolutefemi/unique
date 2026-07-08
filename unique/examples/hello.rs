@@ -1,9 +1,9 @@
-//! Hello-world example using the `kungfu` idiomatic API.
+//! Hello-world example using the `unique` idiomatic API.
 //!
 //! Run with:
-//!   cargo run -p kungfu --example hello
+//!   cargo run -p unique --example hello
 
-use kungfu::prelude::*;
+use unique::prelude::*;
 
 fn main() {
     tracing_subscriber::fmt()
@@ -12,16 +12,16 @@ fn main() {
 
     // The `#[get]` macro expands to a register function. We pass that function
     // to `.route()` to register it on the router.
-    let register_hello = get!("/hello", |_req: kungfu::Request| {
-        kungfu::Response::new().json(&serde_json::json!({
+    let register_hello = get!("/hello", |_req: unique::Request| {
+        unique::Response::new().json(&serde_json::json!({
             "message": "world",
-            "framework": "kungfu",
-            "version": kungfu::VERSION,
+            "framework": "unique",
+            "version": unique::VERSION,
         }))
     });
 
-    let register_echo = post!("/echo/:name", |req: kungfu::Request| {
-        kungfu::Response::new().json(&serde_json::json!({
+    let register_echo = post!("/echo/:name", |req: unique::Request| {
+        unique::Response::new().json(&serde_json::json!({
             "hello": req.param("name").unwrap_or("anonymous"),
             "you_sent": req.json_value().unwrap_or(serde_json::json!({})),
         }))
@@ -34,8 +34,8 @@ fn main() {
         .expect("tokio runtime");
 
     rt.block_on(
-        Kungfu::new()
-            .title("Hello Kungfu")
+        Unique::new()
+            .title("Hello Unique")
             .route(register_hello)
             .route(register_echo)
             .run("0.0.0.0:3000"),

@@ -88,7 +88,7 @@ mod tests {
     use super::*;
     use serde::{Deserialize, Serialize};
 
-    #[derive(kungfu_macros::Model, Serialize, Deserialize)]
+    #[derive(unique_macros::Model, Serialize, Deserialize)]
     #[table(name = "users")]
     struct User {
         #[field(primary, auto_increment)]

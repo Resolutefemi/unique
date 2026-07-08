@@ -1,5 +1,5 @@
 [package]
-name = "kungfu"
+name = "unique"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
@@ -11,14 +11,14 @@ readme.workspace = true
 keywords = ["web", "framework", "http", "server", "polyglot"]
 categories.workspace = true
 rust-version.workspace = true
-description = "Idiomatic Rust API for the Kungfu.js polyglot web framework — fast, secure, simple"
+description = "Idiomatic Rust API for the Unique.js polyglot web framework — fast, secure, simple"
 
 [lib]
-name = "kungfu"
+name = "unique"
 path = "src/lib.rs"
 
 [dependencies]
-kungfu-core = { path = "../core" }
+unique-core = { path = "../core" }
 tokio = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }

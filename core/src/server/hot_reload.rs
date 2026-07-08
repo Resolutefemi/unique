@@ -40,7 +40,7 @@ impl Default for HotReloadConfig {
     fn default() -> Self {
         Self {
             watch_paths: vec![PathBuf::from("src"), PathBuf::from("routes")],
-            extensions: vec!["rs".into(), "kungfu".into(), "ts".into(), "js".into()],
+            extensions: vec!["rs".into(), "unique".into(), "ts".into(), "js".into()],
             debounce_ms: 200,
         }
     }
@@ -127,7 +127,7 @@ mod tests {
     #[test]
     fn watcher_fires_on_file_change() {
         // Create a temp dir + file, modify it, ensure we get an event.
-        let tmp = std::env::temp_dir().join(format!("kungfu-test-{}", std::process::id()));
+        let tmp = std::env::temp_dir().join(format!("unique-test-{}", std::process::id()));
         std::fs::create_dir_all(&tmp).unwrap();
         let file = tmp.join("test.rs");
         std::fs::write(&file, "fn main() {}").unwrap();

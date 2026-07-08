@@ -25,7 +25,7 @@
 //! This module is only compiled when the `io_uring` feature is enabled:
 //!
 //! ```toml
-//! kungfu-core = { path = "...", features = ["io_uring"] }
+//! unique-core = { path = "...", features = ["io_uring"] }
 //! ```
 //!
 //! On non-Linux platforms the feature silently does nothing — `Server::serve()`
@@ -37,7 +37,7 @@ use std::sync::Arc;
 use bytes::Bytes;
 use tokio_uring::net::TcpListener as UringListener;
 
-use crate::error::{KungfuError, Result, StatusCode};
+use crate::error::{UniqueError, Result, StatusCode};
 use crate::middleware::build_chain;
 use crate::request::{Method, Request};
 use crate::response::Response;
@@ -58,7 +58,7 @@ pub async fn serve_io_uring(
     n_threads: usize,
 ) -> Result<()> {
     tracing::info!(
-        "kungfu (io_uring) listening on http://{} ({} threads)",
+        "unique (io_uring) listening on http://{} ({} threads)",
         addr,
         n_threads
     );
@@ -69,7 +69,7 @@ pub async fn serve_io_uring(
 
         // tokio_uring requires each thread to start its own runtime.
         let handle = std::thread::Builder::new()
-            .name(format!("kungfu-uring-{worker_id}"))
+            .name(format!("unique-uring-{worker_id}"))
             .spawn(move || {
                 tokio_uring::start(async move {
                     let listener = match UringListener::bind(addr) {
@@ -103,7 +103,7 @@ pub async fn serve_io_uring(
                     }
                 });
             })
-            .map_err(|e| KungfuError::internal(format!("thread spawn: {e}")))?;
+            .map_err(|e| UniqueError::internal(format!("thread spawn: {e}")))?;
 
         handles.push(handle);
     }
@@ -166,7 +166,7 @@ async fn handle_connection_uring(
     Ok(())
 }
 
-fn underlying_io_eof(e: &KungfuError) -> Option<()> {
+fn underlying_io_eof(e: &UniqueError) -> Option<()> {
     if let Some(detail) = &e.detail {
         if detail.contains("UnexpectedEof") || detail.contains("ConnectionReset") {
             return Some(());
@@ -198,7 +198,7 @@ async fn read_request_uring(
             break;
         }
         if buf.len() > MAX_HEADER_BYTES {
-            return Err(KungfuError::new(
+            return Err(UniqueError::new(
                 StatusCode::BadRequest,
                 "Request headers too large",
             ));
@@ -206,9 +206,9 @@ async fn read_request_uring(
 
         let (res, b) = stream.read(read_buf).await;
         read_buf = b;
-        let n = res.map_err(|e| KungfuError::internal(format!("read: {e}")))?;
+        let n = res.map_err(|e| UniqueError::internal(format!("read: {e}")))?;
         if n == 0 {
-            return Err(KungfuError::internal("UnexpectedEof"));
+            return Err(UniqueError::internal("UnexpectedEof"));
         }
         buf.extend_from_slice(&read_buf[..n]);
     }
@@ -217,11 +217,11 @@ async fn read_request_uring(
     let mut req_parser = httparse::Request::new(&mut headers);
     let parsed = req_parser
         .parse(&buf)
-        .map_err(|e| KungfuError::new(StatusCode::BadRequest, format!("HTTP parse: {e}")))?;
+        .map_err(|e| UniqueError::new(StatusCode::BadRequest, format!("HTTP parse: {e}")))?;
     let header_bytes_consumed = match parsed {
         httparse::Status::Complete(n) => n,
         httparse::Status::Partial => {
-            return Err(KungfuError::new(
+            return Err(UniqueError::new(
                 StatusCode::BadRequest,
                 "Incomplete HTTP request",
             ));
@@ -231,11 +231,11 @@ async fn read_request_uring(
     let method = req_parser
         .method
         .and_then(|m| Method::from_bytes(m.as_bytes()))
-        .ok_or_else(|| KungfuError::new(StatusCode::BadRequest, "Unsupported method"))?;
+        .ok_or_else(|| UniqueError::new(StatusCode::BadRequest, "Unsupported method"))?;
 
     let raw_path = req_parser
         .path
-        .ok_or_else(|| KungfuError::new(StatusCode::BadRequest, "Missing path"))?;
+        .ok_or_else(|| UniqueError::new(StatusCode::BadRequest, "Missing path"))?;
 
     let (path_string, query_string_string) = match raw_path.find('?') {
         Some(idx) => (raw_path[..idx].to_string(), raw_path[idx + 1..].to_string()),
@@ -274,7 +274,7 @@ async fn read_request_uring(
 
     let body: Bytes = if let Some(cl) = content_length {
         if cl > MAX_BODY_BYTES {
-            return Err(KungfuError::new(StatusCode::BadRequest, "Body too large"));
+            return Err(UniqueError::new(StatusCode::BadRequest, "Body too large"));
         }
         if partial_body.len() >= cl {
             partial_body.slice(..cl)
@@ -284,9 +284,9 @@ async fn read_request_uring(
             while full.len() < cl {
                 let (res, b) = stream.read(read_buf).await;
                 read_buf = b;
-                let n = res.map_err(|e| KungfuError::internal(format!("body read: {e}")))?;
+                let n = res.map_err(|e| UniqueError::internal(format!("body read: {e}")))?;
                 if n == 0 {
-                    return Err(KungfuError::internal("UnexpectedEof while reading body"));
+                    return Err(UniqueError::internal("UnexpectedEof while reading body"));
                 }
                 full.extend_from_slice(&read_buf[..n]);
             }
@@ -343,7 +343,7 @@ async fn dispatch(mut req: Request, router: &Router) -> Response {
                 let path = path.clone();
                 let method = method;
                 Box::pin(async move {
-                    Response::new().error(KungfuError::method_not_allowed(format!(
+                    Response::new().error(UniqueError::method_not_allowed(format!(
                         "Method {} not allowed on {}",
                         method.as_str(),
                         path
@@ -361,7 +361,7 @@ async fn dispatch(mut req: Request, router: &Router) -> Response {
                     let path = path.clone();
                     let method = method;
                     Box::pin(async move {
-                        Response::new().error(KungfuError::not_found(format!(
+                        Response::new().error(UniqueError::not_found(format!(
                             "No route for {} {}",
                             method.as_str(),
                             path
@@ -422,7 +422,7 @@ async fn write_response_uring(
     // tokio_uring's write_all takes ownership of the buffer and returns
     // (Result<()>, Buf).
     let (res, _buf) = stream.write_all(out).await;
-    res.map_err(|e| KungfuError::internal(format!("write: {e}")))?;
+    res.map_err(|e| UniqueError::internal(format!("write: {e}")))?;
     Ok(())
 }
 

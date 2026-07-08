@@ -1,4 +1,4 @@
-//! kungfu-css — a Tailwind-like utility CSS engine for the Kungfu.js framework.
+//! unique-css — a Tailwind-like utility CSS engine for the Unique.js framework.
 //!
 //! Parses utility class names (`flex`, `p-4`, `text-red-500`, `md:hover:bg-blue-200`)
 //! and emits CSS rules. Scans source files to extract the set of used classes
@@ -7,9 +7,9 @@
 //! ## Why a custom engine?
 //!
 //! Tailwind CSS is excellent, but it ships 30+ MB of CSS in development mode
-//! and its JIT compiler is a Node.js dependency. We want Kungfu's frontend
+//! and its JIT compiler is a Node.js dependency. We want Unique's frontend
 //! story to be dependency-light and fast — the CSS engine is part of the
-//! Rust core, so `kungfu build` produces a CSS bundle in microseconds without
+//! Rust core, so `unique build` produces a CSS bundle in microseconds without
 //! spawning a Node process.
 //!
 //! ## Supported utilities (V1)
@@ -26,7 +26,7 @@
 //! ## Example
 //!
 //! ```ignore
-//! use kungfu_css::{compile_directory, compile_classes};
+//! use unique_css::{compile_directory, compile_classes};
 //!
 //! // Compile a single class string:
 //! let css = compile_classes("flex p-4 text-red-500");

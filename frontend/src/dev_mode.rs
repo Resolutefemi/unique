@@ -1,7 +1,7 @@
 //! Dev-mode integrations: live reload + type generation wiring.
 //!
 //! Wires the `LiveReloadServer` and `generate_typescript` into a running
-//! Kungfu server. In dev mode, call `DevMode::enable()` to:
+//! Unique server. In dev mode, call `DevMode::enable()` to:
 //!
 //! 1. Inject the livereload script into every SSR page.
 //! 2. Broadcast a `reload` event when files change.
@@ -10,7 +10,7 @@
 //! ## Example
 //!
 //! ```ignore
-//! use kungfu_frontend::dev_mode::DevMode;
+//! use unique_frontend::dev_mode::DevMode;
 //!
 //! let dev = DevMode::new("./src", "./frontend/routes.d.ts");
 //! dev.start_watcher().await;
@@ -76,7 +76,7 @@ impl DevMode {
     /// Render an SSR page with livereload injected (if enabled).
     pub fn render_with_livereload(
         &self,
-        file: &crate::parser::KungfuFile,
+        file: &crate::parser::UniqueFile,
         ctx: &SsrContext,
         rendered_template: &str,
         data: &serde_json::Value,
@@ -94,7 +94,7 @@ impl DevMode {
     /// Write the routes.d.ts file with the given route metadata.
     pub fn write_routes_types(
         &self,
-        routes: &[kungfu_core::router::RouteMeta],
+        routes: &[unique_core::router::RouteMeta],
     ) -> std::io::Result<()> {
         let path = match &self.config.routes_types_path {
             Some(p) => p,
@@ -122,11 +122,11 @@ mod tests {
 
     #[test]
     fn writes_routes_types_file() {
-        let tmp = std::env::temp_dir().join(format!("kungfu-routes-{}.d.ts", std::process::id()));
+        let tmp = std::env::temp_dir().join(format!("unique-routes-{}.d.ts", std::process::id()));
         let dev = DevMode::new(vec![], Some(tmp.clone()));
-        let routes = vec![kungfu_core::router::RouteMeta {
+        let routes = vec![unique_core::router::RouteMeta {
             path: "/hello".into(),
-            method: kungfu_core::Method::Get,
+            method: unique_core::Method::Get,
             ..Default::default()
         }];
         dev.write_routes_types(&routes).unwrap();

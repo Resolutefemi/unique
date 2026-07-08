@@ -9,9 +9,9 @@
 //! ## Example
 //!
 //! ```ignore
-//! use kungfu::middleware_builtin::gzip;
+//! use unique::middleware_builtin::gzip;
 //!
-//! Kungfu::new()
+//! Unique::new()
 //!     .use_middleware(gzip())
 //!     .handle_get("/large.json", |_req, res| res.json(&big_data()))
 //! ```
