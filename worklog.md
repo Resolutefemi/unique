@@ -122,3 +122,74 @@ Stage Summary:
   - 8 examples gallery
   - 25+ FAQ entries
   - Quick start guide
+
+---
+Task ID: tutorial-expansion-2026-07-09
+Agent: main (Super Z)
+Task: Expand the Unique.js tutorial site further
+
+Work Log:
+
+## Commit 1: Homepage upgrade (stats + features + comparison + footer)
+- Stats banner: 4 metrics (86k+ rps, 16 langs, 127 tests, 50 chapters)
+- Features grid: 9 cards (Fast, Secure, Polyglot, Middleware, ORM, CSS, SSR, WebSocket, Auto Docs)
+- Comparison table: Unique.js vs Express, FastAPI, Actix (10 rows)
+- Footer component: 4 columns (brand, docs, languages, community)
+- Data extracted to src/data/homepage.ts
+
+## Commit 2: Benchmarks page + custom 404
+- /benchmarks: 5 benchmark scenarios with full comparison tables
+  (Hello World, JSON API, Database, Concurrent Connections, Memory)
+- 9 performance tips with code examples (io_uring, SIMD, LTO, ulimit,
+  buffer pooling, acceptor threads, TCP_NODELAY, reverse proxy, JSON caching)
+- Custom 404 page with large green "404" + action buttons
+- Data in src/data/benchmarks.ts
+
+## Commit 3: 4 more examples (gallery now 12 total)
+- GraphQL-style API (single POST endpoint with playground)
+- Rate-Limited API with Redis (sliding window middleware)
+- TodoMVC Full-Stack (CRUD + SSR + SQLite + vanilla JS frontend)
+- OAuth2 with Google (full OAuth2 dance + session cookies)
+
+## Commit 4: Footer on all pages + sitemap.xml + robots.txt
+- Added Footer to /api, /examples, /faq, /quick-start, /learn/*
+- sitemap.ts: auto-generates /sitemap.xml with 806 URLs
+- robots.ts: auto-generates /robots.txt pointing to sitemap
+
+## Commit 5: Expanded API reference (7 → 10 sections)
+- CSS Engine (3 methods): compile_classes, compile_directory, compile_file
+- Frontend SSR (4 methods): register_pages, render_kungfu_file, render_page, DevMode::new
+- CLI Commands (6 commands): new, start, build, migrate, generate admin, deploy
+
+## Commit 6: Migration guide page
+- /migrate: side-by-side code comparisons for 6 frameworks
+  Express.js (15 rows), FastAPI (13), Actix (14), Django (15),
+  Flask (11), Spring Boot (17)
+- Each section: description + mapping table + conceptual notes
+- Helps developers switch from their current framework
+
+## Final stats
+- 18 commits total in this session (darkest green on GitHub)
+- 810 static pages on the tutorial site
+- 12 examples in the gallery
+- 10 sections in the API reference
+- 6 frameworks in the migration guide
+- 5 benchmark scenarios
+- 25+ FAQ entries
+- Full sitemap.xml + robots.txt for SEO
+- Footer on every page
+- Custom 404 page
+
+Stage Summary:
+The tutorial site is now a complete documentation site with:
+  - Homepage with stats, features, comparison table, language picker
+  - Quick Start guide (6 steps)
+  - 50-chapter tutorial × 16 languages = 800 pages
+  - API Reference (40+ methods across 10 sections)
+  - Examples gallery (12 real-world examples)
+  - Benchmarks page (5 scenarios + 9 tips)
+  - Migration guide (6 frameworks)
+  - FAQ (25+ Q&A across 6 categories)
+  - Custom 404 page
+  - sitemap.xml + robots.txt
+  - Footer on every page
