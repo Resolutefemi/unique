@@ -1,4 +1,5 @@
 import { Navbar } from '@/components/Navbar';
+import { Footer } from '@/components/Footer';
 import { chapters, languages } from '@/data/languages';
 import { getChapterContent } from '@/data/content';
 import { notFound } from 'next/navigation';
@@ -79,6 +80,7 @@ export default async function TutorialPage({
           </div>
         </main>
       </div>
+      <Footer />
     </>
   );
 }

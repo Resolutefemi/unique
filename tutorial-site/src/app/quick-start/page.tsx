@@ -1,4 +1,5 @@
 import { Navbar } from '@/components/Navbar';
+import { Footer } from '@/components/Footer';
 
 export const metadata = {
   title: 'Quick Start — Unique.js',
@@ -190,6 +191,7 @@ unique deploy --target systemd`}</code></pre>
           </main>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

@@ -1,4 +1,5 @@
 import { Navbar } from '@/components/Navbar';
+import { Footer } from '@/components/Footer';
 import { faqs } from '@/data/faqs';
 
 export const metadata = {
@@ -50,6 +51,7 @@ export default function FaqPage() {
           </main>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

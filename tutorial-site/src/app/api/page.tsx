@@ -1,4 +1,5 @@
 import { Navbar } from '@/components/Navbar';
+import { Footer } from '@/components/Footer';
 import { apiReference } from '@/data/api-reference';
 
 export const metadata = {
@@ -67,6 +68,7 @@ export default function ApiReferencePage() {
           ))}
         </main>
       </div>
+      <Footer />
     </>
   );
 }

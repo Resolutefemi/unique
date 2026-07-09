@@ -1,4 +1,5 @@
 import { Navbar } from '@/components/Navbar';
+import { Footer } from '@/components/Footer';
 import { examples } from '@/data/examples';
 
 export const metadata = {
@@ -44,6 +45,7 @@ export default function ExamplesPage() {
           ))}
         </div>
       </div>
+      <Footer />
     </>
   );
 }
