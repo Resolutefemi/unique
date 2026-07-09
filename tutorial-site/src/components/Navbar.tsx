@@ -73,6 +73,12 @@ export function Navbar() {
           Examples
         </Link>
         <Link
+          href="/benchmarks"
+          className={`navbar-link ${pathname?.startsWith('/benchmarks') ? 'navbar-link--active' : ''}`}
+        >
+          Benchmarks
+        </Link>
+        <Link
           href="/faq"
           className={`navbar-link ${pathname?.startsWith('/faq') ? 'navbar-link--active' : ''}`}
         >
@@ -139,6 +145,13 @@ export function Navbar() {
             onClick={() => setMenuOpen(false)}
           >
             Examples
+          </Link>
+          <Link
+            href="/benchmarks"
+            className="navbar-mobile-link"
+            onClick={() => setMenuOpen(false)}
+          >
+            Benchmarks
           </Link>
           <Link
             href="/faq"
