@@ -79,6 +79,12 @@ export function Navbar() {
           Benchmarks
         </Link>
         <Link
+          href="/migrate"
+          className={`navbar-link ${pathname?.startsWith('/migrate') ? 'navbar-link--active' : ''}`}
+        >
+          Migrate
+        </Link>
+        <Link
           href="/faq"
           className={`navbar-link ${pathname?.startsWith('/faq') ? 'navbar-link--active' : ''}`}
         >
@@ -152,6 +158,13 @@ export function Navbar() {
             onClick={() => setMenuOpen(false)}
           >
             Benchmarks
+          </Link>
+          <Link
+            href="/migrate"
+            className="navbar-mobile-link"
+            onClick={() => setMenuOpen(false)}
+          >
+            Migrate
           </Link>
           <Link
             href="/faq"
