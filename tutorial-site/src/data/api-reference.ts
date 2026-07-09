@@ -467,4 +467,155 @@ let inserted = user.insert(&db).await?;`,
       },
     ],
   },
+  {
+    id: 'css-engine',
+    title: 'CSS Engine',
+    description: 'Tailwind-like utility CSS engine. Scans .kng and .html files for class names and generates minimal CSS.',
+    methods: [
+      {
+        name: 'compile_classes',
+        signature: 'compile_classes(class_string: &str) -> Result<String>',
+        description: 'Compile a space-separated string of utility classes into CSS rules. Only generates CSS for classes it recognizes — unknown classes are silently skipped.',
+        parameters: [{ name: 'class_string', type: '&str', description: 'Space-separated utility classes (e.g. "flex p-4 text-red-500")' }],
+        returns: 'A CSS string with only the used classes',
+        example: `let css = compile_classes("flex p-4 text-red-500 hover:bg-blue-200")?;
+// → .flex { display: flex; }
+//   .p-4 { padding: 1rem; }
+//   .text-red-500 { color: #ef4444; }
+//   .hover\\:bg-blue-200:hover { background-color: #bfdbfe; }`,
+      },
+      {
+        name: 'compile_directory',
+        signature: 'compile_directory(dir: &str) -> Result<String>',
+        description: 'Recursively scan a directory for .kng, .html, .js, .ts files, extract all class= attributes, and compile the combined CSS. This is the main entry point for production builds.',
+        parameters: [{ name: 'dir', type: '&str', description: 'Directory path to scan (e.g. "./src")' }],
+        returns: 'A tree-shaken CSS string with only the classes used in the scanned files',
+        example: `let css = compile_directory("./src")?;
+std::fs::write("./static/app.css", css)?;`,
+      },
+      {
+        name: 'compile_file',
+        signature: 'compile_file(path: &str) -> Result<String>',
+        description: 'Scan a single file for class= attributes and compile the CSS. Useful for incremental builds.',
+        parameters: [{ name: 'path', type: '&str', description: 'Path to a .kng, .html, .js, or .ts file' }],
+        returns: 'CSS string for the classes used in that file',
+      },
+    ],
+  },
+  {
+    id: 'frontend-ssr',
+    title: 'Frontend (SSR + .kng)',
+    description: 'Server-side rendering with .kng files. Each .kng file exports data() and template() functions.',
+    methods: [
+      {
+        name: 'register_pages',
+        signature: 'register_pages(router: &mut Router, pages_dir: &Path) -> Result<usize>',
+        description: 'Walk a directory of .kng files and register each as a GET route. index.kng → /, about.kng → /about, users/[id].kng → /users/:id, assets/[...path].kng → /assets/*path.',
+        parameters: [
+          { name: 'router', type: '&mut Router', description: 'The router to register routes in' },
+          { name: 'pages_dir', type: '&Path', description: 'Path to the pages directory (e.g. "src/pages")' },
+        ],
+        returns: 'Number of pages registered',
+        example: `use unique_frontend::file_routing::register_pages;
+use std::path::Path;
+
+register_pages(app.router_mut(), Path::new("src/pages"))?;`,
+      },
+      {
+        name: 'render_kungfu_file',
+        signature: 'render_kungfu_file(file: &Path, req_json: &str, ctx: &SsrContext) -> Result<String>',
+        description: 'Render a .kng file to HTML by calling its data() function with the request, then its template() function with the data. Uses a Node.js subprocess for JS/TS execution.',
+        parameters: [
+          { name: 'file', type: '&Path', description: 'Path to the .kng file' },
+          { name: 'req_json', type: '&str', description: 'JSON string of the request object passed to data()' },
+          { name: 'ctx', type: '&SsrContext', description: 'SSR context (url, headers, inject_livereload)' },
+        ],
+        returns: 'Rendered HTML string',
+      },
+      {
+        name: 'render_page',
+        signature: 'render_page(file: &KungfuFile, ctx: &SsrContext, body: &str, data: &Value) -> String',
+        description: 'Wrap rendered HTML in a full HTML page with CSS, hydration script, and optional livereload script. Called internally by render_kungfu_file.',
+        parameters: [
+          { name: 'file', type: '&KungfuFile', description: 'Parsed .kng file (code + static_html + route_path)' },
+          { name: 'ctx', type: '&SsrContext', description: 'SSR context' },
+          { name: 'body', type: '&str', description: 'Inner HTML from template()' },
+          { name: 'data', type: '&Value', description: 'JSON data from data(), injected for hydration' },
+        ],
+        returns: 'Complete HTML page string',
+      },
+      {
+        name: 'DevMode::new',
+        signature: 'DevMode::new(pages_dir: &Path) -> DevMode',
+        description: 'Create a dev mode watcher that monitors the pages directory for changes and triggers live reload via WebSocket. Used by `unique start --watch`.',
+        parameters: [{ name: 'pages_dir', type: '&Path', description: 'Directory to watch for .kng file changes' }],
+        returns: 'A DevMode instance',
+      },
+    ],
+  },
+  {
+    id: 'cli',
+    title: 'CLI Commands',
+    description: 'The `unique` command-line tool. Install with `cargo install unique-cli`.',
+    methods: [
+      {
+        name: 'unique new',
+        signature: 'unique new <name> [--lang <language>]',
+        description: 'Scaffold a new Unique.js project. Creates a directory with the right structure, Cargo.toml (or package.json / pyproject.toml), and a hello world example.',
+        parameters: [
+          { name: 'name', type: 'string', description: 'Project name (becomes the directory name)' },
+          { name: '--lang', type: 'string', description: 'Language: rust (default), javascript, typescript, python, go, etc.' },
+        ],
+        example: `unique new myapp --lang rust
+cd myapp
+cargo run`,
+      },
+      {
+        name: 'unique start',
+        signature: 'unique start [--watch] [--port <port>]',
+        description: 'Start the development server. With --watch, enables hot reload: changes to .rs or .kng files automatically recompile and refresh the browser.',
+        parameters: [
+          { name: '--watch', type: 'flag', description: 'Enable file watching and hot reload' },
+          { name: '--port', type: 'number', description: 'Port to listen on (default: 3000)' },
+        ],
+        example: `unique start --watch --port 8080`,
+      },
+      {
+        name: 'unique build',
+        signature: 'unique build [--release] [--features <features>]',
+        description: 'Build the project for production. Equivalent to cargo build --release but with the right features enabled by default.',
+        parameters: [
+          { name: '--release', type: 'flag', description: 'Build in release mode with optimizations (default)' },
+          { name: '--features', type: 'string', description: 'Comma-separated features: io_uring, simd, ffi' },
+        ],
+        example: `unique build --features "io_uring simd"`,
+      },
+      {
+        name: 'unique migrate',
+        signature: 'unique migrate [--generate] [--apply]',
+        description: 'Generate database migrations from #[derive(Model)] structs, or apply pending migrations. Creates SQL files in migrations/ directory.',
+        parameters: [
+          { name: '--generate', type: 'flag', description: 'Generate migration SQL from model structs' },
+          { name: '--apply', type: 'flag', description: 'Apply pending migrations to the database' },
+        ],
+        example: `unique migrate --generate
+unique migrate --apply`,
+      },
+      {
+        name: 'unique generate admin',
+        signature: 'unique generate admin <Model>',
+        description: 'Generate an admin CRUD dashboard for a model. Creates routes for list, create, edit, delete with a Bootstrap-based UI.',
+        parameters: [{ name: 'Model', type: 'string', description: 'Model struct name (e.g. User, Post, Todo)' }],
+        example: `unique generate admin User`,
+      },
+      {
+        name: 'unique deploy',
+        signature: 'unique deploy --target <docker|systemd>',
+        description: 'Generate deployment configuration files. For Docker: Dockerfile + docker-compose.yml. For systemd: .service file.',
+        parameters: [{ name: '--target', type: 'string', description: 'Deployment target: docker or systemd' }],
+        example: `unique deploy --target docker
+unique deploy --target systemd`,
+      },
+    ],
+  },
 ];
