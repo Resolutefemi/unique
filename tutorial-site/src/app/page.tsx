@@ -1,5 +1,7 @@
 import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
 import { languages } from '../data/languages';
+import { features, stats, comparisonRows } from '../data/homepage';
 import Link from 'next/link';
 
 export default function HomePage() {
@@ -42,8 +44,72 @@ export default function HomePage() {
             <span className="quick-nav-desc">Common questions answered</span>
           </Link>
         </div>
+      </section>
 
-        <h2 style={{ fontSize: '1.4rem', marginTop: '2.5rem' }}>Choose your language</h2>
+      {/* Stats banner */}
+      <section className="stats-banner">
+        {stats.map((stat) => (
+          <div key={stat.label} className="stat-item">
+            <div className="stat-value">{stat.value}</div>
+            <div className="stat-label">{stat.label}</div>
+          </div>
+        ))}
+      </section>
+
+      {/* Features grid */}
+      <section className="features-section">
+        <h2>Why Unique.js?</h2>
+        <p className="features-intro">
+          A web framework should be fast by default, secure by default, and simple to learn.
+          Unique.js delivers all three without trade-offs.
+        </p>
+        <div className="features-grid">
+          {features.map((feature) => (
+            <div key={feature.title} className="feature-card">
+              <div className="feature-icon">{feature.icon}</div>
+              <h3>{feature.title}</h3>
+              <p>{feature.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Comparison table */}
+      <section className="comparison-section">
+        <h2>How does Unique.js compare?</h2>
+        <p className="features-intro">
+          See how Unique.js stacks up against other popular web frameworks.
+        </p>
+        <div className="comparison-table-wrapper">
+          <table className="comparison-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th className="highlight">Unique.js</th>
+                <th>Express.js</th>
+                <th>FastAPI</th>
+                <th>Actix</th>
+              </tr>
+            </thead>
+            <tbody>
+              {comparisonRows.map((row) => (
+                <tr key={row.feature}>
+                  <td className="feature-name">{row.feature}</td>
+                  <td className="highlight">{row.unique}</td>
+                  <td>{row.express}</td>
+                  <td>{row.fastapi}</td>
+                  <td>{row.actix}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Language picker */}
+      <section className="hero" style={{ paddingTop: '2rem' }}>
+        <h2 style={{ fontSize: '1.6rem' }}>Choose your language</h2>
+        <p>16 supported languages — pick one to start the tutorial</p>
         <div className="lang-grid">
           {languages.map((lang) => (
             <Link
@@ -59,6 +125,8 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      <Footer />
     </>
   );
 }
